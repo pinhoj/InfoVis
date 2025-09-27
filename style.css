@@ -1,0 +1,29 @@
+body {
+  font-family: sans-serif;
+}
+
+.container {
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-template-columns: 1fr 1fr;
+  gap: 0px 0px;
+  grid-template-areas:
+    "ScatterPlot BarChart"
+    "Histogram Sunburst"
+    "LineChart LineChart";
+}
+.BarChart {
+  grid-area: BarChart;
+}
+.ScatterPlot {
+  grid-area: ScatterPlot;
+}
+.Histogram {
+  grid-area: Histogram;
+}
+.Sunburst {
+  grid-area: Sunburst;
+}
+.LineChart {
+  grid-area: LineChart;
+}
