@@ -62,7 +62,7 @@ export function createBreedChart(container, data, { width, height, margin }) {
         tooltip.transition().duration(150).style("opacity", 1);
         tooltip.html(`Breed: ${d.dog_breed}<br/>Group: ${d.dog_breed_group}<br/>Count: ${d3.format(",")(d.dog_count)}`);
         
-        d3.select(this).attr("fill", d.dog_breed === selectedBreed ? COLORS.selected : COLORS.hover);
+        d3.select(this).attr("fill", selectedBreed === d.dog_breed ? COLORS.selected : COLORS.hover);
       })
       .on("mousemove", function (event) {
         tooltip.style("left", (event.pageX + 10) + "px")
@@ -85,14 +85,14 @@ export function createBreedChart(container, data, { width, height, margin }) {
   function highlightBreed(breed) {
     bars.attr("fill", COLORS.base);
     if (breed != null) {
-      bars.filter(b => b.dog_breed === breed).attr("fill", COLORS.hover);
+      bars.filter(b => b.dog_breed === breed).attr("fill", COLORS.selected);
     }
   }
 
   function highlightByGroup(group) {
     bars.attr("fill", COLORS.base);
     if (group != null) {
-      bars.filter(b => b.dog_breed_group === group).attr("fill", COLORS.hover);
+      bars.filter(b => b.dog_breed_group === group).attr("fill", COLORS.selected);
     }
   }
 
@@ -106,7 +106,9 @@ export function createBreedChart(container, data, { width, height, margin }) {
       return;
     }
 
-    bars.attr("fill", d => d.dog_breed_group === group ? COLORS.hover : COLORS.base);
+    bars.attr("fill", d => 
+      selectedBreed === d.dog_breed ? COLORS.selected : 
+      (d.dog_breed_group === group ? COLORS.hover : COLORS.base));
   }
 
   // NEW: update function to re-bind data & redraw
@@ -147,11 +149,13 @@ export function createBreedChart(container, data, { width, height, margin }) {
     if (state.selectedGroup != null) {
       highlightByGroup(state.selectedGroup, true);
       title.text("Top 10 " + state.selectedGroup + " in Vienna"); 
-    } else if (state.selectedBreed != null) {
+    } else {
+      title.text("Top 10 Dog Breeds in Vienna"); 
+    }
+    if (state.selectedBreed != null) {
       highlightBreed(state.selectedBreed);
     } else {
       bars.attr("fill", COLORS.base);
-      title.text("Top 10 Dog Breeds in Vienna"); 
     }
   }
 
