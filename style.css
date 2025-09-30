@@ -2,28 +2,72 @@ body {
   font-family: sans-serif;
 }
 
+
+header {
+  background: #222;
+  color: #fff;
+  padding: 1.5rem 0;
+  text-align: center;
+}
+
+footer {
+  background: #222;
+  color: #fff;
+  text-align: center;
+  padding: 1rem 0;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+main {
+  min-height: 80vh;
+  padding-bottom: 3rem;
+}
+
 .container {
   display: grid;
-  grid-auto-columns: 1fr;
-  grid-template-columns: 1fr 1fr;
-  gap: 0px 0px;
-  grid-template-areas:
-    "ScatterPlot BarChart"
-    "Histogram Sunburst"
-    "LineChart LineChart";
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 24px;
+  width: 90vw;
+  max-width: 2000px;
+  margin: 2rem auto;
+  height: 70vh;
 }
-.BarChart {
-  grid-area: BarChart;
+
+
+.grid-item {
+  background: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  padding: 1rem;
+  min-height: 350px;
+  overflow: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.ScatterPlot {
-  grid-area: ScatterPlot;
+
+/* Make SVG charts responsive to grid cell size */
+.grid-item svg {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
 }
-.Histogram {
-  grid-area: Histogram;
+
+.grid-item img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
 }
-.Sunburst {
-  grid-area: Sunburst;
-}
-.LineChart {
-  grid-area: LineChart;
-}
+
+.Map { grid-area: 1 / 1 / 2 / 4; }
+.BarChart_Breeds    { grid-area: 1 / 4 / 2 / 6; }
+.BarChart_Groups   { grid-area: 2 / 4 / 3 / 6; }
+.Table    { grid-area: 2 / 1 / 3 / 4; }

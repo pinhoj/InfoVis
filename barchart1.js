@@ -1,4 +1,4 @@
-d3.csv("dogs_in_vienna.csv").then(data => {
+d3.csv("./data/dogs_in_vienna.csv").then(data => {
   // Convert numeric fields
   data.forEach(d => {
     d.dog_count = +d.dog_count;

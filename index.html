@@ -7,12 +7,32 @@
     <link rel="stylesheet" href="style.css" />
     <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="./script.js"></script>
-    <script src="./idioms/linechart.js"></script>
+    <!-- <script src="./barchart1v2.js"></script> -->
+    <script type="module">
+    import './script.js';
+    </script>
   </head>
-  <body onload="init()">
-    <div class="container">
-      <div class="LineChart"></div>
-    </div>
+  <body>
+    <header>
+      <h1>Dog Data Visualization Dashboard</h1>
+    </header>
+    <main>
+      <div class="container">
+        <div id="chart1" class="grid-item Map">
+          <img src="images/map.jpg" alt="map" />
+        </div>
+        <div id="chart2" class="grid-item BarChart_Breeds">
+        </div>
+        <div id="chart3" class="grid-item BarChart_Groups">
+        </div>
+        <div id="chart4" class="grid-item Table">
+          <img src="images/table.jpg" alt="table" />
+      </div>
+      </div>
+    </main>
+    <footer>
+      <p>&copy; 2025 Dog Data Visualizations</p>
+      <p>Made with 🐶 by Group 21</p>
+    </footer>
   </body>
-</html>
+</html> 

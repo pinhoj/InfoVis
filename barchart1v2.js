@@ -1,9 +1,9 @@
-d3.csv("dogs_in_vienna.csv").then(data => {
+d3.csv("data/dogs_in_vienna.csv").then(data => {
   // Convert numeric fields
   data.forEach(d => d.dog_count = +d.dog_count);
 
-  const margin = { top: 60, right: 40, bottom: 60, left: 160 };
-  const width = 900 - margin.left - margin.right;
+  const margin = { top: 20, right: 20, bottom: 20, left: 20 };
+  const width = 800 - margin.left - margin.right;
   const height = 500 - margin.top - margin.bottom;
 
   // ================== First Chart: Top 10 Breeds ==================
@@ -20,10 +20,11 @@ d3.csv("dogs_in_vienna.csv").then(data => {
 
   const topBreeds = aggregatedData.slice(0, 10);
 
-  const svg1 = d3.select("#chart")
+  const svg1 = d3.select("#chart2")
     .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
+    .attr("width", "100%")
+    .attr("height", "100%")
+    .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
     .append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
@@ -63,10 +64,11 @@ d3.csv("dogs_in_vienna.csv").then(data => {
   const groupData = Array.from(groupCounts, ([dog_breed_group, dog_count]) => ({ dog_breed_group, dog_count }))
     .sort((a,b)=>d3.descending(a.dog_count,b.dog_count));
 
-  const svg2 = d3.select("#chart")
+  const svg2 = d3.select("#chart3")
     .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
+    .attr("width", "100%")
+    .attr("height", "100%")
+    .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
     .append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
