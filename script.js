@@ -109,6 +109,11 @@ d3.csv('data/dogs_in_vienna.csv', d => ({
     filterState.breedGroup = dog_breed_group || null;
     recomputeAndRender();
   });
+ 
+  // React to hover
+  groupChart.on("hover", ({ dog_breed_group }) => {
+    breedChart.hoverByGroup(dog_breed_group);
+  });
 
   // TODO: postcode chart filter handler
 

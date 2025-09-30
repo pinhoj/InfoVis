@@ -3,7 +3,8 @@
 // Uses a semantic "filter" event to tell the controller which group to filter by.
 
 export function createGroupChart(container, data, { width, height, margin }) {
-  const dispatch = d3.dispatch('filter');
+  const dispatch = d3.dispatch('filter', 'hover');
+
   console.log(height);
   const svg = d3.select(container)
     .append("svg")
@@ -64,6 +65,10 @@ export function createGroupChart(container, data, { width, height, margin }) {
       .on('mouseover', function (event, d) {
         tooltip.transition().duration(150).style('opacity', 1);
         tooltip.html(`Group: ${d.dog_breed_group} <br/>Count: ${d3.format(',')(d.dog_count)}`);
+        if (selectedGroup === null) {
+          d3.select(this).attr('fill','steelblue');
+          dispatch.call('hover', null, { dog_breed_group: d.dog_breed_group });
+        }
       })
       .on('mousemove', function (event) {
         tooltip.style('left', (event.pageX + 10) + 'px')
@@ -71,6 +76,12 @@ export function createGroupChart(container, data, { width, height, margin }) {
       })
       .on('mouseout', function () {
         tooltip.transition().duration(150).style('opacity', 0);
+
+        d3.select(this).attr('fill',
+          selectedGroup != null ? 'orange' : 'teal'
+        );
+
+        dispatch.call('hover', null, { dog_breed_group: null });
       })
       .on('click', function (event, d) {
         // Toggle next selection relative to current controller-driven state

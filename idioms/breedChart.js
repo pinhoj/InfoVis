@@ -30,7 +30,7 @@ export function createBreedChart(container, data, { width, height, margin }) {
   const gBars = svg.append("g");
 
   // Title
-  svg.append("text")
+  const title = svg.append("text")
     .attr("x", width / 2)
     .attr("y", -20)
     .attr("text-anchor", "middle")
@@ -60,6 +60,8 @@ export function createBreedChart(container, data, { width, height, margin }) {
       .on("mouseover", function (event, d) {
         tooltip.transition().duration(150).style("opacity", 1);
         tooltip.html(`Breed: ${d.dog_breed}<br/>Group: ${d.dog_breed_group}<br/>Count: ${d3.format(",")(d.dog_count)}`);
+        
+        d3.select(this).attr("fill", d.dog_breed === selectedBreed ? "orange" : "steelblue");
       })
       .on("mousemove", function (event) {
         tooltip.style("left", (event.pageX + 10) + "px")
@@ -67,6 +69,8 @@ export function createBreedChart(container, data, { width, height, margin }) {
       })
       .on("mouseout", function () {
         tooltip.transition().duration(150).style("opacity", 0);
+
+        d3.select(this).attr("fill", selectedBreed != null ? "orange" : "teal");
       })
       .on("click", function (event, d) {
         // local highlight
@@ -89,6 +93,22 @@ export function createBreedChart(container, data, { width, height, margin }) {
     if (group != null) {
       bars.filter(b => b.dog_breed_group === group).attr("fill", "orange");
     }
+  }
+
+  function hoverByGroup(group) {
+    if (group == null) {
+      if (selectedBreed != null) {
+        highlightBreed(selectedBreed);
+      } else {
+        bars.attr("fill", "teal");
+      }
+      return;
+    }
+
+    bars.attr("fill", d =>
+      d.dog_breed_group === group ? "steelblue" :
+      (selectedBreed === d.dog_breed ? "orange" : "teal")
+    );
   }
 
   // NEW: update function to re-bind data & redraw
@@ -127,11 +147,13 @@ export function createBreedChart(container, data, { width, height, margin }) {
 
     // 5) restore any external highlight state
     if (state.selectedGroup != null) {
-      highlightByGroup(state.selectedGroup);
+      highlightByGroup(state.selectedGroup, true);
+      title.text("Top 10 " + state.selectedGroup + " in Vienna"); 
     } else if (state.selectedBreed != null) {
       highlightBreed(state.selectedBreed);
     } else {
       bars.attr("fill", "teal");
+      title.text("Top 10 Dog Breeds in Vienna"); 
     }
   }
 
@@ -144,6 +166,7 @@ export function createBreedChart(container, data, { width, height, margin }) {
     on: (type, handler) => (dispatch.on(type, handler), undefined),
     highlightBreed,
     highlightByGroup,
-    update
+    update,
+    hoverByGroup
   };
 }
