@@ -1,20 +1,29 @@
-body {
+html, body {
   font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+  top:0;
+  height:100%;
+  overflow:hidden;
 }
 
 
 header {
   background: #222;
   color: #fff;
-  padding: 1.5rem 0;
+  position:absolute;
+  padding: 0;
+  top:0;
+  width:100%;
   text-align: center;
 }
 
+
 footer {
+  z-index:-1;
   background: #222;
   color: #fff;
   text-align: center;
-  padding: 1rem 0;
   position: fixed;
   left: 0;
   bottom: 0;
@@ -22,19 +31,22 @@ footer {
 }
 
 main {
-  min-height: 80vh;
-  padding-bottom: 3rem;
+  position:absolute;
+  top:10%;
+  height:82vh;
+  padding-bottom: 0;
+  box-sizing:border-box;
 }
 
 .container {
   display: grid;
+  
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  gap: 24px;
-  width: 90vw;
-  max-width: 2000px;
-  margin: 2rem auto;
-  height: 70vh;
+  grid-template-rows: 60% 40%;
+  gap: 12px;
+  width: 95%;
+  margin: 0 auto;
+  height: 100%;
 }
 
 
@@ -42,23 +54,10 @@ main {
   background: #f9f9f9;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-  padding: 1rem;
-  min-height: 350px;
-  overflow: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 /* Make SVG charts responsive to grid cell size */
-.grid-item svg {
-  width: 100% !important;
-  height: 100% !important;
-  max-width: 100%;
-  max-height: 100%;
-  display: block;
-}
-
+.grid-item svg,
 .grid-item img {
   width: 100% !important;
   height: 100% !important;

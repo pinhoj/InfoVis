@@ -4,25 +4,42 @@
 
 export function createGroupChart(container, data, { width, height, margin }) {
   const dispatch = d3.dispatch('filter');
-
+  console.log(height);
   const svg = d3.select(container)
-    .append('svg')
-    .attr('width', '100%')
-    .attr('height', '100%')
-    .attr('viewBox', `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
-    .append('g')
-    .attr('transform', `translate(${margin.left},${margin.top})`);
+    .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
+    .append("g")
+    .attr("transform", `translate(${margin.left},${margin.top})`);
 
   // Scales
-  const x = d3.scaleLinear().range([0, width]);
-  const y = d3.scaleBand().range([0, height]).padding(0.3);
+  const x = d3.scaleLinear()
+      .domain([0, d3.max(data, d => d.dog_count)]).nice()
+      .range([0, width]);
+  const y = d3.scaleBand()
+      .domain(data.map(d => d.dog_breed_group))
+      .range([0, height])
+      .padding(0.3);
 
   // Axis groups (called inside update)
-  const xAxisG = svg.append('g').attr('transform', `translate(0,${height})`);
-  const yAxisG = svg.append('g');
+  const xAxisG = svg.append('g')
+        .attr('transform', `translate(0,${height})`)
+        .call(d3.axisBottom(x).tickFormat(d3.format("~s")));
+  const yAxisG = svg.append("g")
+        .call(d3.axisLeft(y).tickSize(0));
 
   // Bars container
   const gBars = svg.append('g');
+
+  // Title
+  svg.append("text")
+    .attr("x", width / 2)
+    .attr("y", -20)
+    .attr("text-anchor", "middle")
+    .style("font-size", "20px")
+    .style("font-weight", "bold")
+    .text("Top 5 Breed Groups in Vienna");
 
   // Tooltip scoped to this chart
   const tooltip = d3.select('body')
@@ -46,7 +63,7 @@ export function createGroupChart(container, data, { width, height, margin }) {
     sel
       .on('mouseover', function (event, d) {
         tooltip.transition().duration(150).style('opacity', 1);
-        tooltip.html(`Count: ${d3.format(',')(d.dog_count)}`);
+        tooltip.html(`Group: ${d.dog_breed_group} <br/>Count: ${d3.format(',')(d.dog_count)}`);
       })
       .on('mousemove', function (event) {
         tooltip.style('left', (event.pageX + 10) + 'px')
@@ -83,8 +100,8 @@ export function createGroupChart(container, data, { width, height, margin }) {
     y.domain(newData.map(d => d.dog_breed_group));
 
     // 2) axes
-    xAxisG.transition().duration(250).call(d3.axisBottom(x));
-    yAxisG.transition().duration(250).call(d3.axisLeft(y).tickSize(0));
+    xAxisG.transition().duration(250).call(d3.axisBottom(x).tickFormat(d3.format("~s")));
+    yAxisG.transition().duration(250).call(d3.axisLeft(y).tickSize(10));
 
     // 3) join
     bars = wireHandlers(

@@ -2,13 +2,13 @@
 // Loads CSV, keeps global filter state, recomputes aggregates,
 // and updates ALL charts when the group filter changes.
 
-import { createBreedChart } from './components/BreedChart.js';
-import { createGroupChart } from './components/groupChart.js';
+import { createBreedChart } from './idioms/breedChart.js';
+import { createGroupChart } from './idioms/groupChart.js';
 
 // ---- config ----
-const margin = { top: 20, right: 20, bottom: 20, left: 20 };
-const width  = 800 - margin.left - margin.right;
-const height = 500 - margin.top - margin.bottom;
+const margin = { top: 10, right: 10, bottom: 10, left: 140 };
+const width  = window.innerWidth * 0.4 - margin.left - margin.right;
+let height = window.innerHeight * 0.4 - margin.top - margin.bottom;
 
 // ---- state ----
 let rows = [];
@@ -63,7 +63,8 @@ function recomputeAndRender() {
   const filtered = getFilteredRows();
   const breedsAll = rollupBreeds(filtered);
   const topBreeds = breedsAll.slice(0, 10);
-  const groups = rollupGroups(filtered);
+
+  const groups = rollupGroups(filtered).slice(0, 5);
 
   breedChart.update(topBreeds, {
     selectedGroup: filterState.breedGroup,
@@ -82,15 +83,17 @@ d3.csv('data/dogs_in_vienna.csv', d => ({
   dog_breed_group: d.dog_breed_group,
   dog_count: +d.dog_count
 })).then(data => {
-  rows = data;
+  rows = data.filter(d => d.dog_breed !== "Unknown");
 
   // initial aggregates
   const breedsAll = rollupBreeds(rows);
   const topBreeds = breedsAll.slice(0, 10);
-  const groups    = rollupGroups(rows);
+  const groups    = rollupGroups(rows).slice(0, 5);
 
   // create charts
+  
   breedChart = createBreedChart('#chart2', topBreeds, { width, height, margin });
+  height = (window.innerHeight * 0.25) - margin.top - margin.bottom;
   groupChart = createGroupChart('#chart3', groups,    { width, height, margin });
   // TODO: create postcode chart for #chart1
 
