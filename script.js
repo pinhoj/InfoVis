@@ -112,7 +112,7 @@ d3.csv('data/dogs_in_vienna.csv', d => ({
  
   // React to hover
   breedChart.on("hover", ({ dog_breed_group }) => {
-    groupChart.highlightGroup(dog_breed_group);
+    groupChart.hoverGroup(dog_breed_group);
   });
 
   // React to hover

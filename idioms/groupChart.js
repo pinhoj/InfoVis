@@ -104,6 +104,14 @@ export function createGroupChart(container, data, { width, height, margin }) {
     }
   }
 
+  function hoverGroup(group) {
+    if (selectedGroup != null) return;
+    bars.attr('fill', COLORS.base);
+    if (group != null) {
+      bars.filter(b => b.dog_breed_group === group).attr('fill', COLORS.hover);
+    }
+  }
+
   // Public redraw: re-bind data, recompute scales/axes, restyle selection
   function update(newData, state = {}) {
     // sync local with controller state (so click toggling works)
@@ -152,6 +160,7 @@ export function createGroupChart(container, data, { width, height, margin }) {
   return {
     on: (type, handler) => (dispatch.on(type, handler), undefined),
     update,
-    highlightGroup
+    highlightGroup,
+    hoverGroup
   };
 }
