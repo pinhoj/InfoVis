@@ -4,7 +4,7 @@
 import { COLORS } from '../colors.js';
 
 export function createBreedChart(container, data, { width, height, margin }) {
-  const dispatch = d3.dispatch("filter"); 
+  const dispatch = d3.dispatch("filter", "hover"); 
 
   const svg = d3.select(container)
     .append("svg")
@@ -62,7 +62,10 @@ export function createBreedChart(container, data, { width, height, margin }) {
         tooltip.transition().duration(150).style("opacity", 1);
         tooltip.html(`Breed: ${d.dog_breed}<br/>Group: ${d.dog_breed_group}<br/>Count: ${d3.format(",")(d.dog_count)}`);
         
-        d3.select(this).attr("fill", selectedBreed === d.dog_breed ? COLORS.selected : COLORS.hover);
+        if (selectedBreed != d.dog_breed){
+          dispatch.call('hover', null, { dog_breed_group: d.dog_breed_group });
+          d3.select(this).attr("fill", COLORS.hover);
+        }
       })
       .on("mousemove", function (event) {
         tooltip.style("left", (event.pageX + 10) + "px")
@@ -70,7 +73,7 @@ export function createBreedChart(container, data, { width, height, margin }) {
       })
       .on("mouseout", function () {
         tooltip.transition().duration(150).style("opacity", 0);
-
+        dispatch.call('hover', null, { dog_breed_group: null });
         d3.select(this).attr("fill", selectedBreed != null ? COLORS.selected : COLORS.base);
       })
       .on("click", function (event, d) {
