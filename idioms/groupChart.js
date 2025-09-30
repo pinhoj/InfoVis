@@ -1,6 +1,8 @@
 // groupChart.js
 // Renders the breed-group bar chart and exposes an API with update() + events.
 // Uses a semantic "filter" event to tell the controller which group to filter by.
+import { COLORS } from '../colors.js';
+
 
 export function createGroupChart(container, data, { width, height, margin }) {
   const dispatch = d3.dispatch('filter', 'hover');
@@ -66,7 +68,7 @@ export function createGroupChart(container, data, { width, height, margin }) {
         tooltip.transition().duration(150).style('opacity', 1);
         tooltip.html(`Group: ${d.dog_breed_group} <br/>Count: ${d3.format(',')(d.dog_count)}`);
         if (selectedGroup === null) {
-          d3.select(this).attr('fill','steelblue');
+          d3.select(this).attr('fill',COLORS.hover);
           dispatch.call('hover', null, { dog_breed_group: d.dog_breed_group });
         }
       })
@@ -78,7 +80,7 @@ export function createGroupChart(container, data, { width, height, margin }) {
         tooltip.transition().duration(150).style('opacity', 0);
 
         d3.select(this).attr('fill',
-          selectedGroup != null ? 'orange' : 'teal'
+          selectedGroup != null ? COLORS.selected : COLORS.base
         );
 
         dispatch.call('hover', null, { dog_breed_group: null });
@@ -88,6 +90,7 @@ export function createGroupChart(container, data, { width, height, margin }) {
         const next = (selectedGroup === d.dog_breed_group) ? null : d.dog_breed_group;
         // Publish semantic filter event (controller will recompute + call update)
         dispatch.call('filter', null, { dog_breed_group: next });
+        dispatch.call('hover', null, { dog_breed_group: null });
       });
     return sel;
   }
@@ -95,9 +98,9 @@ export function createGroupChart(container, data, { width, height, margin }) {
   let bars = gBars.selectAll('rect'); // will be bound in first update
 
   function highlightGroup(group) {
-    bars.attr('fill', 'teal');
+    bars.attr('fill', COLORS.base);
     if (group != null) {
-      bars.filter(b => b.dog_breed_group === group).attr('fill', 'orange');
+      bars.filter(b => b.dog_breed_group === group).attr('fill', COLORS.selected);
     }
   }
 
@@ -124,7 +127,7 @@ export function createGroupChart(container, data, { width, height, margin }) {
             .attr('y', d => y(d.dog_breed_group))
             .attr('height', y.bandwidth())
             .attr('width', d => x(d.dog_count))
-            .attr('fill', 'teal'),
+            .attr('fill', COLORS.base),
           update => update,
           exit => exit.transition().duration(200).style('opacity', 0).remove()
         )
@@ -137,8 +140,8 @@ export function createGroupChart(container, data, { width, height, margin }) {
       .attr('width', d => x(d.dog_count))
       .attr('fill', d =>
         selectedGroup == null
-          ? 'teal'
-          : (d.dog_breed_group === selectedGroup ? 'orange' : 'teal')
+          ? COLORS.base
+          : (d.dog_breed_group === selectedGroup ? COLORS.selected : COLORS.base)
       );
   }
 

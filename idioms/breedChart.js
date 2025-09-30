@@ -1,6 +1,7 @@
 // breedChart.js
 // Renders the Top-10 breeds bar chart. Publishes a "filter" event with { dog_breed }.
 // Exposes update(), highlightBreed(), highlightByGroup(), and on().
+import { COLORS } from '../colors.js';
 
 export function createBreedChart(container, data, { width, height, margin }) {
   const dispatch = d3.dispatch("filter"); 
@@ -61,7 +62,7 @@ export function createBreedChart(container, data, { width, height, margin }) {
         tooltip.transition().duration(150).style("opacity", 1);
         tooltip.html(`Breed: ${d.dog_breed}<br/>Group: ${d.dog_breed_group}<br/>Count: ${d3.format(",")(d.dog_count)}`);
         
-        d3.select(this).attr("fill", d.dog_breed === selectedBreed ? "orange" : "steelblue");
+        d3.select(this).attr("fill", d.dog_breed === selectedBreed ? COLORS.selected : COLORS.hover);
       })
       .on("mousemove", function (event) {
         tooltip.style("left", (event.pageX + 10) + "px")
@@ -70,7 +71,7 @@ export function createBreedChart(container, data, { width, height, margin }) {
       .on("mouseout", function () {
         tooltip.transition().duration(150).style("opacity", 0);
 
-        d3.select(this).attr("fill", selectedBreed != null ? "orange" : "teal");
+        d3.select(this).attr("fill", selectedBreed != null ? COLORS.selected : COLORS.base);
       })
       .on("click", function (event, d) {
         // local highlight
@@ -82,16 +83,16 @@ export function createBreedChart(container, data, { width, height, margin }) {
   }
 
   function highlightBreed(breed) {
-    bars.attr("fill", "teal");
+    bars.attr("fill", COLORS.base);
     if (breed != null) {
-      bars.filter(b => b.dog_breed === breed).attr("fill", "orange");
+      bars.filter(b => b.dog_breed === breed).attr("fill", COLORS.hover);
     }
   }
 
   function highlightByGroup(group) {
-    bars.attr("fill", "teal");
+    bars.attr("fill", COLORS.base);
     if (group != null) {
-      bars.filter(b => b.dog_breed_group === group).attr("fill", "orange");
+      bars.filter(b => b.dog_breed_group === group).attr("fill", COLORS.hover);
     }
   }
 
@@ -100,15 +101,12 @@ export function createBreedChart(container, data, { width, height, margin }) {
       if (selectedBreed != null) {
         highlightBreed(selectedBreed);
       } else {
-        bars.attr("fill", "teal");
+        bars.attr("fill", COLORS.base);
       }
       return;
     }
 
-    bars.attr("fill", d =>
-      d.dog_breed_group === group ? "steelblue" :
-      (selectedBreed === d.dog_breed ? "orange" : "teal")
-    );
+    bars.attr("fill", d => d.dog_breed_group === group ? COLORS.hover : COLORS.base);
   }
 
   // NEW: update function to re-bind data & redraw
@@ -133,7 +131,7 @@ export function createBreedChart(container, data, { width, height, margin }) {
             .attr("y", d => y(d.dog_breed))
             .attr("height", y.bandwidth())
             .attr("width", d => x(d.dog_count))
-            .attr("fill", "teal"),
+            .attr("fill", COLORS.base),
           update => update,
           exit => exit.transition().duration(200).style("opacity", 0).remove()
         )
@@ -152,7 +150,7 @@ export function createBreedChart(container, data, { width, height, margin }) {
     } else if (state.selectedBreed != null) {
       highlightBreed(state.selectedBreed);
     } else {
-      bars.attr("fill", "teal");
+      bars.attr("fill", COLORS.base);
       title.text("Top 10 Dog Breeds in Vienna"); 
     }
   }
