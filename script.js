@@ -12,17 +12,27 @@ const height = 500 - margin.top - margin.bottom;
 
 // ---- state ----
 let rows = [];
-let currentGroupFilter = null;
-let selectedBreed = null; // optional: if you keep breed clicks
+let filterState = {
+  postcode: null,
+  breed: null,
+  breedGroup: null
+};
 
 // ---- data helpers ----
+function getFilteredRows() {
+  return rows.filter(r =>
+    (!filterState.postcode   || r.district_code === filterState.postcode) &&
+    (!filterState.breed      || r.dog_breed === filterState.breed) &&
+    (!filterState.breedGroup || r.dog_breed_group === filterState.breedGroup)
+  );
+}
+
 function rollupBreeds(srcRows) {
   const byBreed = d3.rollup(
     srcRows,
     v => d3.sum(v, d => d.dog_count),
     d => d.dog_breed
   );
-  // map breed → group (first match)
   const breedToGroup = new Map(srcRows.map(d => [d.dog_breed, d.dog_breed_group]));
   const arr = Array.from(byBreed, ([dog_breed, dog_count]) => ({
     dog_breed,
@@ -50,27 +60,24 @@ let breedChart, groupChart;
 
 // ---- controller ----
 function recomputeAndRender() {
-  const filtered = currentGroupFilter
-    ? rows.filter(r => r.dog_breed_group === currentGroupFilter)
-    : rows;
-
+  const filtered = getFilteredRows();
   const breedsAll = rollupBreeds(filtered);
   const topBreeds = breedsAll.slice(0, 10);
-
   const groups = rollupGroups(filtered);
 
-  // push state to charts
   breedChart.update(topBreeds, {
-    selectedGroup: currentGroupFilter,
-    selectedBreed: selectedBreed
+    selectedGroup: filterState.breedGroup,
+    selectedBreed: filterState.breed
   });
   groupChart.update(groups, {
-    selectedGroup: currentGroupFilter
+    selectedGroup: filterState.breedGroup
   });
+  // TODO: add chart1 update for postcode filter
 }
 
 // ---- boot ----
 d3.csv('data/dogs_in_vienna.csv', d => ({
+  district_code: d.district_code,
   dog_breed: d.dog_breed,
   dog_breed_group: d.dog_breed_group,
   dog_count: +d.dog_count
@@ -85,28 +92,30 @@ d3.csv('data/dogs_in_vienna.csv', d => ({
   // create charts
   breedChart = createBreedChart('#chart2', topBreeds, { width, height, margin });
   groupChart = createGroupChart('#chart3', groups,    { width, height, margin });
+  // TODO: create postcode chart for #chart1
 
-  // OPTIONAL: keep breed highlight state if you still use breed clicks
-  breedChart.on('click', ({ dog_breed }) => {
-    selectedBreed = dog_breed;
-    // if a group filter is active and the clicked breed doesn't belong to it,
-    // you could clear selectedBreed or ignore; here we keep it as a visual hint.
-  });
-
-  // Group chart drives GLOBAL filter across ALL charts
-  groupChart.on('filter', ({ dog_breed_group }) => {
-    currentGroupFilter = dog_breed_group || null; // toggled off → null
-    // when applying a new group filter, it's usually clearer to drop breed selection
-    if (currentGroupFilter) selectedBreed = null;
+  // Breed chart filter
+  breedChart.on('filter', ({ dog_breed }) => {
+    console.log('breed filter event', dog_breed);
+    filterState.breed = dog_breed || null;
     recomputeAndRender();
   });
+
+  // Group chart filter
+  groupChart.on('filter', ({ dog_breed_group }) => {
+    filterState.breedGroup = dog_breed_group || null;
+    recomputeAndRender();
+  });
+
+  // TODO: postcode chart filter handler
 
   // optional reset button if present in HTML
   const resetBtn = document.getElementById('reset');
   if (resetBtn) {
     resetBtn.addEventListener('click', () => {
-      currentGroupFilter = null;
-      selectedBreed = null;
+      filterState.postcode = null;
+      filterState.breed = null;
+      filterState.breedGroup = null;
       recomputeAndRender();
     });
   }
