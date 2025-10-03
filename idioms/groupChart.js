@@ -7,7 +7,6 @@ import { COLORS } from '../colors.js';
 export function createGroupChart(container, data, { width, height, margin }) {
   const dispatch = d3.dispatch('filter', 'hover');
 
-  console.log(height);
   const svg = d3.select(container)
     .append("svg")
     .attr("width", width + margin.left + margin.right)

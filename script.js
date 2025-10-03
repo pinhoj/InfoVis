@@ -4,6 +4,7 @@
 
 import { createBreedChart } from './idioms/breedChart.js';
 import { createGroupChart } from './idioms/groupChart.js';
+import { createChoropleth } from './idioms/choropleth.js';
 
 // ---- config ----
 const margin = { top: 10, right: 10, bottom: 10, left: 140 };
@@ -56,7 +57,7 @@ function rollupGroups(srcRows) {
 }
 
 // ---- charts (created after data load) ----
-let breedChart, groupChart;
+let breedChart, groupChart, choropleth;
 
 // ---- controller ----
 function recomputeAndRender() {
@@ -91,7 +92,11 @@ d3.csv('data/dogs_in_vienna.csv', d => ({
   const groups    = rollupGroups(rows).slice(0, 5);
 
   // create charts
-  
+  d3.json('geodata/vienna_districts.json').then(geodata => {
+    choropleth = createChoropleth('#chart1', rows, geodata, {width, height, margin:{top:10,bottom:0, left:0, right:0}});
+    
+  })
+
   breedChart = createBreedChart('#chart2', topBreeds, { width, height, margin });
   height = (window.innerHeight * 0.25) - margin.top - margin.bottom;
   groupChart = createGroupChart('#chart3', groups,    { width, height, margin });
