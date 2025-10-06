@@ -29,8 +29,8 @@ export const COLORS = {
     selected: '#4E5A41',
   },
   'Hound Dogs':{
-    base: '#7AA8E0',
-    hover: '#5D8FCC',
-    selected: '#456FA0',
+    base: '#6E85C1',
+    hover: '#596FA3',
+    selected: '#455880',
   },
 };
