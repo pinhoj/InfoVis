@@ -116,7 +116,7 @@ export function createBreedChart(container, data, { width, height, margin }) {
 
   // NEW: update function to re-bind data & redraw
   function update(newData, state = {}) {
-    selectedBreed = state.selectedBreed ?? null;
+    selectedBreed = state.breed ?? null;
 
     // 1) scales
     x.domain([0, d3.max(newData, d => d.dog_count) || 0]).nice();

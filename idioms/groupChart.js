@@ -99,7 +99,8 @@ export function createGroupChart(container, data, { width, height, margin }) {
   function highlightGroup(group) {
     bars.attr('fill', d => COLORS[d.dog_breed_group].base);
     if (group != null) {
-      bars.filter(b => b.dog_breed_group === group).attr('fill', d =>COLORS[d.dog_breed_group].selected);
+      bars.filter(b => b.dog_breed_group === group)
+          .attr('fill', d =>COLORS[d.dog_breed_group].selected);
     }
   }
 
@@ -107,14 +108,15 @@ export function createGroupChart(container, data, { width, height, margin }) {
     if (selectedGroup != null) return;
     bars.attr('fill', d => COLORS[d.dog_breed_group].base);
     if (group != null) {
-      bars.filter(b => b.dog_breed_group === group).attr('fill', d => COLORS[d.dog_breed_group].hover);
+      bars.filter(b => b.dog_breed_group === group)
+        .attr('fill', d => COLORS[d.dog_breed_group].hover);
     }
   }
 
   // Public redraw: re-bind data, recompute scales/axes, restyle selection
   function update(newData, state = {}) {
     // sync local with controller state (so click toggling works)
-    selectedGroup = state.selectedGroup ?? null;
+    selectedGroup = state.group ?? null;
 
     // 1) scales
     x.domain([0, d3.max(newData, d => d.dog_count) || 0]).nice();
