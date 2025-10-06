@@ -1,8 +1,8 @@
 export const COLORS = {
   background: '#d2e8e8',
-  base: 'teal',
-  hover: '#014d4d',
-  selected: '#013838',  
+  base: '#BF0A30',
+  hover: '#A00526',
+  selected: '#70031A',  
   'Companion Dogs':{
     base: '#F8BBD0',
     hover: '#F48FB1',

@@ -41,7 +41,7 @@ export function createGroupChart(container, data, { width, height, margin }) {
     .attr("text-anchor", "middle")
     .style("font-size", "20px")
     .style("font-weight", "bold")
-    .text("Top 5 Breed Groups in Vienna");
+    .text("Dog Breed Groups in Vienna");
 
   // Tooltip scoped to this chart
   const tooltip = d3.select('body')

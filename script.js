@@ -81,7 +81,7 @@ function recomputeAndRender() {
   const breedsAll = rollupBreeds(filtered);
   const topBreeds = breedsAll.slice(0, 10);
 
-  const groups = rollupGroups(filtered).slice(0, 5);
+  const groups = rollupGroups(filtered).slice(0, 6);
 
   breedChart.update(topBreeds, {
     selectedGroup: filterState.group,
@@ -108,7 +108,7 @@ d3.csv('data/dogs_in_vienna.csv', d => ({
   // initial aggregates
   const breedsAll = rollupBreeds(rows);
   const topBreeds = breedsAll.slice(0, 10);
-  const groups    = rollupGroups(rows).slice(0, 5);
+  const groups    = rollupGroups(rows).slice(0, 6);
 
   // create charts
   d3.json('geodata/vienna_districts.json').then(data => {
@@ -126,25 +126,25 @@ d3.csv('data/dogs_in_vienna.csv', d => ({
   groupChart = createGroupChart('#chart3', groups,    { width, height, margin });
   // TODO: create postcode chart for #chart1
 
-  // Breed chart filter
+
   breedChart.on('filter', ({ dog_breed }) => {
     console.log('breed filter event', dog_breed);
     filterState.breed = dog_breed || null;
     recomputeAndRender();
   });
 
-  // Group chart filter
+
   groupChart.on('filter', ({ dog_breed_group }) => {
     filterState.group = dog_breed_group || null;
     recomputeAndRender();
   });
  
-  // React to hover
+
   breedChart.on("hover", ({ dog_breed_group }) => {
     groupChart.hoverGroup(dog_breed_group);
   });
 
-  // React to hover
+
   groupChart.on("hover", ({ dog_breed_group }) => {
     breedChart.hoverByGroup(dog_breed_group);
   });
