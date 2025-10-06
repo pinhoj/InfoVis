@@ -60,21 +60,21 @@ export function createBreedChart(container, data, { width, height, margin }) {
     sel
       .on("mouseover", function (event, d) {
         tooltip.transition().duration(150).style("opacity", 1);
-        tooltip.html(`Breed: ${d.dog_breed}<br/>Group: ${d.dog_breed_group}<br/>Count: ${d3.format(",")(d.dog_count)}`);
+        tooltip.html(`Breed: ${d.dog_breed}<br/>Group: ${d.dog_breed_group}<br/>Count: ${d3.format(".3~s")(d.dog_count)}`);
         
         if (selectedBreed != d.dog_breed){
           dispatch.call('hover', null, { dog_breed_group: d.dog_breed_group });
-          d3.select(this).attr("fill", COLORS.hover);
+          d3.select(this).attr("fill", COLORS[d.dog_breed_group].hover);
         }
       })
       .on("mousemove", function (event) {
         tooltip.style("left", (event.pageX + 10) + "px")
                .style("top", (event.pageY - 28) + "px");
       })
-      .on("mouseout", function () {
+      .on("mouseout", function (event, d) {
         tooltip.transition().duration(150).style("opacity", 0);
         dispatch.call('hover', null, { dog_breed_group: null });
-        d3.select(this).attr("fill", selectedBreed != null ? COLORS.selected : COLORS.base);
+        d3.select(this).attr("fill", selectedBreed === d.dog_breed ? COLORS[d.dog_breed_group].selected : COLORS[d.dog_breed_group].base);
       })
       .on("click", function (event, d) {
         // local highlight
@@ -86,16 +86,16 @@ export function createBreedChart(container, data, { width, height, margin }) {
   }
 
   function highlightBreed(breed) {
-    bars.attr("fill", COLORS.base);
+    bars.attr("fill", b => COLORS[b.dog_breed_group].base);
     if (breed != null) {
-      bars.filter(b => b.dog_breed === breed).attr("fill", COLORS.selected);
+      bars.filter(b => b.dog_breed === breed).attr("fill", b =>COLORS[b.dog_breed_group].selected);
     }
   }
 
   function highlightByGroup(group) {
-    bars.attr("fill", COLORS.base);
+    bars.attr("fill", b => COLORS[b.dog_breed_group].base);
     if (group != null) {
-      bars.filter(b => b.dog_breed_group === group).attr("fill", COLORS.selected);
+      bars.filter(b => b.dog_breed_group === group).attr("fill", b =>COLORS[b.dog_breed_group].selected);
     }
   }
 
@@ -104,14 +104,14 @@ export function createBreedChart(container, data, { width, height, margin }) {
       if (selectedBreed != null) {
         highlightBreed(selectedBreed);
       } else {
-        bars.attr("fill", COLORS.base);
+        bars.attr("fill", b => COLORS[b.dog_breed_group].base);
       }
       return;
     }
 
     bars.attr("fill", d => 
-      selectedBreed === d.dog_breed ? COLORS.selected : 
-      (d.dog_breed_group === group ? COLORS.hover : COLORS.base));
+      selectedBreed === d.dog_breed ? COLORS[d.dog_breed_group].selected : 
+      (d.dog_breed_group === group ? COLORS[d.dog_breed_group].hover : COLORS[d.dog_breed_group].base));
   }
 
   // NEW: update function to re-bind data & redraw
@@ -136,7 +136,7 @@ export function createBreedChart(container, data, { width, height, margin }) {
             .attr("y", d => y(d.dog_breed))
             .attr("height", y.bandwidth())
             .attr("width", d => x(d.dog_count))
-            .attr("fill", COLORS.base),
+            .attr("fill", d => COLORS[d.dog_breed_group].base),
           update => update,
           exit => exit.transition().duration(200).style("opacity", 0).remove()
         )
@@ -158,7 +158,7 @@ export function createBreedChart(container, data, { width, height, margin }) {
     if (state.selectedBreed != null) {
       highlightBreed(state.selectedBreed);
     } else {
-      bars.attr("fill", COLORS.base);
+      bars.attr("fill", b => COLORS[b.dog_breed_group].base);
     }
   }
 

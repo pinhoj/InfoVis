@@ -12,11 +12,11 @@ const width  = window.innerWidth * 0.4 - margin.left - margin.right;
 let height = window.innerHeight * 0.4 - margin.top - margin.bottom;
 
 // ---- state ----
-let rows = [];
+let rows = [], geodata= {};
 let filterState = {
   postcode: null,
   breed: null,
-  breedGroup: null
+  group: null
 };
 
 // ---- data helpers ----
@@ -24,8 +24,24 @@ function getFilteredRows() {
   return rows.filter(r =>
     (!filterState.postcode   || r.district_code === filterState.postcode) &&
     (!filterState.breed      || r.dog_breed === filterState.breed) &&
-    (!filterState.breedGroup || r.dog_breed_group === filterState.breedGroup)
+    (!filterState.group || r.dog_breed_group === filterState.group)
   );
+}
+function getGeoFilteredRows() {
+  const dataByDistrict = d3.group(getFilteredRows(), d => d.district_code);
+
+    const mergedFeatures = geodata.features.map(feature => {
+      const iso = feature.properties.iso;
+      const dogData = dataByDistrict.get(iso) || [];
+
+      const totalDogs = d3.sum(dogData, d => d.dog_count);
+      const dogDensity = d3.sum(dogData, d => d.dog_density);
+
+      feature.properties.totalDogs = totalDogs;
+      feature.properties.dog_density = dogDensity;
+      return feature;
+    })
+    return mergedFeatures;
 }
 
 function rollupBreeds(srcRows) {
@@ -68,21 +84,24 @@ function recomputeAndRender() {
   const groups = rollupGroups(filtered).slice(0, 5);
 
   breedChart.update(topBreeds, {
-    selectedGroup: filterState.breedGroup,
+    selectedGroup: filterState.group,
     selectedBreed: filterState.breed
   });
   groupChart.update(groups, {
-    selectedGroup: filterState.breedGroup
+    selectedGroup: filterState.group
   });
+  choropleth.update({type:"FeatureCollection",features:getGeoFilteredRows()}, filterState)
+
   // TODO: add chart1 update for postcode filter
 }
 
 // ---- boot ----
 d3.csv('data/dogs_in_vienna.csv', d => ({
-  district_code: d.district_code,
+  district_code: +d.district_code,
   dog_breed: d.dog_breed,
   dog_breed_group: d.dog_breed_group,
-  dog_count: +d.dog_count
+  dog_count: +d.dog_count,
+  dog_density: +d.dog_density,
 })).then(data => {
   rows = data.filter(d => d.dog_breed !== "Unknown");
 
@@ -92,9 +111,14 @@ d3.csv('data/dogs_in_vienna.csv', d => ({
   const groups    = rollupGroups(rows).slice(0, 5);
 
   // create charts
-  d3.json('geodata/vienna_districts.json').then(geodata => {
-    choropleth = createChoropleth('#chart1', rows, geodata, {width, height, margin:{top:10,bottom:0, left:0, right:0}});
-    
+  d3.json('geodata/vienna_districts.json').then(data => {
+    geodata = data;
+
+    choropleth = createChoropleth('#chart1', 
+        {type: 'FeatureCollection', features: getGeoFilteredRows()}, 
+        {breed:null, group:null, district:null}, 
+        {width, height, margin:{top:10,bottom:0, left:0, right:0}}
+      );
   })
 
   breedChart = createBreedChart('#chart2', topBreeds, { width, height, margin });
@@ -111,7 +135,7 @@ d3.csv('data/dogs_in_vienna.csv', d => ({
 
   // Group chart filter
   groupChart.on('filter', ({ dog_breed_group }) => {
-    filterState.breedGroup = dog_breed_group || null;
+    filterState.group = dog_breed_group || null;
     recomputeAndRender();
   });
  
@@ -133,7 +157,7 @@ d3.csv('data/dogs_in_vienna.csv', d => ({
     resetBtn.addEventListener('click', () => {
       filterState.postcode = null;
       filterState.breed = null;
-      filterState.breedGroup = null;
+      filterState.group = null;
       recomputeAndRender();
     });
   }

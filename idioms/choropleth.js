@@ -1,6 +1,6 @@
 import {COLORS} from '../colors.js'
 
-export function createChoropleth(container, data, geodata, {width, height, margin}){
+export function createChoropleth(container, geodata, selectedState, {width, height, margin}){
 
     const svg = d3.select(container)
         .append("svg")
@@ -8,22 +8,31 @@ export function createChoropleth(container, data, geodata, {width, height, margi
         .attr("height", height + margin.top + margin.bottom)
         .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
         
+    
+    const counts = geodata.features.map(d => d.properties.dog_density);
+
+    const colorScale = d3.scaleSequential()
+        .domain([d3.min(counts), d3.max(counts)])  // or [0, d3.max(counts)] if you want
+        .interpolator(d3.interpolate('#ffffff', 
+            selectedState.group != null ? COLORS[selectedState.group].base
+            : COLORS.base )); 
+
         
     const g = svg.append("g")
         .attr("transform", `translate(${margin.left},${margin.top})`);
 
-    const projection = d3.geoIdentity()
+    let projection = d3.geoIdentity()
         .reflectY(true)
         .fitSize([width - margin.left - margin.right, height - margin.top - margin.bottom], geodata);
     
-    const path = d3.geoPath().projection(projection);
+    let path = d3.geoPath().projection(projection);
     
     g.selectAll('path')
         .data(geodata.features)
         .enter()
         .append('path')
         .attr('d', path)
-        .attr('fill', 'teal')
+        .attr('fill', d => colorScale(d.properties.dog_density))
         .attr('stroke', '#333')
         .attr('stroke-width', 1)
 
@@ -40,7 +49,7 @@ export function createChoropleth(container, data, geodata, {width, height, margi
         .style('pointer-events', 'none')
         .style('opacity', 0);
 
-    
+        
     let districts = g.selectAll('path');
 
 
@@ -48,9 +57,11 @@ export function createChoropleth(container, data, geodata, {width, height, margi
     function wireHandlers(sel) {
     sel
         .on('mouseover', function (event, d) {
-            console.log(d);
         tooltip.transition().duration(150).style('opacity', 1);
-        tooltip.html(`District ${d.properties.iso.toString().slice(1,3)} <br>Name: ${d.properties.name}`);
+        tooltip.html(`District ${d.properties.iso.toString().slice(1,3)} 
+                    <br>Name: ${d.properties.name}
+                    <br>Dogs per 1000 people: ${d3.format('.3~s')(d.properties.dog_density)}
+                    <br>Dog count: ${d3.format('.3~s')(d.properties.totalDogs)}`);
         // if (selectedGroup === null) {
         //     d3.select(this).attr('fill',COLORS.hover);
         //     dispatch.call('hover', null, { dog_breed_group: d.dog_breed_group });
@@ -78,16 +89,43 @@ export function createChoropleth(container, data, geodata, {width, height, margi
     return sel;
     }
     
-    function update(data){
+    function update(newdata, newState= {}){
+        selectedState = newState;
+        console.log(selectedState);
+        const counts = newdata.features.map(d => d.properties.dog_density);
+
+        const newcolorScale = d3.scaleSequential()
+            .domain([d3.min(counts), d3.max(counts)])  // or [0, d3.max(counts)] if you want
+            .interpolator(d3.interpolate('#ffffff', 
+                selectedState.group != null ? COLORS[selectedState.group].selected
+                : COLORS.base )); 
+
+        console.log(newcolorScale.domain());
+
+        projection = d3.geoIdentity()
+        .reflectY(true)
+        .fitSize([width - margin.left - margin.right, height - margin.top - margin.bottom], newdata);
+    
+        path = d3.geoPath().projection(projection);
+
         districts = wireHandlers(
             g.selectAll('path')
-            .data(geodata.features)
+            .data(newdata.features, d=>d.properties)
             .join(
-                enter => enter.append('path')
-                    .attr('fill', COLORS.base),
-                update => update,
+                enter => enter
+                    .append('path')
+                    .attr('d', path)
+                    .attr('fill', d => newcolorScale(d.properties.dog_density))
+                    .attr('stroke', '#333')
+                    .attr('stroke-width', 1)),
+                update => update
+                    .attr('d', path)
+                    .attr('fill', d => {
+                                newcolorScale(d.properties.dog_density);
+                                console.log('Setting fill for', d.properties.name, 'to',  newcolorScale(d.properties.dog_density));
+                            }),
                 exit => exit.transition().duration(200).style('opacity', 0).remove()
-            ))
+            )
     }
 
     function hoverDistrict(district){
@@ -99,7 +137,7 @@ export function createChoropleth(container, data, geodata, {width, height, margi
     }
 
     // Initial render
-    update(data);
+    update(geodata);
 
     // API
     return {
