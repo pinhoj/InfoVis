@@ -1,6 +1,6 @@
 export const COLORS = {
   background: '#d2e8e8',
-  base: '#BF0A30',
+  base: '#A00526',
   hover: '#A00526',
   selected: '#70031A',  
   'Companion Dogs':{

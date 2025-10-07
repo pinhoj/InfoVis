@@ -46,13 +46,58 @@ export function createChoropleth(container, geodata, selectedState, {width, heig
         .style("font-weight", "bold")
         .text("Dogs");
         
-        svg.append("text")
+    svg.append("text")
         .attr("x", width / 4)
         .attr("y", 20)
         .attr("text-anchor", "middle")
         .style("font-size", "10px")
         .style("font-weight", "bold")
         .text("per 1000 people in Vienna");
+
+    // ===== Add color scale (legend) =====
+    const legendWidth = 120;
+    const legendHeight = 10;
+
+    const defs = svg.append("defs");
+    const linearGradient = defs.append("linearGradient")
+        .attr("id", "legend-gradient");
+
+    linearGradient.selectAll("stop")
+        .data([
+            {offset: "0%", color: colorScale(d3.min(counts))},
+            {offset: "100%", color: colorScale(d3.max(counts))}
+        ])
+        .enter()
+        .append("stop")
+        .attr("offset", d => d.offset)
+        .attr("stop-color", d => d.color);
+
+    // Slightly shifted left (previously width / 4 - legendWidth / 2)
+    const legendGroup = svg.append("g")
+        .attr("transform", `translate(${width / 4 - legendWidth * 0.65}, ${35})`);
+
+    legendGroup.append("rect")
+        .attr("width", legendWidth)
+        .attr("height", legendHeight)
+        .style("fill", "url(#legend-gradient)")
+        .style("stroke", "#ccc")
+        .style("stroke-width", "0.5px");
+
+    // Add legend axis
+    const legendScale = d3.scaleLinear()
+        .domain(colorScale.domain())
+        .range([0, legendWidth]);
+
+    const legendAxis = d3.axisBottom(legendScale)
+        .ticks(4)
+        .tickFormat(d3.format(".1f"));
+
+    legendGroup.append("g")
+        .attr("transform", `translate(0, ${legendHeight})`)
+        .call(legendAxis)
+        .selectAll("text")
+        .style("font-size", "8px");
+
 
     // Tooltip (scoped; avoid duplicates by selecting or creating)
     const tooltip = d3.select('body').selectAll('.tooltip-map').data([null]).join('div')
