@@ -37,14 +37,33 @@ export function createChoropleth(container, geodata, selectedState, {width, heig
         .attr('stroke', '#333')
         .attr('stroke-width', 1)
 
+    // Title
+    const title = svg.append("text")
+        .attr("x", width / 4)
+        .attr("y", 10)
+        .attr("text-anchor", "middle")
+        .style("font-size", "10px")
+        .style("font-weight", "bold")
+        .text("Dogs");
+        
+        svg.append("text")
+        .attr("x", width / 4)
+        .attr("y", 20)
+        .attr("text-anchor", "middle")
+        .style("font-size", "10px")
+        .style("font-weight", "bold")
+        .text("per 1000 people in Vienna");
+
     // Tooltip (scoped; avoid duplicates by selecting or creating)
     const tooltip = d3.select('body').selectAll('.tooltip-map').data([null]).join('div')
         .attr('class', 'tooltip-map')
         .style('position', 'absolute')
         .style('background', 'white')
         .style('border', '1px solid #ccc')
+        .style('z-index', '10')
         .style('padding', '6px 10px')
         .style('border-radius', '6px')
+        .style('width', '15%')
         .style('box-shadow', '0 2px 6px rgba(0,0,0,0.2)')
         .style('font-size', '12px')
         .style('pointer-events', 'none')
@@ -119,6 +138,14 @@ export function createChoropleth(container, geodata, selectedState, {width, heig
                             }),
                 exit => exit.transition().duration(200).style('opacity', 0).remove()
             )
+
+        if (selectedState.breed != null)
+            title.text(selectedState.breed + "s");
+        else if (selectedState.group != null)
+            title.text(selectedState.group);
+        else
+            title.text("Dogs");
+
     }
 
     function hoverDistrict(district){

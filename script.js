@@ -166,7 +166,7 @@ d3.csv('data/dogs_in_vienna.csv', d => ({
     choropleth = createChoropleth('#chart1', 
         {type: 'FeatureCollection', features: getGeoFilteredRows()}, 
         {breed:null, group:null, district:null}, 
-        {width, height, margin:{top:10,bottom:0, left:0, right:0}}
+        {width, height, margin:{top:0,bottom:0, left:0, right:0}}
       );
 
     choropleth.on('filter', ({ district }) => {
