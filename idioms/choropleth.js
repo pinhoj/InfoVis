@@ -55,7 +55,7 @@ export function createChoropleth(container, geodata, selectedState, {width, heig
         .style("font-weight", "bold")
         .text("per 1000 people in Vienna");
 
-    // ===== Add color scale (legend) =====
+    // color scale
     const legendWidth = 120;
     const legendHeight = 10;
 
