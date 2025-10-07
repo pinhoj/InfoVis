@@ -16,6 +16,7 @@ export function createChoropleth(container, geodata, selectedState, {width, heig
         .domain([d3.min(counts), d3.max(counts)])  // or [0, d3.max(counts)] if you want
         .interpolator(d3.interpolate('#ffffff', 
             selectedState.group != null ? COLORS[selectedState.group].base
+            : selectedState.breed != null ? COLORS[getGroup(selectedState.breed)].base
             : COLORS.base )); 
 
         
@@ -62,10 +63,15 @@ export function createChoropleth(container, geodata, selectedState, {width, heig
     const linearGradient = defs.append("linearGradient")
         .attr("id", "legend-gradient");
 
+    // determine color based on selectedState
+    const legendColor = selectedState.group != null ? COLORS[selectedState.group].base
+        : selectedState.breed != null ? COLORS[getGroup(selectedState.breed)].base
+        : COLORS.base;
+
     linearGradient.selectAll("stop")
         .data([
-            {offset: "0%", color: colorScale(d3.min(counts))},
-            {offset: "100%", color: colorScale(d3.max(counts))}
+            {offset: "0%", color: "#ffffff"},
+            {offset: "100%", color: legendColor}
         ])
         .enter()
         .append("stop")
@@ -184,13 +190,35 @@ export function createChoropleth(container, geodata, selectedState, {width, heig
                 exit => exit.transition().duration(200).style('opacity', 0).remove()
             )
 
+        // ===== Update legend dynamically =====
+        const newLegendColor = selectedState.group != null ? COLORS[selectedState.group].selected
+            : selectedState.breed != null ? COLORS[getGroup(selectedState.breed)].selected
+            : COLORS.base;
+
+        linearGradient.selectAll("stop")
+            .data([
+                {offset: "0%", color: "#ffffff"},
+                {offset: "100%", color: newLegendColor}
+            ])
+            .join("stop")
+            .attr("offset", d => d.offset)
+            .attr("stop-color", d => d.color);
+
+        const newLegendScale = d3.scaleLinear()
+            .domain(newcolorScale.domain())
+            .range([0, legendWidth]);
+
+        legendGroup.select("g")
+            .call(d3.axisBottom(newLegendScale).ticks(4).tickFormat(d3.format(".1f")))
+            .selectAll("text")
+            .style("font-size", "8px");
+
         if (selectedState.breed != null)
             title.text(selectedState.breed + "s");
         else if (selectedState.group != null)
             title.text(selectedState.group);
         else
             title.text("Dogs");
-
     }
 
     function hoverDistrict(district){
