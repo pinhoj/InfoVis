@@ -40,7 +40,7 @@ export function createChoropleth(container, geodata, selectedState, {width, heig
 
     // Title
     const title = svg.append("text")
-        .attr("x", width / 4)
+        .attr("x", width / 4 -20)
         .attr("y", 10)
         .attr("text-anchor", "middle")
         .style("font-size", "10px")
@@ -48,7 +48,7 @@ export function createChoropleth(container, geodata, selectedState, {width, heig
         .text("Dogs");
         
     svg.append("text")
-        .attr("x", width / 4)
+        .attr("x", width / 4 -20)
         .attr("y", 20)
         .attr("text-anchor", "middle")
         .style("font-size", "10px")
