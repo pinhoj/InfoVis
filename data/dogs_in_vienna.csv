@@ -75,7 +75,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 90100,Miniature Schnauzer,Terrier Dogs,14,16.29,5678.38,2.87,49.2,Medium,4.0,0.86
 90100,Norfolk Terrier,Terrier Dogs,1,16.29,5678.38,2.87,49.2,Small,4.0,0.06
 90100,Papillon,Companion Dogs,14,16.29,5678.38,2.87,49.2,Small,3.2,0.86
-90100,Parson Russell Terrier,,55,16.29,5678.38,2.87,49.2,,,3.38
+90100,Parson Russell Terrier,Terrier Dogs,55,16.29,5678.38,2.87,49.2,Small,,3.38
 90100,Pekingese,Companion Dogs,20,16.29,5678.38,2.87,49.2,Small,3.6,1.23
 90100,Pembroke Welsh Corgi,Herding Dogs,3,16.29,5678.38,2.87,49.2,Large,3.8,0.18
 90100,Peruvian Hairless Dog,,5,16.29,5678.38,2.87,49.2,,,0.31
@@ -236,7 +236,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 90200,Old Danish Pointer,,3,96.582,5019.33,19.24,42.3,,,0.03
 90200,Old English Bulldog,,23,96.582,5019.33,19.24,42.3,,,0.24
 90200,Papillon,Companion Dogs,22,96.582,5019.33,19.24,42.3,Small,3.2,0.23
-90200,Parson Russell Terrier,,82,96.582,5019.33,19.24,42.3,,,0.85
+90200,Parson Russell Terrier,Terrier Dogs82,96.582,5019.33,19.24,42.3,Small,,0.85
 90200,Pekingese,Companion Dogs,191,96.582,5019.33,19.24,42.3,Small,3.6,1.98
 90200,Pembroke Welsh Corgi,Herding Dogs,2,96.582,5019.33,19.24,42.3,Large,3.8,0.02
 90200,Podenco Canario,,4,96.582,5019.33,19.24,42.3,,,0.04
@@ -402,7 +402,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 90300,Norwich Terrier,Terrier Dogs,7,84.574,11432.41,7.4,44.0,Medium,3.6,0.08
 90300,Old English Bulldog,,20,84.574,11432.41,7.4,44.0,,,0.24
 90300,Papillon,Companion Dogs,21,84.574,11432.41,7.4,44.0,Small,3.2,0.25
-90300,Parson Russell Terrier,,87,84.574,11432.41,7.4,44.0,,,1.03
+90300,Parson Russell Terrier,Terrier Dogs87,84.574,11432.41,7.4,44.0,Small,,1.03
 90300,Pekingese,Companion Dogs,133,84.574,11432.41,7.4,44.0,Small,3.6,1.57
 90300,Petit Basset Griffon Vendéen,Hound Dogs,4,84.574,11432.41,7.4,44.0,Large,3.4,0.05
 90300,Pharaoh Hound,Hound Dogs,3,84.574,11432.41,7.4,44.0,Very Large,3.2,0.04
@@ -538,7 +538,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 90400,Norwich Terrier,Terrier Dogs,6,30.724,17307.27,1.78,44.4,Medium,3.6,0.2
 90400,Old English Bulldog,,7,30.724,17307.27,1.78,44.4,,,0.23
 90400,Papillon,Companion Dogs,13,30.724,17307.27,1.78,44.4,Small,3.2,0.42
-90400,Parson Russell Terrier,,45,30.724,17307.27,1.78,44.4,,,1.46
+90400,Parson Russell Terrier,Terrier Dogs45,30.724,17307.27,1.78,44.4,Small,,1.46
 90400,Pekingese,Companion Dogs,47,30.724,17307.27,1.78,44.4,Small,3.6,1.53
 90400,Podenco Canario,,12,30.724,17307.27,1.78,44.4,,,0.39
 90400,Pomeranian,Companion Dogs,30,30.724,17307.27,1.78,44.4,Very Small,3.4,0.98
@@ -667,7 +667,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 90500,Norwich Terrier,Terrier Dogs,5,52.581,26138.39,2.01,42.3,Medium,3.6,0.1
 90500,Old English Bulldog,,7,52.581,26138.39,2.01,42.3,,,0.13
 90500,Papillon,Companion Dogs,2,52.581,26138.39,2.01,42.3,Small,3.2,0.04
-90500,Parson Russell Terrier,,36,52.581,26138.39,2.01,42.3,,,0.68
+90500,Parson Russell Terrier,Terrier Dogs36,52.581,26138.39,2.01,42.3,Small,,0.68
 90500,Pekingese,Companion Dogs,79,52.581,26138.39,2.01,42.3,Small,3.6,1.5
 90500,Podenco Canario,,6,52.581,26138.39,2.01,42.3,,,0.11
 90500,Pointer,Sporting Dogs,13,52.581,26138.39,2.01,42.3,Very Large,1.6,0.25
@@ -784,7 +784,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 90600,Norwich Terrier,Terrier Dogs,5,29.388,20197.33,1.46,43.8,Medium,3.6,0.17
 90600,Old English Bulldog,,2,29.388,20197.33,1.46,43.8,,,0.07
 90600,Papillon,Companion Dogs,16,29.388,20197.33,1.46,43.8,Small,3.2,0.54
-90600,Parson Russell Terrier,,14,29.388,20197.33,1.46,43.8,,,0.48
+90600,Parson Russell Terrier,Terrier Dogs14,29.388,20197.33,1.46,43.8,Small,,0.48
 90600,Pekingese,Companion Dogs,34,29.388,20197.33,1.46,43.8,Small,3.6,1.16
 90600,Podenco Canario,,4,29.388,20197.33,1.46,43.8,,,0.14
 90600,Pointer,Sporting Dogs,13,29.388,20197.33,1.46,43.8,Very Large,1.6,0.44
@@ -892,7 +892,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 90700,Norwich Terrier,Terrier Dogs,6,30.101,18716.64,1.61,43.2,Medium,3.6,0.2
 90700,Nova Scotia Duck Tolling Retriever,Sporting Dogs,6,30.101,18716.64,1.61,43.2,Large,3.4,0.2
 90700,Old English Bulldog,,4,30.101,18716.64,1.61,43.2,,,0.13
-90700,Parson Russell Terrier,,24,30.101,18716.64,1.61,43.2,,,0.8
+90700,Parson Russell Terrier,Terrier Dogs24,30.101,18716.64,1.61,43.2,Small,,0.8
 90700,Pekingese,Companion Dogs,26,30.101,18716.64,1.61,43.2,Small,3.6,0.86
 90700,Pembroke Welsh Corgi,Herding Dogs,4,30.101,18716.64,1.61,43.2,Large,3.8,0.13
 90700,Pointer,Sporting Dogs,10,30.101,18716.64,1.61,43.2,Very Large,1.6,0.33
@@ -999,7 +999,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 90800,Norwegian Lundehund,Working Dogs,8,23.56,21615.76,1.09,43.4,Medium,2.4,0.34
 90800,Old English Bulldog,,5,23.56,21615.76,1.09,43.4,,,0.21
 90800,Papillon,Companion Dogs,16,23.56,21615.76,1.09,43.4,Small,3.2,0.68
-90800,Parson Russell Terrier,,10,23.56,21615.76,1.09,43.4,,,0.42
+90800,Parson Russell Terrier,Terrier Dogs10,23.56,21615.76,1.09,43.4,Small,,0.42
 90800,Pekingese,Companion Dogs,11,23.56,21615.76,1.09,43.4,Small,3.6,0.47
 90800,Podenco Canario,,5,23.56,21615.76,1.09,43.4,,,0.21
 90800,Pointer,Sporting Dogs,6,23.56,21615.76,1.09,43.4,Very Large,1.6,0.25
@@ -1118,7 +1118,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 90900,Norwich Terrier,Terrier Dogs,4,39.431,13288.13,2.97,43.3,Medium,3.6,0.1
 90900,Old English Bulldog,,21,39.431,13288.13,2.97,43.3,,,0.53
 90900,Papillon,Companion Dogs,25,39.431,13288.13,2.97,43.3,Small,3.2,0.63
-90900,Parson Russell Terrier,,45,39.431,13288.13,2.97,43.3,,,1.14
+90900,Parson Russell Terrier,Terrier Dogs45,39.431,13288.13,2.97,43.3,Small,,1.14
 90900,Pekingese,Companion Dogs,48,39.431,13288.13,2.97,43.3,Small,3.6,1.22
 90900,Podenco Canario,,12,39.431,13288.13,2.97,43.3,,,0.3
 90900,Pointer,Sporting Dogs,3,39.431,13288.13,2.97,43.3,Very Large,1.6,0.08
@@ -1300,7 +1300,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 91000,Norwich Terrier,Terrier Dogs,5,178.358,5603.71,31.83,42.9,Medium,3.6,0.03
 91000,Old English Bulldog,,59,178.358,5603.71,31.83,42.9,,,0.33
 91000,Papillon,Companion Dogs,96,178.358,5603.71,31.83,42.9,Small,3.2,0.54
-91000,Parson Russell Terrier,,124,178.358,5603.71,31.83,42.9,,,0.7
+91000,Parson Russell Terrier,Terrier Dogs124,178.358,5603.71,31.83,42.9,Small,,0.7
 91000,Patterdale Terrier,Terrier Dogs,6,178.358,5603.71,31.83,42.9,Medium,2.4,0.03
 91000,Pekingese,Companion Dogs,488,178.358,5603.71,31.83,42.9,Small,3.6,2.74
 91000,Pembroke Welsh Corgi,Herding Dogs,4,178.358,5603.71,31.83,42.9,Large,3.8,0.02
@@ -1481,7 +1481,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 91100,Norfolk Terrier,Terrier Dogs,2,91.223,3922.5,23.26,41.5,Small,4.0,0.02
 91100,Old English Bulldog,,49,91.223,3922.5,23.26,41.5,,,0.54
 91100,Papillon,Companion Dogs,53,91.223,3922.5,23.26,41.5,Small,3.2,0.58
-91100,Parson Russell Terrier,,75,91.223,3922.5,23.26,41.5,,,0.82
+91100,Parson Russell Terrier,Terrier Dogs75,91.223,3922.5,23.26,41.5,Small,,0.82
 91100,Patterdale Terrier,Terrier Dogs,6,91.223,3922.5,23.26,41.5,Medium,2.4,0.07
 91100,Pekingese,Companion Dogs,302,91.223,3922.5,23.26,41.5,Small,3.6,3.31
 91100,Pembroke Welsh Corgi,Herding Dogs,8,91.223,3922.5,23.26,41.5,Large,3.8,0.09
@@ -1639,7 +1639,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 91200,Old Danish Pointer,,6,88.515,10923.39,8.1,42.9,,,0.07
 91200,Old English Bulldog,,23,88.515,10923.39,8.1,42.9,,,0.26
 91200,Papillon,Companion Dogs,36,88.515,10923.39,8.1,42.9,Small,3.2,0.41000000000000003
-91200,Parson Russell Terrier,,73,88.515,10923.39,8.1,42.9,,,0.82
+91200,Parson Russell Terrier,Terrier Dogs73,88.515,10923.39,8.1,42.9,Small,,0.82
 91200,Patterdale Terrier,Terrier Dogs,6,88.515,10923.39,8.1,42.9,Medium,2.4,0.07
 91200,Pekingese,Companion Dogs,168,88.515,10923.39,8.1,42.9,Small,3.6,1.9
 91200,Peruvian Hairless Dog,,6,88.515,10923.39,8.1,42.9,,,0.07
@@ -1813,7 +1813,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 91300,Old Danish Pointer,,1,50.65,1342.98,37.71,47.8,,,0.02
 91300,Old English Bulldog,,12,50.65,1342.98,37.71,47.8,,,0.24
 91300,Papillon,Companion Dogs,31,50.65,1342.98,37.71,47.8,Small,3.2,0.61
-91300,Parson Russell Terrier,,76,50.65,1342.98,37.71,47.8,,,1.5
+91300,Parson Russell Terrier,Terrier Dogs76,50.65,1342.98,37.71,47.8,Small,,1.5
 91300,Pekingese,Companion Dogs,69,50.65,1342.98,37.71,47.8,Small,3.6,1.36
 91300,Petit Basset Griffon Vendéen,Hound Dogs,18,50.65,1342.98,37.71,47.8,Large,3.4,0.36
 91300,Pharaoh Hound,Hound Dogs,6,50.65,1342.98,37.71,47.8,Very Large,3.2,0.12
@@ -1991,7 +1991,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 91400,Nova Scotia Duck Tolling Retriever,Sporting Dogs,6,84.973,2516.73,33.76,45.0,Large,3.4,0.07
 91400,Old English Bulldog,,7,84.973,2516.73,33.76,45.0,,,0.08
 91400,Papillon,Companion Dogs,36,84.973,2516.73,33.76,45.0,Small,3.2,0.42
-91400,Parson Russell Terrier,,63,84.973,2516.73,33.76,45.0,,,0.74
+91400,Parson Russell Terrier,Terrier Dogs63,84.973,2516.73,33.76,45.0,Small,,0.74
 91400,Pekingese,Companion Dogs,176,84.973,2516.73,33.76,45.0,Small,3.6,2.07
 91400,Pembroke Welsh Corgi,Herding Dogs,5,84.973,2516.73,33.76,45.0,Large,3.8,0.06
 91400,Petit Basset Griffon Vendéen,Hound Dogs,7,84.973,2516.73,33.76,45.0,Large,3.4,0.08
@@ -2137,7 +2137,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 91500,Norwegian Elkhound,Hound Dogs,6,71.651,18285.48,3.92,41.6,Very Large,3.8,0.08
 91500,Old English Bulldog,,22,71.651,18285.48,3.92,41.6,,,0.31
 91500,Papillon,Companion Dogs,25,71.651,18285.48,3.92,41.6,Small,3.2,0.35
-91500,Parson Russell Terrier,,12,71.651,18285.48,3.92,41.6,,,0.17
+91500,Parson Russell Terrier,Terrier Dogs12,71.651,18285.48,3.92,41.6,Small,,0.17
 91500,Pekingese,Companion Dogs,87,71.651,18285.48,3.92,41.6,Small,3.6,1.21
 91500,Podenco Canario,,6,71.651,18285.48,3.92,41.6,,,0.08
 91500,Pointer,Sporting Dogs,11,71.651,18285.48,3.92,41.6,Very Large,1.6,0.15
@@ -2283,7 +2283,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 91600,Norwich Terrier,Terrier Dogs,1,95.704,11034.64,8.67,42.8,Medium,3.6,0.01
 91600,Old English Bulldog,,16,95.704,11034.64,8.67,42.8,,,0.17
 91600,Papillon,Companion Dogs,31,95.704,11034.64,8.67,42.8,Small,3.2,0.32
-91600,Parson Russell Terrier,,47,95.704,11034.64,8.67,42.8,,,0.49
+91600,Parson Russell Terrier,Terrier Dogs47,95.704,11034.64,8.67,42.8,Small,,0.49
 91600,Pekingese,Companion Dogs,196,95.704,11034.64,8.67,42.8,Small,3.6,2.05
 91600,Podenco Canario,,13,95.704,11034.64,8.67,42.8,,,0.14
 91600,Pointer,Sporting Dogs,24,95.704,11034.64,8.67,42.8,Very Large,1.6,0.25
@@ -2439,7 +2439,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 91700,Old Danish Pointer,,3,52.647,4621.73,11.39,43.1,,,0.06
 91700,Old English Bulldog,,5,52.647,4621.73,11.39,43.1,,,0.09
 91700,Papillon,Companion Dogs,30,52.647,4621.73,11.39,43.1,Small,3.2,0.57
-91700,Parson Russell Terrier,,41,52.647,4621.73,11.39,43.1,,,0.78
+91700,Parson Russell Terrier,Terrier Dogs41,52.647,4621.73,11.39,43.1,Small,,0.78
 91700,Patterdale Terrier,Terrier Dogs,5,52.647,4621.73,11.39,43.1,Medium,2.4,0.09
 91700,Pekingese,Companion Dogs,51,52.647,4621.73,11.39,43.1,Small,3.6,0.97
 91700,Podenco Canario,,5,52.647,4621.73,11.39,43.1,,,0.09
@@ -2597,7 +2597,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 91800,Norwich Terrier,Terrier Dogs,1,47.632,7504.41,6.35,44.2,Medium,3.6,0.02
 91800,Old English Bulldog,,32,47.632,7504.41,6.35,44.2,,,0.67
 91800,Papillon,Companion Dogs,27,47.632,7504.41,6.35,44.2,Small,3.2,0.5700000000000001
-91800,Parson Russell Terrier,,55,47.632,7504.41,6.35,44.2,,,1.15
+91800,Parson Russell Terrier,Terrier Dogs55,47.632,7504.41,6.35,44.2,Small,,1.15
 91800,Pekingese,Companion Dogs,28,47.632,7504.41,6.35,44.2,Small,3.6,0.59
 91800,Pembroke Welsh Corgi,Herding Dogs,5,47.632,7504.41,6.35,44.2,Large,3.8,0.1
 91800,Petit Basset Griffon Vendéen,Hound Dogs,2,47.632,7504.41,6.35,44.2,Large,3.4,0.04
@@ -2785,7 +2785,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 91900,Old English Bulldog,,22,68.46,2744.56,24.94,46.6,,,0.32
 91900,Otterhound,Hound Dogs,5,68.46,2744.56,24.94,46.6,Very Large,3.2,0.07
 91900,Papillon,Companion Dogs,37,68.46,2744.56,24.94,46.6,Small,3.2,0.54
-91900,Parson Russell Terrier,,136,68.46,2744.56,24.94,46.6,,,1.99
+91900,Parson Russell Terrier,Terrier Dogs136,68.46,2744.56,24.94,46.6,Small,,1.99
 91900,Pekingese,Companion Dogs,139,68.46,2744.56,24.94,46.6,Small,3.6,2.03
 91900,Peruvian Hairless Dog,,1,68.46,2744.56,24.94,46.6,,,0.01
 91900,Petit Basset Griffon Vendéen,Hound Dogs,12,68.46,2744.56,24.94,46.6,Large,3.4,0.18
@@ -2943,7 +2943,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 92000,Nova Scotia Duck Tolling Retriever,Sporting Dogs,6,83.351,14596.16,5.71,42.2,Large,3.4,0.07
 92000,Old English Bulldog,,28,83.351,14596.16,5.71,42.2,,,0.34
 92000,Papillon,Companion Dogs,17,83.351,14596.16,5.71,42.2,Small,3.2,0.2
-92000,Parson Russell Terrier,,49,83.351,14596.16,5.71,42.2,,,0.59
+92000,Parson Russell Terrier,Terrier Dogs49,83.351,14596.16,5.71,42.2,Small,,0.59
 92000,Pekingese,Companion Dogs,230,83.351,14596.16,5.71,42.2,Small,3.6,2.76
 92000,Podenco Canario,,10,83.351,14596.16,5.71,42.2,,,0.12
 92000,Podhale Dog,,3,83.351,14596.16,5.71,42.2,,,0.04
@@ -3122,7 +3122,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 92100,Nova Scotia Duck Tolling Retriever,Sporting Dogs,27,144.263,3246.01,44.44,43.7,Large,3.4,0.19
 92100,Old English Bulldog,,74,144.263,3246.01,44.44,43.7,,,0.51
 92100,Papillon,Companion Dogs,127,144.263,3246.01,44.44,43.7,Small,3.2,0.88
-92100,Parson Russell Terrier,,131,144.263,3246.01,44.44,43.7,,,0.91
+92100,Parson Russell Terrier,Terrier Dogs131,144.263,3246.01,44.44,43.7,Small,,0.91
 92100,Patterdale Terrier,Terrier Dogs,12,144.263,3246.01,44.44,43.7,Medium,2.4,0.08
 92100,Pekingese,Companion Dogs,398,144.263,3246.01,44.44,43.7,Small,3.6,2.76
 92100,Pembroke Welsh Corgi,Herding Dogs,6,144.263,3246.01,44.44,43.7,Large,3.8,0.04
@@ -3332,7 +3332,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 92200,Old Danish Pointer,,3,161.957,1583.17,102.3,42.4,,,0.02
 92200,Old English Bulldog,,94,161.957,1583.17,102.3,42.4,,,0.58
 92200,Papillon,Companion Dogs,135,161.957,1583.17,102.3,42.4,Small,3.2,0.8300000000000001
-92200,Parson Russell Terrier,,205,161.957,1583.17,102.3,42.4,,,1.27
+92200,Parson Russell Terrier,Terrier Dogs205,161.957,1583.17,102.3,42.4,Small,,1.27
 92200,Patterdale Terrier,Terrier Dogs,5,161.957,1583.17,102.3,42.4,Medium,2.4,0.03
 92200,Pekingese,Companion Dogs,405,161.957,1583.17,102.3,42.4,Small,3.6,2.5
 92200,Pembroke Welsh Corgi,Herding Dogs,7,161.957,1583.17,102.3,42.4,Large,3.8,0.04
@@ -3538,7 +3538,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 92300,Old Danish Pointer,,2,94.469,2946.47,32.06,45.1,,,0.02
 92300,Old English Bulldog,,40,94.469,2946.47,32.06,45.1,,,0.42
 92300,Papillon,Companion Dogs,90,94.469,2946.47,32.06,45.1,Small,3.2,0.95
-92300,Parson Russell Terrier,,94,94.469,2946.47,32.06,45.1,,,1.0
+92300,Parson Russell Terrier,Terrier Dogs94,94.469,2946.47,32.06,45.1,Small,,1.0
 92300,Patterdale Terrier,Terrier Dogs,7,94.469,2946.47,32.06,45.1,Medium,2.4,0.07
 92300,Pekingese,Companion Dogs,242,94.469,2946.47,32.06,45.1,Small,3.6,2.56
 92300,Peruvian Hairless Dog,,10,94.469,2946.47,32.06,45.1,,,0.11

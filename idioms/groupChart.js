@@ -2,6 +2,7 @@
 // Renders the breed-group bar chart and exposes an API with update() + events.
 // Uses a semantic "filter" event to tell the controller which group to filter by.
 import { COLORS } from '../colors.js';
+import { getDistrict } from '../script.js';
 
 
 export function createGroupChart(container, data, { width, height, margin }) {
@@ -35,7 +36,7 @@ export function createGroupChart(container, data, { width, height, margin }) {
   const gBars = svg.append('g');
 
   // Title
-  svg.append("text")
+  const title = svg.append("text")
     .attr("x", width / 2)
     .attr("y", -20)
     .attr("text-anchor", "middle")
@@ -66,7 +67,7 @@ export function createGroupChart(container, data, { width, height, margin }) {
       .on('mouseover', function (event, d) {
         tooltip.transition().duration(150).style('opacity', 1);
         tooltip.html(`Group: ${d.dog_breed_group} <br/>Count: ${d3.format('.3~s')(d.dog_count)}`);
-        if (selectedGroup === null) {
+        if (selectedGroup != d.dog_breed_group) {
           d3.select(this).attr('fill',COLORS[d.dog_breed_group].hover);
           dispatch.call('hover', null, { dog_breed_group: d.dog_breed_group });
         }
@@ -79,7 +80,7 @@ export function createGroupChart(container, data, { width, height, margin }) {
         tooltip.transition().duration(150).style('opacity', 0);
 
         d3.select(this).attr('fill',
-          selectedGroup != null ? COLORS[d.dog_breed_group].selected : COLORS[d.dog_breed_group].base
+          selectedGroup === d.dog_breed_group ? COLORS[d.dog_breed_group].selected : COLORS[d.dog_breed_group].base
         );
 
         dispatch.call('hover', null, { dog_breed_group: null });
@@ -153,10 +154,15 @@ export function createGroupChart(container, data, { width, height, margin }) {
           : (d.dog_breed_group === selectedGroup ? COLORS[d.dog_breed_group].selected : COLORS[d.dog_breed_group].base)
       );
 
+    let district = state.postcode === null ? "Vienna" : getDistrict(state.postcode);
+    
+    title.text("Dog Breed Groups in " + district); 
+    
+
   }
 
   // Initial render
-  update(data, { selectedGroup: null });
+  update(data, { group: null, breed: null, postcode: null });
 
   // API
   return {

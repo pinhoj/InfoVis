@@ -27,11 +27,14 @@ function renderFilterDisplay(filterState) {
 
   container.append('h3').text('Filters selected');
 
-  const filters = Object.entries(filterState).map(([key, value]) => ({
-    key: key.charAt(0).toUpperCase() + key.slice(1),
-    value: value || 'All'
-  }));
+  const filters = [
+    ["District", filterState.postcode != null ? getDistrict(filterState.postcode) : 'All'],
+    ["Breed", filterState.breed || 'All'],
+    ["Group", filterState.group || 'All'],
+  ];
 
+  // console.log();
+  
   const table = container.append('table');
 
   const rows = table.selectAll('tr')
@@ -41,10 +44,10 @@ function renderFilterDisplay(filterState) {
 
   rows.append('td')
     .style('font-weight', 'bold')
-    .text(d => `${d.key}:`);
+    .text(([d]) => d + ':');
 
   rows.append('td')
-    .text(d => d.value);
+    .text(([_,d]) => d);
   
 }
 
@@ -101,6 +104,11 @@ function rollupBreeds(srcRows) {
 
 export function getGroup(breed){
   return breedToGroup.get(breed);
+}
+
+export function getDistrict(postcode){
+  if (Object.keys(geodata).length === 0) return;
+  return geodata.features.find(f=>f.properties.iso === postcode).properties.name;
 }
 
 function rollupGroups(srcRows) {
@@ -177,10 +185,10 @@ d3.csv('data/dogs_in_vienna.csv', d => ({
   // TODO: create postcode chart for #chart1
 
 
-  breedChart.on('filter', ({ dog_breed, dog_group }) => {
+  breedChart.on('filter', ({ dog_breed }) => {
     console.log('breed filter event', dog_breed);
     filterState = {
-      postcode: filterState.postcode,
+      postcode: null,
       breed: dog_breed || null,
       group: filterState.group,
     };
