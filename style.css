@@ -9,7 +9,7 @@ html, body {
 
 
 header {
-  background: #222;
+  background: #70031A;
   color: #fff;
   position:absolute;
   padding: 0;
@@ -21,7 +21,7 @@ header {
 
 footer {
   z-index:-1;
-  background: #222;
+  background: #70031A;
   color: #fff;
   text-align: center;
   position: fixed;
