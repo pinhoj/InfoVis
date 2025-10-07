@@ -40,7 +40,7 @@ export function createChoropleth(container, geodata, selectedState, {width, heig
 
     // Title
     const title = svg.append("text")
-        .attr("x", width / 4 -20)
+        .attr("x", width / 4)
         .attr("y", 10)
         .attr("text-anchor", "middle")
         .style("font-size", "10px")
@@ -48,7 +48,7 @@ export function createChoropleth(container, geodata, selectedState, {width, heig
         .text("Dogs");
         
     svg.append("text")
-        .attr("x", width / 4 -20)
+        .attr("x", width / 4)
         .attr("y", 20)
         .attr("text-anchor", "middle")
         .style("font-size", "10px")
@@ -56,22 +56,19 @@ export function createChoropleth(container, geodata, selectedState, {width, heig
         .text("per 1000 people in Vienna");
 
     // color scale
-    const legendWidth = 120;
-    const legendHeight = 10;
+    const legendWidth = width * 0.25;
+    const legendHeight = height * 0.04;
+
 
     const defs = svg.append("defs");
     const linearGradient = defs.append("linearGradient")
         .attr("id", "legend-gradient");
 
-    // determine color based on selectedState
-    const legendColor = selectedState.group != null ? COLORS[selectedState.group].base
-        : selectedState.breed != null ? COLORS[getGroup(selectedState.breed)].base
-        : COLORS.base;
 
     linearGradient.selectAll("stop")
         .data([
-            {offset: "0%", color: "#ffffff"},
-            {offset: "100%", color: legendColor}
+            {offset: "0%", color: colorScale(d3.min(counts))},
+            {offset: "100%", color: colorScale(d3.max(counts))}
         ])
         .enter()
         .append("stop")
@@ -80,13 +77,13 @@ export function createChoropleth(container, geodata, selectedState, {width, heig
 
     // Slightly shifted left (previously width / 4 - legendWidth / 2)
     const legendGroup = svg.append("g")
-        .attr("transform", `translate(${width / 4 - legendWidth * 0.65}, ${35})`);
+        .attr("transform", `translate(${width *0.7}, ${height * 0.93})`);
 
     legendGroup.append("rect")
         .attr("width", legendWidth)
         .attr("height", legendHeight)
         .style("fill", "url(#legend-gradient)")
-        .style("stroke", "#ccc")
+        .style("stroke", "#000000")
         .style("stroke-width", "0.5px");
 
     // Add legend axis
@@ -94,15 +91,19 @@ export function createChoropleth(container, geodata, selectedState, {width, heig
         .domain(colorScale.domain())
         .range([0, legendWidth]);
 
-    const legendAxis = d3.axisBottom(legendScale)
-        .ticks(4)
-        .tickFormat(d3.format(".1f"));
+    const [min,max] = colorScale.domain() 
 
+    const legendAxis = d3.axisBottom(legendScale)
+        .tickValues(d3.range(5).map(i => min + i/4 * (max-min)))
+        .tickSize(4)
+        .tickFormat(d3.format("~s"));
+    
     legendGroup.append("g")
         .attr("transform", `translate(0, ${legendHeight})`)
+        .attr("stroke-width", "0.5px")
         .call(legendAxis)
         .selectAll("text")
-        .style("font-size", "8px");
+        .style("font-size", "6px");
 
 
     // Tooltip (scoped; avoid duplicates by selecting or creating)
@@ -129,9 +130,11 @@ export function createChoropleth(container, geodata, selectedState, {width, heig
     sel
         .on('mouseover', function (event, d) {
             tooltip.transition().duration(150).style('opacity', 1);
-            tooltip.html(`District ${d.properties.iso.toString().slice(1,3)} 
-                        <br>Name: ${d.properties.name}
-                        <br>Dogs per 1000 people: ${d3.format('.3~s')(d.properties.dog_density)}
+            tooltip.html(`District ${d.properties.iso.toString().slice(1,3)}: ${d.properties.name}
+                        <br>Dogs per 1000 people: ${
+                            d.properties.dog_density > 10 ? d3.format('.3~s')(d.properties.dog_density)
+                            : d3.format('.1f')(d.properties.dog_density)
+                        }
                         <br>Dog count: ${d3.format('.3~s')(d.properties.totalDogs)}`);
         
         })
@@ -191,14 +194,11 @@ export function createChoropleth(container, geodata, selectedState, {width, heig
             )
 
         // ===== Update legend dynamically =====
-        const newLegendColor = selectedState.group != null ? COLORS[selectedState.group].selected
-            : selectedState.breed != null ? COLORS[getGroup(selectedState.breed)].selected
-            : COLORS.base;
 
         linearGradient.selectAll("stop")
             .data([
-                {offset: "0%", color: "#ffffff"},
-                {offset: "100%", color: newLegendColor}
+                {offset: "0%", color: colorScale(d3.min(counts))},
+                {offset: "100%", color: newcolorScale(d3.max(counts))}
             ])
             .join("stop")
             .attr("offset", d => d.offset)
@@ -207,11 +207,20 @@ export function createChoropleth(container, geodata, selectedState, {width, heig
         const newLegendScale = d3.scaleLinear()
             .domain(newcolorScale.domain())
             .range([0, legendWidth]);
+        
+        const [min,max] = newcolorScale.domain() 
 
+        const axis = d3.axisBottom(newLegendScale)
+            .tickValues(d3.range(5).map(i => min + i/4 * (max-min)))
+            .tickSize(4)
+            .tickFormat(max > 100 ? d3.format(".2~s")
+                        : max > 10 ? d3.format(".0f")
+                        : d3.format(".1f"));
+        
         legendGroup.select("g")
-            .call(d3.axisBottom(newLegendScale).ticks(4).tickFormat(d3.format(".1f")))
+            .call(axis)
             .selectAll("text")
-            .style("font-size", "8px");
+            .style("font-size", "6px");
 
         if (selectedState.breed != null)
             title.text(selectedState.breed + "s");
@@ -230,7 +239,7 @@ export function createChoropleth(container, geodata, selectedState, {width, heig
     }
 
     // Initial render
-    update(geodata);
+    update(geodata, {breed:null,group:null, postcode:null});
 
     // API
     return {
