@@ -2,7 +2,6 @@
 // Renders the Top-10 breeds bar chart. Publishes a "filter" event with { dog_breed }.
 // Exposes update(), highlightBreed(), highlightByGroup(), and on().
 import { COLORS } from '../colors.js';
-import { getDistrict } from '../script.js';
 
 export function createBreedChart(container, data, { width, height, margin }) {
   const dispatch = d3.dispatch("filter", "hover"); 
@@ -150,7 +149,7 @@ export function createBreedChart(container, data, { width, height, margin }) {
       .attr("width", d => x(d.dog_count));
 
     // 5) restore any external highlight state
-    let district = state.postcode === null ? "Vienna" : getDistrict(state.postcode);
+    let district = "Vienna";
     if (state.group != null) {
       highlightByGroup(state.group, true);
       title.text("Top 10 " + state.group + " in " + district); 

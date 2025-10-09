@@ -4,7 +4,6 @@
 
 import { createBreedChart } from './idioms/breedChart.js';
 import { createGroupChart } from './idioms/groupChart.js';
-import { createChoropleth } from './idioms/choropleth.js';
 
 // ---- config ----
 const margin = { top: 10, right: 10, bottom: 10, left: 140 };
@@ -12,7 +11,7 @@ const width  = window.innerWidth * 0.4 - margin.left - margin.right;
 let height = window.innerHeight * 0.4 - margin.top - margin.bottom;
 
 // ---- state ----
-let rows = [], geodata= {};
+let rows = [];
 let breedToGroup;
 let filterState = {
   postcode: null,
@@ -28,7 +27,7 @@ function renderFilterDisplay(filterState) {
   container.append('h3').text('Filters selected');
 
   const filters = [
-    ["District", filterState.postcode != null ? getDistrict(filterState.postcode) : 'All'],
+    ["District", 'All'],
     ["Breed", filterState.breed || 'All'],
     ["Group", filterState.group || 'All'],
   ];
@@ -65,28 +64,6 @@ function getGroupFilteredRows(){
   );
 }
 
-function getGeoFilteredRows() {
-  const filtered = rows.filter(r =>
-    (!filterState.breed || r.dog_breed === filterState.breed) &&
-    (!filterState.group || r.dog_breed_group === filterState.group)
-  );
-
-  const dataByDistrict = d3.group(filtered, d => d.district_code);
-
-    const mergedFeatures = geodata.features.map(feature => {
-      const iso = feature.properties.iso;
-      const dogData = dataByDistrict.get(iso) || [];
-
-      const totalDogs = d3.sum(dogData, d => d.dog_count);
-      const dogDensity = d3.sum(dogData, d => d.dog_density);
-
-      feature.properties.totalDogs = totalDogs;
-      feature.properties.dog_density = dogDensity;
-      return feature;
-    })
-    return mergedFeatures;
-}
-
 function rollupBreeds(srcRows) {
   const byBreed = d3.rollup(
     srcRows,
@@ -106,11 +83,6 @@ export function getGroup(breed){
   return breedToGroup.get(breed);
 }
 
-export function getDistrict(postcode){
-  if (Object.keys(geodata).length === 0) return;
-  return geodata.features.find(f=>f.properties.iso === postcode).properties.name;
-}
-
 function rollupGroups(srcRows) {
   const byGroup = d3.rollup(
     srcRows,
@@ -125,7 +97,7 @@ function rollupGroups(srcRows) {
 }
 
 // ---- charts (created after data load) ----
-let breedChart, groupChart, choropleth;
+let breedChart, groupChart;
 
 // ---- controller ----
 function recomputeAndRender() {
@@ -138,9 +110,8 @@ function recomputeAndRender() {
 
   breedChart.update(topBreeds, filterState);
   groupChart.update(groups, filterState);
-  choropleth.update({type:"FeatureCollection", features:getGeoFilteredRows()}, filterState)
 
-  renderFilterDisplay(filterState);
+  // renderFilterDisplay(filterState);
   // TODO: add chart1 update for postcode filter
 }
 
@@ -159,25 +130,6 @@ d3.csv('data/dogs_in_vienna.csv', d => ({
   const topBreeds = breedsAll.slice(0, 10);
   const groups    = rollupGroups(rows).slice(0, 6);
 
-  // create charts
-  d3.json('geodata/vienna_districts.json').then(data => {
-    geodata = data;
-
-    choropleth = createChoropleth('#chart1', 
-        {type: 'FeatureCollection', features: getGeoFilteredRows()}, 
-        {breed:null, group:null, district:null}, 
-        {width, height, margin:{top:0,bottom:0, left:0, right:0}}
-      );
-
-    choropleth.on('filter', ({ district }) => {
-      filterState = {
-        postcode: district || null,
-        breed: null,
-        group: filterState.group,
-      }
-      recomputeAndRender();
-    });
-  })
 
   breedChart = createBreedChart('#chart2', topBreeds, { width, height, margin });
   height = (window.innerHeight * 0.25) - margin.top - margin.bottom;
@@ -228,4 +180,4 @@ d3.csv('data/dogs_in_vienna.csv', d => ({
   }
 });
 
-renderFilterDisplay(filterState);
+// renderFilterDisplay(filterState);

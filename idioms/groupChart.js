@@ -2,7 +2,6 @@
 // Renders the breed-group bar chart and exposes an API with update() + events.
 // Uses a semantic "filter" event to tell the controller which group to filter by.
 import { COLORS } from '../colors.js';
-import { getDistrict } from '../script.js';
 
 
 export function createGroupChart(container, data, { width, height, margin }) {
@@ -154,7 +153,7 @@ export function createGroupChart(container, data, { width, height, margin }) {
           : (d.dog_breed_group === selectedGroup ? COLORS[d.dog_breed_group].selected : COLORS[d.dog_breed_group].base)
       );
 
-    let district = state.postcode === null ? "Vienna" : getDistrict(state.postcode);
+    let district = "Vienna";
     
     title.text("Dog Breed Groups in " + district); 
     
