@@ -5,6 +5,7 @@
 import { createBreedChart } from './idioms/breedChart.js';
 import { createGroupChart } from './idioms/groupChart.js';
 import { createChoropleth } from './idioms/choropleth.js';
+import { createTileChart } from './idioms/tileChart.js';
 
 // ---- config ----
 const margin = { top: 10, right: 10, bottom: 10, left: 140 };
@@ -17,7 +18,10 @@ let breedToGroup;
 let filterState = {
   postcode: null,
   breed: null,
-  group: null
+  group: null,
+  // table controls from #chart4
+  tableMode: 'population_density',
+  tableOption: 'adaptability',
 };
 
 function renderFilterDisplay(filterState) {
@@ -31,6 +35,8 @@ function renderFilterDisplay(filterState) {
     ["District", filterState.postcode != null ? getDistrict(filterState.postcode) : 'All'],
     ["Breed", filterState.breed || 'All'],
     ["Group", filterState.group || 'All'],
+    ["Table Mode", filterState.tableMode || 'All'],
+    ["Table Option", filterState.tableOption || 'None'],
   ];
 
   // console.log();
@@ -125,7 +131,7 @@ function rollupGroups(srcRows) {
 }
 
 // ---- charts (created after data load) ----
-let breedChart, groupChart, choropleth;
+let breedChart, groupChart, choropleth, tileChart;
 
 // ---- controller ----
 function recomputeAndRender() {
@@ -139,6 +145,7 @@ function recomputeAndRender() {
   breedChart.update(topBreeds, filterState);
   groupChart.update(groups, filterState);
   choropleth.update({type:"FeatureCollection", features:getGeoFilteredRows()}, filterState)
+  tileChart.update(rows, filterState);
 
   renderFilterDisplay(filterState);
   // TODO: add chart1 update for postcode filter
@@ -151,6 +158,9 @@ d3.csv('data/dogs_in_vienna.csv', d => ({
   dog_breed_group: d.dog_breed_group,
   dog_count: +d.dog_count,
   dog_density: +d.dog_density,
+  adaptability: +d.adaptability,
+  population_density: +d.population_density,
+  avg_age: +d.avg_age,
 })).then(data => {
   rows = data.filter(d => d.dog_breed !== "Unknown");
 
@@ -213,6 +223,42 @@ d3.csv('data/dogs_in_vienna.csv', d => ({
   groupChart.on("hover", ({ dog_breed_group }) => {
     breedChart.hoverByGroup(dog_breed_group);
   });
+
+  tileChart = createTileChart('#chart4', rows, { 
+    xField: filterState.tableMode,
+    yField: filterState.tableOption,         // binned on X
+    bins: 6, width, height });
+  tileChart.on('filter', ({ category, attribute }) => {
+    console.log('tile filter event', category, attribute);
+  });
+  
+  // Wire the table header controls (mode + options) to the central filterState
+  function wireTableControls(){
+    const modeInputs = document.querySelectorAll('input[name="table-mode"]');
+    modeInputs.forEach(input => {
+      input.addEventListener('change', (e) => {
+        if (e.target.checked) {
+          filterState.tableMode = e.target.value;
+          recomputeAndRender();
+        }
+      });
+    });
+
+    const optionInputs = document.querySelectorAll('input[name="table-option"]');
+    optionInputs.forEach(input => {
+      input.addEventListener('change', (e) => {
+        if (e.target.checked) {
+          filterState.tableOption = e.target.value;
+        } else {
+          filterState.tableOption = null;
+        }
+        recomputeAndRender();
+      });
+    });
+  }
+
+  wireTableControls();
+  
 
   // TODO: postcode chart filter handler
 

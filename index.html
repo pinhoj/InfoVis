@@ -24,9 +24,35 @@
         </div>
         <div id="chart3" class="grid-item BarChart_Groups">
         </div>
-        <div id="chart4" class="grid-item Table">
-          <img src="images/table.jpg" alt="table" />
-      </div>
+        <div class="grid-item Table">
+  <!-- Header (small) -->
+  <div class="table-header">
+    <div>Population</div>
+    <div class="modes">
+      <label>Mode:</label>
+      <fieldset class="radio-row" aria-label="Table mode">
+        <label><input type="radio" name="table-mode" value="population_density" checked> Density</label>
+        <label><input type="radio" name="table-mode" value="avg_age"> Age</label>
+      </fieldset>
+    </div>
+  </div>
+
+  <!-- Content area: chart left, options right -->
+  <div class="table-body">
+    <div id="chart4"></div>
+
+    <div id="table-options">
+      <fieldset aria-label="Table options">
+        <label><input type="radio" name="table-option" value="size"> Size</label>
+        <label><input type="radio" name="table-option" value="adaptability"> Adaptability</label>
+        <label><input type="radio" name="table-option" value="friendliness"> Friendliness</label>
+        <label><input type="radio" name="table-option" value="health_needs"> Health Needs</label>
+        <label><input type="radio" name="table-option" value="trainability"> Trainability</label>
+        <label><input type="radio" name="table-option" value="exercise_needs"> Exercise Needs</label>
+      </fieldset>
+    </div>
+  </div>
+</div>
       </div>
     </main>
     <footer>
