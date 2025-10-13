@@ -1,4 +1,4 @@
-import {COLORS} from '../colors.js'
+import {COLORS} from '../colors.js';
 import { getGroup } from '../script.js';
 
 export function createChoropleth(container, geodata, selectedState, {width, height, margin}){
@@ -136,14 +136,16 @@ export function createChoropleth(container, geodata, selectedState, {width, heig
                             : d3.format('.1f')(d.properties.dog_density)
                         }
                         <br>Dog count: ${d3.format('.3~s')(d.properties.totalDogs)}`);
-        
+            hoverDistrict(d, 1);
+            
         })
         .on('mousemove', function (event) {
             tooltip.style('left', (event.pageX + 10) + 'px')
                    .style('top', (event.pageY - 28) + 'px');
         })
-        .on('mouseout', function () {
+        .on('mouseout', function (event, d) {
             tooltip.transition().duration(150).style('opacity', 0);
+            hoverDistrict(d, 0);
         })
         .on('click', function (event, d) {
             console.log(selectedState.postcode , d.properties.iso)
@@ -230,8 +232,13 @@ export function createChoropleth(container, geodata, selectedState, {width, heig
             title.text("Dogs");
     }
 
-    function hoverDistrict(district){
-        districts.filter(d =>d.code === district.code).attr('fill', 'red')
+    function hoverDistrict(district, toggle){
+        // console.log(district.properties.name)
+        if (toggle == 1){
+            console.log(districts);
+            districts.filter(d => d.properties.iso === district.properties.iso).attr('stroke-width', 1.5);
+        } else
+            districts.filter(d => d.properties.iso === district.properties.iso).attr('stroke-width', 1);
     }
 
     function highlightDistrict(district){
