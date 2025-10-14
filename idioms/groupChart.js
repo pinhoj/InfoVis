@@ -125,7 +125,7 @@ export function createGroupChart(container, data, { width, height, margin }) {
 
     // 2) axes
     xAxisG.transition().duration(250).call(d3.axisBottom(x).tickFormat(d3.format("~s")));
-    yAxisG.transition().duration(250).call(d3.axisLeft(y).tickSize(10));
+    yAxisG.transition().duration(250).call(d3.axisLeft(y).tickSize(0));
 
     // 3) join
     bars = wireHandlers(

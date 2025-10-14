@@ -1,305 +1,143 @@
+import {COLORS} from "../colors.js";
+import { getGroup } from '../script.js';
+
+
+const bins = 6;
+const tilePadding = 0.08;
 // expects D3 v6+ to be available (import * as d3 from 'd3')
-export function createTileChart(
-  container,
-  data = [],
-  {
-    bins = 6,
-    xField = 'population_density',         // binned on X
-    // xField = 'avg_age',         // binned on X
-    yField = 'adaptability',    // classes on Y
-    valueField = 'dog_count',   // summed per tile
-    width = 720,
-    height = 420,
-    margin = { top: 32, right: 16, bottom: 48, left: 56 },
-    xLabel = xField,
-    yLabel = yField,
-    colorInterpolator = d3.interpolateBlues,
-    tilePadding = 0.08,
-  } = {}
-) {
-  const dispatch = d3.dispatch('filter', 'hover');
-  console.log('data', data);
+export function createTileChart(container, data, state, filterState, {width, height, margin}){
+  const dispatch = d3.dispatch('changeState');
 
-  // Resolve container to a selection
-  const root =
-    typeof container === 'string'
-      ? d3.select(container)
-      : d3.select(container);
+  const svg = d3.select(container)
+      .append('svg')
+      .attr('width', width + margin.right + margin.left)
+      .attr('height', height + margin.top + margin.bottom)
+      .attr('viewBox', `0 0 ${width + margin.right + margin.left} ${height + margin.top + margin.bottom}`);
 
-  // Clear previous render (if any)
-  root.selectAll('*').remove();
-
-  // Build SVG & groups
-  const svg = root
-    .append('svg')
-    .attr('width', width)
-    .attr('height', height)
-    .attr('viewBox', `0 0 ${width} ${height}`)
-    .attr('role', 'img');
-
-  const plotW = width - margin.left - margin.right;
-  const plotH = height - margin.top - margin.bottom;
 
   const g = svg
     .append('g')
     .attr('transform', `translate(${margin.left},${margin.top})`);
 
-  // --- Helpers
-  const num = v => (v == null || v === '' ? NaN : +v);
+  const valueMax = d3.max(data, d => d.totalCount) ?? 0;
+  
+  const sqrtScale = d3.scaleSqrt()
+          .domain([0, valueMax || 1])
+          .range([0, 1]);
 
-  // --- 1) Prepare Y domain (classes) and optional numeric binning
-  // Sort numerically if numeric, otherwise by string
-  const yRaw = data.map(d => d[yField]).filter(v => v != null);
-  const isYNumeric = yRaw.every(v => !isNaN(num(v)));
-
-  // if caller provided yBins use it; otherwise we'll special-case 'adaptability'
-  const yBinsRequested = typeof yBins !== 'undefined' && yBins != null ? yBins : null;
-  let yDomain;
-  let yBinObjs = null; // when numeric Y is binned this holds bin metadata
-
-  if (yField === 'adaptability') {
-    // Adaptability is a discrete 1..5 score in the data. Use labels '1'..'5'.
-    yDomain = ['1', '2', '3', '4', '5'];
-    yBinObjs = yDomain.map((label, i) => ({ i, y0: +label, y1: +label, label, rows: [] }));
-  } else if (yBinsRequested && isYNumeric) {
-    // create numeric bins for Y similar to X
-    const yValues = data.map(d => num(d[yField])).filter(v => isFinite(v));
-    const yExtent = d3.extent(yValues);
-    const yPad = yExtent[0] === yExtent[1] ? 0.5 : 0;
-    const yBinGen = d3
-      .bin()
-      .value(d => num(d[yField]))
-      .domain([yExtent[0] - yPad, yExtent[1] + yPad])
-      .thresholds(yBinsRequested);
-
-    const yBinned = yBinGen(data);
-    yBinObjs = yBinned.map((bin, i) => {
-      const y0 = bin.x0 ?? NaN;
-      const y1 = bin.x1 ?? NaN;
-      const label = isFinite(y0) && isFinite(y1) ? `${d3.format('.2f')(y0)}–${d3.format('.2f')(y1)}` : `YBin ${i + 1}`;
-      return { i, y0, y1, label, rows: bin };
-    });
-    yDomain = yBinObjs.map(b => b.label);
-  } else {
-    const uniq = Array.from(new Set(yRaw));
-    yDomain = uniq.sort((a, b) => (isYNumeric ? num(a) - num(b) : d3.ascending(String(a), String(b))));
-  }
-
-  // --- 2) Build X bins for xField
-  const xValues = data.map(d => num(d[xField])).filter(v => isFinite(v));
-  const xExtent = d3.extent(xValues);
-  // Guard: if not enough variation, widen slightly to avoid empty bins
-  const pad = xExtent[0] === xExtent[1] ? 0.5 : 0;
-  const binGen = d3
-    .bin()
-    .value(d => num(d[xField]))
-    .domain([xExtent[0] - pad, xExtent[1] + pad])
-    .thresholds(bins);
-
-  const binned = binGen(data);
-
-  // Create an index so we can quickly map a datum to its bin index
-  // (binned[i] is an array of original data rows in that bin)
-  // We will also build human-readable bin labels.
-  const xBins = binned.map((bin, i) => {
-    const x0 = bin.x0 ?? NaN;
-    const x1 = bin.x1 ?? NaN;
-    const label =
-      isFinite(x0) && isFinite(x1)
-        ? `${d3.format('.2f')(x0)}–${d3.format('.2f')(x1)}`
-        : `Bin ${i + 1}`;
-    return { i, x0, x1, label, rows: bin };
-  });
-
-  // Map from datum -> bin index
-  const datumToBinIndex = d => {
-    // Find the bin whose [x0, x1) contains this datum's x
-    const v = num(d[xField]);
-    // Handle edge case where v == last bin's x1: include in last bin
-    for (let i = 0; i < xBins.length; i++) {
-      const { x0, x1 } = xBins[i];
-      if (v >= x0 && v < x1) return i;
-      if (i === xBins.length - 1 && v === x1) return i;
-    }
-    return null;
-  };
-
-  // Map a datum to the Y label used in tiles. Handles 'adaptability' specially.
-  const datumToYLabel = d => {
-    if (yField === 'adaptability') {
-      const v = num(d[yField]);
-      if (!isFinite(v)) return null;
-      const rounded = Math.round(v);
-      if (rounded < 1 || rounded > 5) return null;
-      return String(rounded);
-    }
-    if (yBinObjs) {
-      const v = num(d[yField]);
-      for (let i = 0; i < yBinObjs.length; i++) {
-        const { y0, y1, label } = yBinObjs[i];
-        if (v >= y0 && v < y1) return label;
-        if (i === yBinObjs.length - 1 && v === y1) return label;
-      }
-      return null;
-    }
-    // otherwise return the raw value (string or number)
-    return d[yField];
-  };
-
-  // --- 3) Aggregate into tiles: for each (yClass, xBin) sum valueField
-  const tileMap = new Map(); // key `${y}|${xIndex}` -> {y, xIndex, value}
-  const ensureTile = (y, xIndex) => {
-    const k = `${y}|${xIndex}`;
-    if (!tileMap.has(k)) tileMap.set(k, { y, xIndex, value: 0, count: 0 });
-    return tileMap.get(k);
-  };
-
-  for (const d of data) {
-    const yKey = datumToYLabel(d);
-    const xIndex = datumToBinIndex(d);
-    if (yKey == null || xIndex == null) continue;
-    const v = num(d[valueField]);
-    if (!isFinite(v)) continue;
-    const cell = ensureTile(yKey, xIndex);
-    cell.value += v;
-    cell.count += 1;
-  }
-
-  // Fill in missing combinations with zero-value tiles
-  for (const y of yDomain) {
-    for (let i = 0; i < xBins.length; i++) {
-      const k = `${y}|${i}`;
-      if (!tileMap.has(k)) tileMap.set(k, { y, xIndex: i, value: 0, count: 0 });
-    }
-  }
-
-  const tiles = Array.from(tileMap.values());
-
-  // --- 4) Scales
-  const xScale = d3
-    .scaleBand()
-    .domain(d3.range(xBins.length))
-    .range([0, plotW])
-    .padding(tilePadding);
-
-  const yScale = d3
-    .scaleBand()
-    .domain(yDomain)
-    .range([plotH, 0])
-    .padding(tilePadding);
-
-  const valueMax = d3.max(tiles, d => d.value) ?? 0;
-  const color = d3
-    .scaleSequential(colorInterpolator)
+  const colorScale = d3
+    .scaleSequential(d3.interpolate('#eeeeee', COLORS.base))
     .domain([0, valueMax || 1]); // avoid identical domain if all zeros
 
-  // --- 5) Axes
-  const xAxis = d3
-    .axisBottom(xScale)
-    .tickFormat(i => xBins[i]?.label ?? `Bin ${i + 1}`)
-    .tickSizeOuter(0);
 
-  const yAxis = d3.axisLeft(yScale).tickSizeOuter(0);
-
-  g.append('g')
-    .attr('transform', `translate(0,${plotH})`)
-    .attr('class', 'x-axis')
-    .call(xAxis)
-    .selectAll('text')
-    .attr('dy', '0.8em')
-    .attr('dx', '-0.4em')
-    .attr('transform', 'rotate(20)')
-    .style('text-anchor', 'start');
-
-  g.append('g').attr('class', 'y-axis').call(yAxis);
-
-  // Axis labels
-  g.append('text')
-    .attr('class', 'x-label')
-    .attr('x', plotW / 2)
-    .attr('y', plotH + 40)
-    .attr('text-anchor', 'middle')
-    .attr('dominant-baseline', 'middle')
-    .style('font-size', 12)
-    .text(xLabel);
-
-  g.append('text')
-    .attr('class', 'y-label')
-    .attr('transform', `translate(${-40},${plotH / 2}) rotate(-90)`)
-    .attr('text-anchor', 'middle')
-    .attr('dominant-baseline', 'middle')
-    .style('font-size', 12)
-    .text(yLabel);
-
-  // --- 6) Tiles
+  // Create tiles
   const tileG = g.append('g').attr('class', 'tiles');
 
-  const rects = tileG
+  
+  let tiles = tileG
     .selectAll('rect.tile')
-    .data(tiles, d => `${d.y}|${d.xIndex}`)
+    .data(data)
     .join('rect')
     .attr('class', 'tile')
-    .attr('x', d => xScale(d.xIndex))
-    .attr('y', d => yScale(d.y))
-    .attr('width', xScale.bandwidth())
-    .attr('height', yScale.bandwidth())
+    .attr('transform', (d,i) =>`translate(${Math.floor(i / 5) * width/7},${ height * 0.15 + i % 5 * height/8})`)
+    .attr('width', width / 7)
+    .attr('height', height / 8)
     .attr('rx', 4)
     .attr('ry', 4)
     .attr('stroke', '#fff')
     .attr('stroke-width', 1)
-    .attr('fill', d => color(d.value))
-    .style('cursor', 'pointer')
-    .on('mouseenter', (event, d) => {
-      const bin = xBins[d.xIndex];
-      dispatch.call('hover', null, {
-        y: d.y,
-        xIndex: d.xIndex,
-        xRange: [bin?.x0, bin?.x1],
-        value: d.value,
-        count: d.count,
-      });
-      d3.select(event.currentTarget).attr('stroke', '#222');
-    })
-    .on('mouseleave', (event, d) => {
-      dispatch.call('hover', null, null);
-      d3.select(event.currentTarget).attr('stroke', '#fff');
-    })
-    .on('click', (event, d) => {
-      const bin = xBins[d.xIndex];
-      dispatch.call('filter', null, {
-        y: d.y,
-        xIndex: d.xIndex,
-        xRange: [bin?.x0, bin?.x1],
-        value: d.value,
-        count: d.count,
-      });
-    });
+    .attr('fill', d => colorScale(d.totalCount))
+  
+  const xLabels = Array.from(new Set(data.map(d => d.xBinLabel)));
+  const yLabels = Array.from(new Set(data.map(d => d.yBinLabel)));
 
-  // Accessible titles
-  rects.append('title').text(d => {
-    const bin = xBins[d.xIndex];
-    const label = bin ? `${bin.label}` : `Bin ${d.xIndex + 1}`;
-    return `${yLabel}: ${d.y}\n${xLabel}: ${label}\n${valueField} (sum): ${d.value}\nrows: ${d.count}`;
-  });
+  const xScale = d3.scaleBand()
+    .domain(xLabels)
+    .range([0, width * 0.86]);
+
+  const yScale = d3.scaleBand()
+    .domain(yLabels)
+    .range([0, height * 0.65]);
+
+  let xAxis = g.append('g')
+    .attr('class', 'x-axis')
+    .attr('transform', `translate(-2, ${height * 0.8})`)
+    .call(d3.axisBottom(xScale).tickSizeInner(0).tickFormat(d=>`${d3.format("~s")(d.split('-')[0])}-${d3.format("~s")(d.split('-')[1])}`))
+    
+    
+  xAxis.selectAll('text')
+    .attr('dy', '0.8em')
+    .attr('dx', '-0.4em')
+    .attr('transform', 'rotate(20)')
+    .style('text-anchor', 'start');
+    
+    
+  let yAxis = g.append('g')
+    .attr('class', 'y-axis')
+    .attr('transform', `translate(-2, ${height * 0.15})`)
+    .call(d3.axisLeft(yScale).tickSizeInner(0));
+
+  // --- Tooltip (custom, immediate) - follow breedChart pattern
+  const tooltip = d3.select('body')
+    .selectAll('.tooltip-tile')
+    .data([null])
+    .join('div')
+    .attr('class', 'tooltip-tile')
+    .style('position', 'absolute')
+    .style('background', 'white')
+    .style('border', '1px solid #ccc')
+    .style('padding', '6px 8px')
+    .style('border-radius', '6px')
+    .style('box-shadow', '0 2px 6px rgba(0,0,0,0.15)')
+    .style('font-size', '12px')
+    .style('pointer-events', 'none')
+    .style('opacity', 0);
+
+  // Axis labels
+  let xTitle = g.append('text')
+    .attr('class', 'x-label')
+    .attr('transform', `translate(${width * 0.4},${height}) `)
+    .attr('text-anchor', 'middle')
+    .attr('dominant-baseline', 'middle')
+    .style('font-size', 12)
+    .text(state.x);
+
+  let yTitle = g.append('text')
+    .attr('class', 'y-label')
+    .attr('transform', `translate(${-70},${height / 2}) rotate(-90)`)
+    .attr('text-anchor', 'middle')
+    .attr('dominant-baseline', 'middle')
+    .style('font-size', 12)
+    .text(state.y);
+
+
+  let title = g.append('text')
+    .attr('transform', `translate(${width *0.4 },0)`)
+    .attr('text-anchor', 'middle')
+    .attr('dominant-baseline', 'middle')
+    .style('font-size', 20)
+    .style('font-weight', 'bold')
+    .text("Dog Size vs Population Density");
 
   // --- 7) Legend (simple gradient)
-  const legendHeight = 10;
-  const legendWidth = Math.min(240, plotW);
-  const legendX = (plotW - legendWidth) / 2;
-  const legendY = -20;
+  const legendHeight = 8;
+  const legendWidth = width * 0.3;
+  const legendX = width * 0.92;
+  const legendY = height * 0.85;
 
   const legend = g.append('g').attr('class', 'legend');
 
   // Gradient
-  const defs = svg.append('defs');
   const gradId = `grad-${Math.random().toString(36).slice(2)}`;
-  const gradient = defs.append('linearGradient').attr('id', gradId);
-  gradient
+
+  const defs = svg.append('defs');
+  const gradient = defs.append('linearGradient')
+    .attr('id', gradId)
     .selectAll('stop')
     .data(d3.range(0, 1.0001, 0.1))
     .join('stop')
     .attr('offset', d => `${d * 100}%`)
-    .attr('stop-color', d => color(d * valueMax));
+    .attr('stop-color', d => colorScale(sqrtScale(d * valueMax)));
 
   legend
     .append('rect')
@@ -308,65 +146,341 @@ export function createTileChart(
     .attr('width', legendWidth)
     .attr('height', legendHeight)
     .attr('fill', `url(#${gradId})`)
-    .attr('stroke', '#ccc');
+    .attr('stroke', '#000')
+    .attr('stroke-width', '0.8');
 
+  // console.log(d3.format('.1~s')(valueMax));
   const legendScale = d3
     .scaleLinear()
     .domain([0, valueMax])
+    .nice()
     .range([legendX, legendX + legendWidth]);
 
-  const legendAxis = d3
+  let legendAxis = d3
     .axisBottom(legendScale)
-    .ticks(5)
-    .tickSize(legendHeight + 4);
-
-  legend
+    .ticks(3)
+    .tickSize(4)
+    .tickFormat(d3.format(".2~s"));
+    
+    let legendAxis2 = legend
     .append('g')
-    .attr('transform', `translate(0,${legendY})`)
-    .call(legendAxis)
-    .call(g => g.select('.domain').remove())
-    .call(g => g.selectAll('line').attr('y2', 0));
+    .attr('transform', `translate(0,${legendY + legendHeight})`)
+    .attr('stroke-width', '0.8')
+    .call(legendAxis);
 
   legend
     .append('text')
-    .attr('x', legendX + legendWidth + 6)
-    .attr('y', legendY + legendHeight / 2)
+    .attr('transform', `translate(0,${legendY + legendHeight})`)
     .attr('dominant-baseline', 'middle')
     .style('font-size', 11)
-    .text(`${valueField} (sum)`);
+
+
+  const switchWidth = 40;
+  const switchHeight = 20;
+  const radius = switchHeight / 2 - 3;
+
+  let isRightOn = false;  // false = left is on
+
+  const toggle = svg.append("g")
+    .attr("transform", `translate(${width}, ${10})`)
+    .style("cursor", "pointer")
+    .on("click", () => {
+      isRightOn = !isRightOn;
+
+      dispatch.call("changeState", null, {newState:
+        {x: isRightOn ? "avg_age" : "population_density", y:state.y}});
+        
+      updateToggle();
+    });
+
+  // Track (background)
+  const track = toggle.append("rect")
+    .attr("width", switchWidth)
+    .attr("height", switchHeight)
+    .attr("rx", switchHeight / 2)
+    .attr("fill", "#ccc");
+
+  // Handle (knob)
+  const handle = toggle.append("circle")
+    .attr("cy", switchHeight / 2)
+    .attr("r", radius + 2)
+    .attr("cx", radius + 3)
+    .attr("fill", "white")
+    .attr("stroke", "#888");
+
+  // Left label
+  const leftLabel = svg.append("text")
+    .attr("x", width - 8)
+    .attr("y", switchHeight / 2 + 13)
+    .attr("text-anchor", "end")
+    .attr("font-size", 10)
+    .text("Density");
+    
+    // Right label
+    const rightLabel = svg.append("text")
+    .attr("x", width + switchWidth + 8)
+    .attr("y", switchHeight / 2 + 13)
+    .attr("text-anchor", "start")
+    .attr("font-size", 10)
+    .text("Age");
+
+  function updateToggle() {
+    // Update track color
+    track.transition()
+      .duration(200)
+      .attr("fill", isRightOn ? "#bbbbbb" : "#bbbbbb");
+
+    // Move handle
+    handle.transition()
+      .duration(200)
+      .attr("fill", COLORS.base)
+      .attr("cx", isRightOn ? switchWidth - radius - 3 : radius + 3);
+
+    // Highlight active label
+    leftLabel
+      .transition()
+      .duration(200)
+      .attr("fill", isRightOn ? "#999" : "#000")
+      .attr("font-weight", isRightOn ? "normal" : "bold");
+
+    rightLabel
+      .transition()
+      .duration(200)
+      .attr("fill", isRightOn ? "#000" : "#999")
+      .attr("font-weight", isRightOn ? "bold" : "normal");
+  }
+
+  updateToggle(); // Initial render
+
+  const options = [
+    { value: "dog_size", label: "Size" },
+    { value: "adaptability", label: "Adaptability" },
+    { value: "friendliness", label: "Friendliness" },
+    { value: "health_needs", label: "Health Needs" },
+    { value: "trainability", label: "Trainability" },
+    { value: "exercise_needs", label: "Exercise Needs" }
+  ];
+
+  const startX = width * 0.92;
+  const startY = margin.top + 30;
+  const lineHeight = 15;
+  const optionRadius = 4;
+
+  const radioGroup = svg.append("g")
+  .attr("id", "table-options");
+
+// Track selected value
+let selectedValue = null;
+
+const optionGroups = radioGroup.selectAll("g.option")
+  .data(options)
+  .enter()
+  .append("g")
+  .attr("class", "option")
+  .attr("transform", (d, i) => `translate(${startX}, ${startY + i * lineHeight})`)
+  .style("cursor", "pointer")
+  .on("click", function(event, d) {
+    selectedValue = d.value;
+    dispatch.call("changeState", null, {newState:
+        {x: state.x, y:d.value}});
+    updateSelection();
+  });
+
+  // Outer circle (radio ring)
+  optionGroups.append("circle")
+    .attr("r", optionRadius)
+    .attr("stroke", "#333")
+    .attr("fill", "#fff");
+
+  // Inner circle (filled only if selected)
+  optionGroups.append("circle")
+    .attr("class", "radio-dot")
+    .attr("r", optionRadius / 2)
+    .attr("fill", "#333")
+    .attr("visibility", "hidden");
+
+  // Label text
+  optionGroups.append("text")
+    .attr("x", optionRadius * 2 + 5)
+    .attr("y", 5)
+    .text(d => d.label)
+    .attr("font-size", 11)
+    .attr("alignment-baseline", "middle");
+
+  function updateSelection() {
+    radioGroup.selectAll(".radio-dot")
+      .attr("visibility", d => d.value === selectedValue ? "visible" : "hidden");
+  }
+
 
   // --- API
-  function update(newData = data, filterState = {}) {
-    // Re-create chart with new data. For simplicity, full re-render:
-    console.log("updading", filterState);
-    svg.remove();
-    return createTileChart(container, newData, {
-      bins,
-      yBins: yBinsRequested,
-      xField: filterState.tableMode,
-      yField: filterState.tableOption,         // classes on Y
-      valueField,
-      width,
-      height,
-      margin,
-      xLabel,
-      yLabel,
-      colorInterpolator,
-      tilePadding,
-    });
-  }
 
-  function destroy() {
-    root.selectAll('*').remove();
-  }
+  function wireHandlers(sel) {
+      sel
+          .on('mouseover', function (event, d) {
+              tooltip.transition().duration(150).style('opacity', 1);
+              tooltip.html(`X: ${d.xBinLabel}
+                          <br>Y: ${d.yBinLabel}
+                          <br>Dog count: ${d3.format('.3~s')(d.totalCount)}`);
+              
+          })
+          .on('mousemove', function (event) {
+              tooltip.style('left', (event.pageX + 10) + 'px')
+                     .style('top', (event.pageY - 28) + 'px');
+          })
+          .on('mouseout', function (event, d) {
+              tooltip.transition().duration(150).style('opacity', 0);
+          })
+          .on('click', function (event, d) {
+              // 
+          });
+      return sel;
+      }
+      
+      function update(newdata, newState, newFilterState){
+          filterState = newFilterState;
+          state = newState;
+          console.log(newdata, newState);
+          
+          const valueMax = d3.max(newdata, d => d.totalCount) ?? 0;
 
-  // Expose dispatcher so user code can do:
-  // chart.on('hover', cb) and chart.on('filter', cb)
-  function on(type, callback) {
-    dispatch.on(type, callback);
-    return api;
-  }
+          const sqrtScale = d3.scaleSqrt()
+          .domain([0, valueMax || 1])
+          .range([0, 1]);
 
-  const api = { update, destroy, on };
-  return api;
+          let baseColor = filterState.group != null ? COLORS[filterState.group].selected
+                        : filterState.breed != null ? COLORS[getGroup(filterState.breed)].selected 
+                        : COLORS.base 
+
+          const newColorScale = d3.scaleSequential(d3.interpolate('#eeeeee', baseColor)); // avoid identical domain if all zeros
+
+  
+          tiles = wireHandlers(
+              tileG.selectAll('rect.tile')
+              .data(newdata)
+              .join(
+                  enter => enter
+                    .append('rect')
+                    .attr('fill', d => newColorScale(sqrtScale(d.totalCount))),
+                  update => update
+                      .transition()
+                      .duration(500)
+                      .attr('fill', d => 
+                                  // if (selectedState.district === null)
+                                      newColorScale(sqrtScale(d.totalCount))
+                              ),
+                  exit => exit.transition().duration(200).style('opacity', 0).remove()
+              )
+            )
+          const xLabels = Array.from(new Set(newdata.map(d => d.xBinLabel)));
+          const yLabels = Array.from(new Set(newdata.map(d => d.yBinLabel)));
+
+          const xScale = d3.scaleBand()
+            .domain(xLabels)
+            .range([0, width * 0.86]);
+
+          const yScale = d3.scaleBand()
+            .domain(yLabels)
+            .range([0, height * 0.65]);
+
+
+          xAxis
+            .call(d3.axisBottom(xScale).tickSizeInner(0).tickFormat(d=>`${d3.format("~s")(d.split('-')[0])}-${d3.format("~s")(d.split('-')[1])}`));
+            
+          xAxis.selectAll('text')
+            .attr('dy', '0.8em')
+            .attr('dx', '-0.4em')
+            .attr('transform', 'rotate(20)')
+            .style('text-anchor', 'start');
+
+          yAxis
+            .call(d3.axisLeft(yScale).tickSizeInner(0));
+
+          handle.attr('fill', baseColor);
+
+          gradient
+            .attr('stop-color', d => newColorScale(sqrtScale(d * valueMax)));
+
+          let legendScale = d3
+            .scaleLinear()
+            .domain([0, valueMax])
+            .nice(3)
+            .range([legendX, legendX + legendWidth]);
+
+          legendAxis = d3
+            .axisBottom(legendScale)
+            .ticks(3)
+            .tickSize(4)
+            .tickFormat(d3.format(".2~s"));
+            
+  
+          legendAxis2
+            .call(legendAxis);
+
+          xTitle.text(state.x);
+          yTitle.text(state.y);
+
+          title.text(state.x + " vs " + state.y);
+          // ===== Update legend dynamically =====
+  
+          // linearGradient.selectAll("stop")
+          //     .data([
+          //         {offset: "0%", color: colorScale(d3.min(counts))},
+          //         {offset: "100%", color: newcolorScale(d3.max(counts))}
+          //     ])
+          //     .join("stop")
+          //     .attr("offset", d => d.offset)
+          //     .attr("stop-color", d => d.color);
+  
+          // const newLegendScale = d3.scaleLinear()
+          //     .domain(newcolorScale.domain())
+          //     .range([0, legendWidth]);
+          
+          // const [min,max] = newcolorScale.domain() 
+  
+          // const axis = d3.axisBottom(newLegendScale)
+          //     .tickValues(d3.range(5).map(i => min + i/4 * (max-min)))
+          //     .tickSize(4)
+          //     .tickFormat(max > 100 ? d3.format(".2~s")
+          //                 : max > 10 ? d3.format(".0f")
+          //                 : d3.format(".1f"));
+          
+          // legendGroup.select("g")
+          //     .call(axis)
+          //     .selectAll("text")
+          //     .style("font-size", "6px");
+  
+          // if (selectedState.breed != null)
+          //     title.text(selectedState.breed + "s");
+          // else if (selectedState.group != null)
+          //     title.text(selectedState.group);
+          // else
+          //     title.text("Dogs");
+      }
+  // function update(newData, newState) {
+  //   // Re-create chart with new data. For simplicity, full re-render:
+  //   console.log("updating", newData, newState);
+    
+    // return createTileChart(container, newData, {
+    //   bins,
+    //   yBins: yBinsRequested,
+    //   xField: filterState.tableMode,
+    //   yField: filterState.tableOption,         // classes on Y
+    //   valueField,
+    //   width,
+    //   height,
+    //   margin,
+    //   xLabel,
+    //   yLabel,
+    //   colorInterpolator,
+    //   tilePadding,
+    // });
+  // }
+
+  update(data, state, filterState);
+
+  return {
+        on: (type, handler) => (dispatch.on(type, handler), undefined),
+        update,
+    };
 }

@@ -37,7 +37,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 90100,Dachshund,Hound Dogs,109,16.29,5678.38,2.87,49.2,Medium,3.4,4.0,2.8,4.0,3.0,6.7
 90100,Dalmatian,Companion Dogs,4,16.29,5678.38,2.87,49.2,Very Large,3.0,4.33,3.8,2.8,5.0,0.25
 90100,Doberman Pinscher,Working Dogs,3,16.29,5678.38,2.87,49.2,Very Large,2.8,3.0,3.4,2.8,3.0,0.18
-90100,Dogo Argentino,Sporting Dogs,15,16.29,5678.38,2.87,49.2,Very Large,1.8,2.67,2.6,2.8,4.0,0.92
+90100,Dogo Argentino,Working Dogs,15,16.29,5678.38,2.87,49.2,Very Large,1.8,2.67,2.6,2.8,4.0,0.92
 90100,English Cocker Spaniel,Sporting Dogs,39,16.29,5678.38,2.87,49.2,Large,3.8,5.0,3.2,4.2,4.0,2.39
 90100,English Setter,Sporting Dogs,3,16.29,5678.38,2.87,49.2,Very Large,2.6,5.0,3.2,4.2,5.0,0.18
 90100,English Springer Spaniel,Sporting Dogs,4,16.29,5678.38,2.87,49.2,Very Large,2.4,5.0,2.4,4.2,5.0,0.25
@@ -178,7 +178,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 90200,Dachshund,Hound Dogs,396,96.582,5019.33,19.24,42.3,Medium,3.4,4.0,2.8,4.0,3.0,4.1000000000000005
 90200,Dalmatian,Companion Dogs,33,96.582,5019.33,19.24,42.3,Very Large,3.0,4.33,3.8,2.8,5.0,0.34
 90200,Doberman Pinscher,Working Dogs,45,96.582,5019.33,19.24,42.3,Very Large,2.8,3.0,3.4,2.8,3.0,0.47
-90200,Dogo Argentino,Sporting Dogs,51,96.582,5019.33,19.24,42.3,Very Large,1.8,2.67,2.6,2.8,4.0,0.53
+90200,Dogo Argentino,Working Dogs,51,96.582,5019.33,19.24,42.3,Very Large,1.8,2.67,2.6,2.8,4.0,0.53
 90200,Dogo Canario,,1,96.582,5019.33,19.24,42.3,,,,,,,0.01
 90200,Dogue de Bordeaux,Working Dogs,16,96.582,5019.33,19.24,42.3,Very Large,3.0,3.67,3.8,3.0,5.0,0.17
 90200,Dutch Shepherd,Herding Dogs,11,96.582,5019.33,19.24,42.3,Very Large,3.0,4.0,3.0,3.2,4.0,0.11
@@ -339,7 +339,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 90300,Dalmatian,Companion Dogs,25,84.574,11432.41,7.4,44.0,Very Large,3.0,4.33,3.8,2.8,5.0,0.3
 90300,Danish-Swedish Farmdog,Working Dogs,6,84.574,11432.41,7.4,44.0,Medium,3.2,5.0,3.6,4.0,5.0,0.07
 90300,Doberman Pinscher,Working Dogs,53,84.574,11432.41,7.4,44.0,Very Large,2.8,3.0,3.4,2.8,3.0,0.63
-90300,Dogo Argentino,Sporting Dogs,23,84.574,11432.41,7.4,44.0,Very Large,1.8,2.67,2.6,2.8,4.0,0.27
+90300,Dogo Argentino,Working Dogs,23,84.574,11432.41,7.4,44.0,Very Large,1.8,2.67,2.6,2.8,4.0,0.27
 90300,Dogue de Bordeaux,Working Dogs,12,84.574,11432.41,7.4,44.0,Very Large,3.0,3.67,3.8,3.0,5.0,0.14
 90300,Dutch Shepherd,Herding Dogs,4,84.574,11432.41,7.4,44.0,Very Large,3.0,4.0,3.0,3.2,4.0,0.05
 90300,Elo,,7,84.574,11432.41,7.4,44.0,,,,,,,0.08
@@ -489,7 +489,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 90400,Dalmatian,Companion Dogs,19,30.724,17307.27,1.78,44.4,Very Large,3.0,4.33,3.8,2.8,5.0,0.62
 90400,Deutscher Wachtelhund,Sporting Dogs,1,30.724,17307.27,1.78,44.4,Very Large,2.8,4.33,3.0,3.6,4.0,0.03
 90400,Doberman Pinscher,Working Dogs,6,30.724,17307.27,1.78,44.4,Very Large,2.8,3.0,3.4,2.8,3.0,0.2
-90400,Dogo Argentino,Sporting Dogs,2,30.724,17307.27,1.78,44.4,Very Large,1.8,2.67,2.6,2.8,4.0,0.07
+90400,Dogo Argentino,Working Dogs,2,30.724,17307.27,1.78,44.4,Very Large,1.8,2.67,2.6,2.8,4.0,0.07
 90400,Dogue de Bordeaux,Working Dogs,3,30.724,17307.27,1.78,44.4,Very Large,3.0,3.67,3.8,3.0,5.0,0.1
 90400,Elo,,1,30.724,17307.27,1.78,44.4,,,,,,,0.03
 90400,English Cocker Spaniel,Sporting Dogs,69,30.724,17307.27,1.78,44.4,Large,3.8,5.0,3.2,4.2,4.0,2.25
@@ -620,7 +620,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 90500,Dachshund,Hound Dogs,232,52.581,26138.39,2.01,42.3,Medium,3.4,4.0,2.8,4.0,3.0,4.42
 90500,Dalmatian,Companion Dogs,19,52.581,26138.39,2.01,42.3,Very Large,3.0,4.33,3.8,2.8,5.0,0.36
 90500,Doberman Pinscher,Working Dogs,19,52.581,26138.39,2.01,42.3,Very Large,2.8,3.0,3.4,2.8,3.0,0.36
-90500,Dogo Argentino,Sporting Dogs,14,52.581,26138.39,2.01,42.3,Very Large,1.8,2.67,2.6,2.8,4.0,0.27
+90500,Dogo Argentino,Working Dogs,14,52.581,26138.39,2.01,42.3,Very Large,1.8,2.67,2.6,2.8,4.0,0.27
 90500,Dogue de Bordeaux,Working Dogs,8,52.581,26138.39,2.01,42.3,Very Large,3.0,3.67,3.8,3.0,5.0,0.15
 90500,Elo,,3,52.581,26138.39,2.01,42.3,,,,,,,0.06
 90500,English Cocker Spaniel,Sporting Dogs,51,52.581,26138.39,2.01,42.3,Large,3.8,5.0,3.2,4.2,4.0,0.97
@@ -741,7 +741,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 90600,Dalmatian,Companion Dogs,5,29.388,20197.33,1.46,43.8,Very Large,3.0,4.33,3.8,2.8,5.0,0.17
 90600,Danish-Swedish Farmdog,Working Dogs,2,29.388,20197.33,1.46,43.8,Medium,3.2,5.0,3.6,4.0,5.0,0.07
 90600,Doberman Pinscher,Working Dogs,5,29.388,20197.33,1.46,43.8,Very Large,2.8,3.0,3.4,2.8,3.0,0.17
-90600,Dogo Argentino,Sporting Dogs,2,29.388,20197.33,1.46,43.8,Very Large,1.8,2.67,2.6,2.8,4.0,0.07
+90600,Dogo Argentino,Working Dogs,2,29.388,20197.33,1.46,43.8,Very Large,1.8,2.67,2.6,2.8,4.0,0.07
 90600,English Cocker Spaniel,Sporting Dogs,70,29.388,20197.33,1.46,43.8,Large,3.8,5.0,3.2,4.2,4.0,2.38
 90600,Entlebucher Mountain Dog,Herding Dogs,12,29.388,20197.33,1.46,43.8,Very Large,2.8,4.33,3.0,4.0,5.0,0.41
 90600,Eurasier,Companion Dogs,6,29.388,20197.33,1.46,43.8,Very Large,2.8,4.0,3.2,2.6,3.0,0.2
@@ -961,7 +961,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 90800,Dachshund,Hound Dogs,99,23.56,21615.76,1.09,43.4,Medium,3.4,4.0,2.8,4.0,3.0,4.21
 90800,Dalmatian,Companion Dogs,4,23.56,21615.76,1.09,43.4,Very Large,3.0,4.33,3.8,2.8,5.0,0.17
 90800,Doberman Pinscher,Working Dogs,12,23.56,21615.76,1.09,43.4,Very Large,2.8,3.0,3.4,2.8,3.0,0.51
-90800,Dogo Argentino,Sporting Dogs,22,23.56,21615.76,1.09,43.4,Very Large,1.8,2.67,2.6,2.8,4.0,0.93
+90800,Dogo Argentino,Working Dogs,22,23.56,21615.76,1.09,43.4,Very Large,1.8,2.67,2.6,2.8,4.0,0.93
 90800,Elo,,4,23.56,21615.76,1.09,43.4,,,,,,,0.17
 90800,English Cocker Spaniel,Sporting Dogs,30,23.56,21615.76,1.09,43.4,Large,3.8,5.0,3.2,4.2,4.0,1.27
 90800,English Setter,Sporting Dogs,16,23.56,21615.76,1.09,43.4,Very Large,2.6,5.0,3.2,4.2,5.0,0.68
@@ -1070,7 +1070,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 90900,Dachshund,Hound Dogs,174,39.431,13288.13,2.97,43.3,Medium,3.4,4.0,2.8,4.0,3.0,4.41
 90900,Dalmatian,Companion Dogs,16,39.431,13288.13,2.97,43.3,Very Large,3.0,4.33,3.8,2.8,5.0,0.41
 90900,Doberman Pinscher,Working Dogs,16,39.431,13288.13,2.97,43.3,Very Large,2.8,3.0,3.4,2.8,3.0,0.41
-90900,Dogo Argentino,Sporting Dogs,39,39.431,13288.13,2.97,43.3,Very Large,1.8,2.67,2.6,2.8,4.0,0.99
+90900,Dogo Argentino,Working Dogs,39,39.431,13288.13,2.97,43.3,Very Large,1.8,2.67,2.6,2.8,4.0,0.99
 90900,Dogue de Bordeaux,Working Dogs,10,39.431,13288.13,2.97,43.3,Very Large,3.0,3.67,3.8,3.0,5.0,0.25
 90900,Dutch Shepherd,Herding Dogs,3,39.431,13288.13,2.97,43.3,Very Large,3.0,4.0,3.0,3.2,4.0,0.08
 90900,English Cocker Spaniel,Sporting Dogs,91,39.431,13288.13,2.97,43.3,Large,3.8,5.0,3.2,4.2,4.0,2.31
@@ -1226,7 +1226,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 91000,Dalmatian,Companion Dogs,65,178.358,5603.71,31.83,42.9,Very Large,3.0,4.33,3.8,2.8,5.0,0.36
 91000,Deutscher Wachtelhund,Sporting Dogs,5,178.358,5603.71,31.83,42.9,Very Large,2.8,4.33,3.0,3.6,4.0,0.03
 91000,Doberman Pinscher,Working Dogs,87,178.358,5603.71,31.83,42.9,Very Large,2.8,3.0,3.4,2.8,3.0,0.49
-91000,Dogo Argentino,Sporting Dogs,84,178.358,5603.71,31.83,42.9,Very Large,1.8,2.67,2.6,2.8,4.0,0.47
+91000,Dogo Argentino,Working Dogs,84,178.358,5603.71,31.83,42.9,Very Large,1.8,2.67,2.6,2.8,4.0,0.47
 91000,Dogo Canario,,5,178.358,5603.71,31.83,42.9,,,,,,,0.03
 91000,Dogue de Bordeaux,Working Dogs,44,178.358,5603.71,31.83,42.9,Very Large,3.0,3.67,3.8,3.0,5.0,0.25
 91000,Dutch Shepherd,Herding Dogs,7,178.358,5603.71,31.83,42.9,Very Large,3.0,4.0,3.0,3.2,4.0,0.04
@@ -1412,7 +1412,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 91100,Dachshund,Hound Dogs,641,91.223,3922.5,23.26,41.5,Medium,3.4,4.0,2.8,4.0,3.0,7.03
 91100,Dalmatian,Companion Dogs,18,91.223,3922.5,23.26,41.5,Very Large,3.0,4.33,3.8,2.8,5.0,0.2
 91100,Doberman Pinscher,Working Dogs,41,91.223,3922.5,23.26,41.5,Very Large,2.8,3.0,3.4,2.8,3.0,0.45
-91100,Dogo Argentino,Sporting Dogs,60,91.223,3922.5,23.26,41.5,Very Large,1.8,2.67,2.6,2.8,4.0,0.66
+91100,Dogo Argentino,Working Dogs,60,91.223,3922.5,23.26,41.5,Very Large,1.8,2.67,2.6,2.8,4.0,0.66
 91100,Dogo Canario,,7,91.223,3922.5,23.26,41.5,,,,,,,0.08
 91100,Dogue de Bordeaux,Working Dogs,27,91.223,3922.5,23.26,41.5,Very Large,3.0,3.67,3.8,3.0,5.0,0.3
 91100,Dutch Shepherd,Herding Dogs,18,91.223,3922.5,23.26,41.5,Very Large,3.0,4.0,3.0,3.2,4.0,0.2
@@ -1577,7 +1577,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 91200,Dalmatian,Companion Dogs,31,88.515,10923.39,8.1,42.9,Very Large,3.0,4.33,3.8,2.8,5.0,0.35
 91200,Danish-Swedish Farmdog,Working Dogs,6,88.515,10923.39,8.1,42.9,Medium,3.2,5.0,3.6,4.0,5.0,0.07
 91200,Doberman Pinscher,Working Dogs,54,88.515,10923.39,8.1,42.9,Very Large,2.8,3.0,3.4,2.8,3.0,0.61
-91200,Dogo Argentino,Sporting Dogs,43,88.515,10923.39,8.1,42.9,Very Large,1.8,2.67,2.6,2.8,4.0,0.49
+91200,Dogo Argentino,Working Dogs,43,88.515,10923.39,8.1,42.9,Very Large,1.8,2.67,2.6,2.8,4.0,0.49
 91200,Dogo Canario,,15,88.515,10923.39,8.1,42.9,,,,,,,0.17
 91200,Dogue de Bordeaux,Working Dogs,28,88.515,10923.39,8.1,42.9,Very Large,3.0,3.67,3.8,3.0,5.0,0.32
 91200,Dutch Shepherd,Herding Dogs,7,88.515,10923.39,8.1,42.9,Very Large,3.0,4.0,3.0,3.2,4.0,0.08
@@ -1740,7 +1740,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 91300,Dalmatian,Companion Dogs,52,50.65,1342.98,37.71,47.8,Very Large,3.0,4.33,3.8,2.8,5.0,1.03
 91300,Deutscher Wachtelhund,Sporting Dogs,6,50.65,1342.98,37.71,47.8,Very Large,2.8,4.33,3.0,3.6,4.0,0.12
 91300,Doberman Pinscher,Working Dogs,23,50.65,1342.98,37.71,47.8,Very Large,2.8,3.0,3.4,2.8,3.0,0.45
-91300,Dogo Argentino,Sporting Dogs,17,50.65,1342.98,37.71,47.8,Very Large,1.8,2.67,2.6,2.8,4.0,0.34
+91300,Dogo Argentino,Working Dogs,17,50.65,1342.98,37.71,47.8,Very Large,1.8,2.67,2.6,2.8,4.0,0.34
 91300,Drentsche Patrijshond,Working Dogs,2,50.65,1342.98,37.71,47.8,Very Large,3.2,4.33,3.2,3.0,4.0,0.04
 91300,Dutch Shepherd,Herding Dogs,6,50.65,1342.98,37.71,47.8,Very Large,3.0,4.0,3.0,3.2,4.0,0.12
 91300,Elo,,7,50.65,1342.98,37.71,47.8,,,,,,,0.14
@@ -1917,7 +1917,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 91400,Dandie Dinmont Terrier,Terrier Dogs,7,84.973,2516.73,33.76,45.0,Medium,3.2,4.0,2.6,2.8,2.0,0.08
 91400,Deutscher Wachtelhund,Sporting Dogs,1,84.973,2516.73,33.76,45.0,Very Large,2.8,4.33,3.0,3.6,4.0,0.01
 91400,Doberman Pinscher,Working Dogs,75,84.973,2516.73,33.76,45.0,Very Large,2.8,3.0,3.4,2.8,3.0,0.88
-91400,Dogo Argentino,Sporting Dogs,50,84.973,2516.73,33.76,45.0,Very Large,1.8,2.67,2.6,2.8,4.0,0.59
+91400,Dogo Argentino,Working Dogs,50,84.973,2516.73,33.76,45.0,Very Large,1.8,2.67,2.6,2.8,4.0,0.59
 91400,Dogo Canario,,3,84.973,2516.73,33.76,45.0,,,,,,,0.04
 91400,Dogue de Bordeaux,Working Dogs,16,84.973,2516.73,33.76,45.0,Very Large,3.0,3.67,3.8,3.0,5.0,0.19
 91400,Dutch Shepherd,Herding Dogs,13,84.973,2516.73,33.76,45.0,Very Large,3.0,4.0,3.0,3.2,4.0,0.15
@@ -2079,7 +2079,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 91500,Dalmatian,Companion Dogs,16,71.651,18285.48,3.92,41.6,Very Large,3.0,4.33,3.8,2.8,5.0,0.22
 91500,Danish-Swedish Farmdog,Working Dogs,2,71.651,18285.48,3.92,41.6,Medium,3.2,5.0,3.6,4.0,5.0,0.03
 91500,Doberman Pinscher,Working Dogs,39,71.651,18285.48,3.92,41.6,Very Large,2.8,3.0,3.4,2.8,3.0,0.54
-91500,Dogo Argentino,Sporting Dogs,23,71.651,18285.48,3.92,41.6,Very Large,1.8,2.67,2.6,2.8,4.0,0.32
+91500,Dogo Argentino,Working Dogs,23,71.651,18285.48,3.92,41.6,Very Large,1.8,2.67,2.6,2.8,4.0,0.32
 91500,Dogo Canario,,5,71.651,18285.48,3.92,41.6,,,,,,,0.07
 91500,Dogue de Bordeaux,Working Dogs,5,71.651,18285.48,3.92,41.6,Very Large,3.0,3.67,3.8,3.0,5.0,0.07
 91500,English Cocker Spaniel,Sporting Dogs,80,71.651,18285.48,3.92,41.6,Large,3.8,5.0,3.2,4.2,4.0,1.12
@@ -2217,7 +2217,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 91600,Dalmatian,Companion Dogs,39,95.704,11034.64,8.67,42.8,Very Large,3.0,4.33,3.8,2.8,5.0,0.41
 91600,Danish-Swedish Farmdog,Working Dogs,1,95.704,11034.64,8.67,42.8,Medium,3.2,5.0,3.6,4.0,5.0,0.01
 91600,Doberman Pinscher,Working Dogs,32,95.704,11034.64,8.67,42.8,Very Large,2.8,3.0,3.4,2.8,3.0,0.33
-91600,Dogo Argentino,Sporting Dogs,48,95.704,11034.64,8.67,42.8,Very Large,1.8,2.67,2.6,2.8,4.0,0.5
+91600,Dogo Argentino,Working Dogs,48,95.704,11034.64,8.67,42.8,Very Large,1.8,2.67,2.6,2.8,4.0,0.5
 91600,Dogo Canario,,14,95.704,11034.64,8.67,42.8,,,,,,,0.15
 91600,Dogue de Bordeaux,Working Dogs,7,95.704,11034.64,8.67,42.8,Very Large,3.0,3.67,3.8,3.0,5.0,0.07
 91600,Dutch Shepherd,Herding Dogs,6,95.704,11034.64,8.67,42.8,Very Large,3.0,4.0,3.0,3.2,4.0,0.06
@@ -2378,7 +2378,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 91700,Dachshund,Hound Dogs,343,52.647,4621.73,11.39,43.1,Medium,3.4,4.0,2.8,4.0,3.0,6.5200000000000005
 91700,Dalmatian,Companion Dogs,41,52.647,4621.73,11.39,43.1,Very Large,3.0,4.33,3.8,2.8,5.0,0.78
 91700,Doberman Pinscher,Working Dogs,30,52.647,4621.73,11.39,43.1,Very Large,2.8,3.0,3.4,2.8,3.0,0.57
-91700,Dogo Argentino,Sporting Dogs,22,52.647,4621.73,11.39,43.1,Very Large,1.8,2.67,2.6,2.8,4.0,0.42
+91700,Dogo Argentino,Working Dogs,22,52.647,4621.73,11.39,43.1,Very Large,1.8,2.67,2.6,2.8,4.0,0.42
 91700,Dogo Canario,,1,52.647,4621.73,11.39,43.1,,,,,,,0.02
 91700,Dogue de Bordeaux,Working Dogs,12,52.647,4621.73,11.39,43.1,Very Large,3.0,3.67,3.8,3.0,5.0,0.23
 91700,Dutch Shepherd,Herding Dogs,1,52.647,4621.73,11.39,43.1,Very Large,3.0,4.0,3.0,3.2,4.0,0.02
@@ -2532,7 +2532,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 91800,Dachshund,Hound Dogs,301,47.632,7504.41,6.35,44.2,Medium,3.4,4.0,2.8,4.0,3.0,6.319999999999999
 91800,Dalmatian,Companion Dogs,35,47.632,7504.41,6.35,44.2,Very Large,3.0,4.33,3.8,2.8,5.0,0.73
 91800,Doberman Pinscher,Working Dogs,24,47.632,7504.41,6.35,44.2,Very Large,2.8,3.0,3.4,2.8,3.0,0.5
-91800,Dogo Argentino,Sporting Dogs,23,47.632,7504.41,6.35,44.2,Very Large,1.8,2.67,2.6,2.8,4.0,0.48
+91800,Dogo Argentino,Working Dogs,23,47.632,7504.41,6.35,44.2,Very Large,1.8,2.67,2.6,2.8,4.0,0.48
 91800,Dogue de Bordeaux,Working Dogs,6,47.632,7504.41,6.35,44.2,Very Large,3.0,3.67,3.8,3.0,5.0,0.13
 91800,Elo,,18,47.632,7504.41,6.35,44.2,,,,,,,0.38
 91800,English Cocker Spaniel,Sporting Dogs,87,47.632,7504.41,6.35,44.2,Large,3.8,5.0,3.2,4.2,4.0,1.83
@@ -2703,7 +2703,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 91900,Dachshund,Hound Dogs,655,68.46,2744.56,24.94,46.6,Medium,3.4,4.0,2.8,4.0,3.0,9.57
 91900,Dalmatian,Companion Dogs,45,68.46,2744.56,24.94,46.6,Very Large,3.0,4.33,3.8,2.8,5.0,0.66
 91900,Doberman Pinscher,Working Dogs,42,68.46,2744.56,24.94,46.6,Very Large,2.8,3.0,3.4,2.8,3.0,0.61
-91900,Dogo Argentino,Sporting Dogs,30,68.46,2744.56,24.94,46.6,Very Large,1.8,2.67,2.6,2.8,4.0,0.44
+91900,Dogo Argentino,Working Dogs,30,68.46,2744.56,24.94,46.6,Very Large,1.8,2.67,2.6,2.8,4.0,0.44
 91900,Dogo Canario,,6,68.46,2744.56,24.94,46.6,,,,,,,0.09
 91900,Dogue de Bordeaux,Working Dogs,10,68.46,2744.56,24.94,46.6,Very Large,3.0,3.67,3.8,3.0,5.0,0.15
 91900,Dutch Shepherd,Herding Dogs,4,68.46,2744.56,24.94,46.6,Very Large,3.0,4.0,3.0,3.2,4.0,0.06
@@ -2872,7 +2872,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 92000,Dachshund,Hound Dogs,483,83.351,14596.16,5.71,42.2,Medium,3.4,4.0,2.8,4.0,3.0,5.79
 92000,Dalmatian,Companion Dogs,21,83.351,14596.16,5.71,42.2,Very Large,3.0,4.33,3.8,2.8,5.0,0.25
 92000,Doberman Pinscher,Working Dogs,26,83.351,14596.16,5.71,42.2,Very Large,2.8,3.0,3.4,2.8,3.0,0.31
-92000,Dogo Argentino,Sporting Dogs,48,83.351,14596.16,5.71,42.2,Very Large,1.8,2.67,2.6,2.8,4.0,0.58
+92000,Dogo Argentino,Working Dogs,48,83.351,14596.16,5.71,42.2,Very Large,1.8,2.67,2.6,2.8,4.0,0.58
 92000,Dogo Canario,,1,83.351,14596.16,5.71,42.2,,,,,,,0.01
 92000,Dogue de Bordeaux,Working Dogs,9,83.351,14596.16,5.71,42.2,Very Large,3.0,3.67,3.8,3.0,5.0,0.11
 92000,Dutch Shepherd,Herding Dogs,6,83.351,14596.16,5.71,42.2,Very Large,3.0,4.0,3.0,3.2,4.0,0.07
@@ -3039,7 +3039,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 92100,Dachshund,Hound Dogs,1302,144.263,3246.01,44.44,43.7,Medium,3.4,4.0,2.8,4.0,3.0,9.02
 92100,Dalmatian,Companion Dogs,84,144.263,3246.01,44.44,43.7,Very Large,3.0,4.33,3.8,2.8,5.0,0.58
 92100,Doberman Pinscher,Working Dogs,105,144.263,3246.01,44.44,43.7,Very Large,2.8,3.0,3.4,2.8,3.0,0.73
-92100,Dogo Argentino,Sporting Dogs,102,144.263,3246.01,44.44,43.7,Very Large,1.8,2.67,2.6,2.8,4.0,0.71
+92100,Dogo Argentino,Working Dogs,102,144.263,3246.01,44.44,43.7,Very Large,1.8,2.67,2.6,2.8,4.0,0.71
 92100,Dogo Canario,,10,144.263,3246.01,44.44,43.7,,,,,,,0.07
 92100,Dogue de Bordeaux,Working Dogs,54,144.263,3246.01,44.44,43.7,Very Large,3.0,3.67,3.8,3.0,5.0,0.37
 92100,Dutch Shepherd,Herding Dogs,30,144.263,3246.01,44.44,43.7,Very Large,3.0,4.0,3.0,3.2,4.0,0.21
@@ -3243,7 +3243,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 92200,Dalmatian,Companion Dogs,155,161.957,1583.17,102.3,42.4,Very Large,3.0,4.33,3.8,2.8,5.0,0.96
 92200,Dandie Dinmont Terrier,Terrier Dogs,7,161.957,1583.17,102.3,42.4,Medium,3.2,4.0,2.6,2.8,2.0,0.04
 92200,Doberman Pinscher,Working Dogs,153,161.957,1583.17,102.3,42.4,Very Large,2.8,3.0,3.4,2.8,3.0,0.94
-92200,Dogo Argentino,Sporting Dogs,99,161.957,1583.17,102.3,42.4,Very Large,1.8,2.67,2.6,2.8,4.0,0.61
+92200,Dogo Argentino,Working Dogs,99,161.957,1583.17,102.3,42.4,Very Large,1.8,2.67,2.6,2.8,4.0,0.61
 92200,Dogo Canario,,19,161.957,1583.17,102.3,42.4,,,,,,,0.12
 92200,Dogue de Bordeaux,Working Dogs,62,161.957,1583.17,102.3,42.4,Very Large,3.0,3.67,3.8,3.0,5.0,0.38
 92200,Drentsche Patrijshond,Working Dogs,8,161.957,1583.17,102.3,42.4,Very Large,3.2,4.33,3.2,3.0,4.0,0.05
@@ -3451,7 +3451,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 92300,Dalmatian,Companion Dogs,60,94.469,2946.47,32.06,45.1,Very Large,3.0,4.33,3.8,2.8,5.0,0.64
 92300,Danish-Swedish Farmdog,Working Dogs,1,94.469,2946.47,32.06,45.1,Medium,3.2,5.0,3.6,4.0,5.0,0.01
 92300,Doberman Pinscher,Working Dogs,58,94.469,2946.47,32.06,45.1,Very Large,2.8,3.0,3.4,2.8,3.0,0.61
-92300,Dogo Argentino,Sporting Dogs,21,94.469,2946.47,32.06,45.1,Very Large,1.8,2.67,2.6,2.8,4.0,0.22
+92300,Dogo Argentino,Working Dogs,21,94.469,2946.47,32.06,45.1,Very Large,1.8,2.67,2.6,2.8,4.0,0.22
 92300,Dogo Canario,,8,94.469,2946.47,32.06,45.1,,,,,,,0.08
 92300,Dogue de Bordeaux,Working Dogs,17,94.469,2946.47,32.06,45.1,Very Large,3.0,3.67,3.8,3.0,5.0,0.18
 92300,Dutch Shepherd,Herding Dogs,18,94.469,2946.47,32.06,45.1,Very Large,3.0,4.0,3.0,3.2,4.0,0.19

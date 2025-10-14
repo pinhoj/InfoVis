@@ -15,14 +15,20 @@ let height = window.innerHeight * 0.4 - margin.top - margin.bottom;
 // ---- state ----
 let rows = [], geodata= {};
 let breedToGroup;
+let dogsWithInfo = [];
 let filterState = {
   postcode: null,
   breed: null,
   group: null,
   // table controls from #chart4
-  tableMode: 'population_density',
-  tableOption: 'adaptability',
+  // tableMode: 'population_density',
+  // tableOption: 'adaptability',
 };
+let heatMapState = {
+  x:'population_density',
+  y:'dog_size',
+}
+
 
 function renderFilterDisplay(filterState) {
   const container = d3.select('#filter-display');
@@ -35,8 +41,8 @@ function renderFilterDisplay(filterState) {
     ["District", filterState.postcode != null ? getDistrict(filterState.postcode) : 'All'],
     ["Breed", filterState.breed || 'All'],
     ["Group", filterState.group || 'All'],
-    ["Table Mode", filterState.tableMode || 'All'],
-    ["Table Option", filterState.tableOption || 'None'],
+    // ["Table Mode", filterState.tableMode || 'All'],
+    // ["Table Option", filterState.tableOption || 'None'],
   ];
 
   // console.log();
@@ -58,6 +64,15 @@ function renderFilterDisplay(filterState) {
 }
 
 // ---- data helpers ----
+function getDogsWithInfo() {
+  dogsWithInfo = rows.filter(r => (r.dog_breed_group != "") &&
+  (!filterState.group    || r.dog_breed_group === filterState.group) && 
+  (!filterState.breed    || r.dog_breed === filterState.breed)
+);
+console.log(dogsWithInfo);
+  
+}
+
 function getBreedFilteredRows() {
   return rows.filter(r =>
     (!filterState.postcode || r.district_code === filterState.postcode) &&
@@ -130,6 +145,68 @@ function rollupGroups(srcRows) {
   return arr;
 }
 
+function computeBins(data, state) {
+  let xBinner;
+  if (state.x == "avg_age"){
+    xBinner = d3.bin()
+      .domain([41,50])
+      .thresholds(d3.range(41,50,1.5));
+  }
+  else {
+    xBinner = d3.bin()
+      .domain([0,30000])
+      .thresholds(d3.range(0,30000,5000));
+  }
+
+  let yBins;
+  //size is categorical
+  let sizes = ["Very Small", "Small", "Medium", "Large", "Very Large"];
+  if (state.y == "dog_size"){
+    yBins = sizes.map(d => ({
+      label: d,
+      test: v => v === d
+    }));
+  }
+  else { //other possible y are numerical 
+    const yBinner = d3.bin()
+        .domain([0,5])
+        .thresholds(d3.range(0, 5, 1));
+
+    yBins = yBinner(data.map(d => d[state.y])).map(bin => ({
+      label: `${bin.x0}-${bin.x1}`,
+      test: (val) => val > bin.x0 && val <= bin.x1
+    }));
+  }
+  // console.log("Y BINS: ", yBins)
+
+  const bins = xBinner(data.map(d => d[state.x]));
+  // console.log("X BINS: ", bins)
+
+  const result = [];
+  bins.forEach((_, i) => {
+    const xStart = bins[i].x0;
+    const xEnd = bins[i].x1;
+
+    yBins.forEach(yVal => {
+      const binPoints = data.filter(d =>
+        d[state.x] > xStart && d[state.x] <= xEnd &&
+        yVal.test(d[state.y])
+      );
+      // console.log("BINPOINTS",binPoints);
+
+      const totalCount = d3.sum(binPoints, d => d.dog_count);
+      
+       result.push({
+        xBinLabel: `${xStart}-${xEnd}`,
+        yBinLabel: yVal.label,
+        totalCount
+      });
+    });
+  });
+
+  return result;
+}
+
 // ---- charts (created after data load) ----
 let breedChart, groupChart, choropleth, tileChart;
 
@@ -145,7 +222,10 @@ function recomputeAndRender() {
   breedChart.update(topBreeds, filterState);
   groupChart.update(groups, filterState);
   choropleth.update({type:"FeatureCollection", features:getGeoFilteredRows()}, filterState)
-  tileChart.update(rows, filterState);
+  
+  getDogsWithInfo();
+  const bins = computeBins(dogsWithInfo, heatMapState);
+  tileChart.update(bins, heatMapState, filterState);
 
   renderFilterDisplay(filterState);
   // TODO: add chart1 update for postcode filter
@@ -158,7 +238,12 @@ d3.csv('data/dogs_in_vienna.csv', d => ({
   dog_breed_group: d.dog_breed_group,
   dog_count: +d.dog_count,
   dog_density: +d.dog_density,
+  dog_size: d.dog_size,
   adaptability: +d.adaptability,
+  friendliness: +d.friendliness,
+  health_needs: +d.health_needs,
+  trainability: +d.trainability,
+  exercise_needs: +d.exercise_needs,
   population_density: +d.population_density,
   avg_age: +d.avg_age,
 })).then(data => {
@@ -224,44 +309,21 @@ d3.csv('data/dogs_in_vienna.csv', d => ({
     breedChart.hoverByGroup(dog_breed_group);
   });
 
-  tileChart = createTileChart('#chart4', rows, { 
-    xField: filterState.tableMode,
-    yField: filterState.tableOption,         // binned on X
-    bins: 6, width, height });
-  tileChart.on('filter', ({ category, attribute }) => {
-    console.log('tile filter event', category, attribute);
+  getDogsWithInfo();
+  const bins = computeBins(dogsWithInfo, heatMapState);
+
+  // console.log(bins);
+  // console.log(computeBins(dogsWithInfo,{x:"avg_age", y:"adaptability"}))
+
+  tileChart = createTileChart('#chart4', bins, heatMapState, filterState,
+            {width, height, margin:{top:20,bottom:5, left:0, right:0}});
+
+  tileChart.on("changeState", ({ newState }) => {
+    console.log(newState);
+    heatMapState = newState;
+    recomputeAndRender()
   });
   
-  // Wire the table header controls (mode + options) to the central filterState
-  function wireTableControls(){
-    const modeInputs = document.querySelectorAll('input[name="table-mode"]');
-    modeInputs.forEach(input => {
-      input.addEventListener('change', (e) => {
-        if (e.target.checked) {
-          filterState.tableMode = e.target.value;
-          recomputeAndRender();
-        }
-      });
-    });
-
-    const optionInputs = document.querySelectorAll('input[name="table-option"]');
-    optionInputs.forEach(input => {
-      input.addEventListener('change', (e) => {
-        if (e.target.checked) {
-          filterState.tableOption = e.target.value;
-        } else {
-          filterState.tableOption = null;
-        }
-        recomputeAndRender();
-      });
-    });
-  }
-
-  wireTableControls();
-  
-
-  // TODO: postcode chart filter handler
-
   // optional reset button if present in HTML
   const resetBtn = document.getElementById('reset');
   if (resetBtn) {
