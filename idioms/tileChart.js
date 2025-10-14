@@ -68,7 +68,6 @@ export function createTileChart(container, data, state, filterState, {width, hei
   xAxis.selectAll('text')
     .attr('dy', '0.8em')
     .attr('dx', '-0.4em')
-    .attr('transform', 'rotate(20)')
     .style('text-anchor', 'start');
     
     
@@ -96,7 +95,7 @@ export function createTileChart(container, data, state, filterState, {width, hei
   // Axis labels
   let xTitle = g.append('text')
     .attr('class', 'x-label')
-    .attr('transform', `translate(${width * 0.4},${height}) `)
+    .attr('transform', `translate(${width * 0.4},${height * 0.95}) `)
     .attr('text-anchor', 'middle')
     .attr('dominant-baseline', 'middle')
     .style('font-size', 12)
@@ -392,7 +391,6 @@ const optionGroups = radioGroup.selectAll("g.option")
           xAxis.selectAll('text')
             .attr('dy', '0.8em')
             .attr('dx', '-0.4em')
-            .attr('transform', 'rotate(20)')
             .style('text-anchor', 'start');
 
           yAxis
