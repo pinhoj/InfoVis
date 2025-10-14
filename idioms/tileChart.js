@@ -62,7 +62,7 @@ export function createTileChart(container, data, state, filterState, {width, hei
   let xAxis = g.append('g')
     .attr('class', 'x-axis')
     .attr('transform', `translate(-2, ${height * 0.8})`)
-    .call(d3.axisBottom(xScale).tickSizeInner(0).tickFormat(d=>`${d3.format("~s")(d.split('-')[0])}-${d3.format("~s")(d.split('-')[1])}`))
+    .call(d3.axisBottom(xScale).tickSizeInner(0).tickFormat(d=>`${formatRange(d)}`))
     
     
   xAxis.selectAll('text')
@@ -312,15 +312,17 @@ const optionGroups = radioGroup.selectAll("g.option")
       .attr("visibility", d => d.value === selectedValue ? "visible" : "hidden");
   }
 
-
+  function formatRange(range){
+    return `${d3.format("~s")(range.split('-')[0])}-${d3.format("~s")(range.split('-')[1])}`
+  }
   // --- API
 
   function wireHandlers(sel) {
       sel
           .on('mouseover', function (event, d) {
               tooltip.transition().duration(150).style('opacity', 1);
-              tooltip.html(`X: ${d.xBinLabel}
-                          <br>Y: ${d.yBinLabel}
+              tooltip.html(`${state.x}: ${formatRange(d.xBinLabel)}
+                          <br>${state.y}: ${d.yBinLabel}
                           <br>Dog count: ${d3.format('.3~s')(d.totalCount)}`);
               
           })
@@ -385,7 +387,7 @@ const optionGroups = radioGroup.selectAll("g.option")
 
 
           xAxis
-            .call(d3.axisBottom(xScale).tickSizeInner(0).tickFormat(d=>`${d3.format("~s")(d.split('-')[0])}-${d3.format("~s")(d.split('-')[1])}`));
+            .call(d3.axisBottom(xScale).tickSizeInner(0).tickFormat(d=>`${formatRange(d)}`));
             
           xAxis.selectAll('text')
             .attr('dy', '0.8em')
@@ -421,41 +423,7 @@ const optionGroups = radioGroup.selectAll("g.option")
           yTitle.text(state.y);
 
           title.text(state.x + " vs " + state.y);
-          // ===== Update legend dynamically =====
-  
-          // linearGradient.selectAll("stop")
-          //     .data([
-          //         {offset: "0%", color: colorScale(d3.min(counts))},
-          //         {offset: "100%", color: newcolorScale(d3.max(counts))}
-          //     ])
-          //     .join("stop")
-          //     .attr("offset", d => d.offset)
-          //     .attr("stop-color", d => d.color);
-  
-          // const newLegendScale = d3.scaleLinear()
-          //     .domain(newcolorScale.domain())
-          //     .range([0, legendWidth]);
           
-          // const [min,max] = newcolorScale.domain() 
-  
-          // const axis = d3.axisBottom(newLegendScale)
-          //     .tickValues(d3.range(5).map(i => min + i/4 * (max-min)))
-          //     .tickSize(4)
-          //     .tickFormat(max > 100 ? d3.format(".2~s")
-          //                 : max > 10 ? d3.format(".0f")
-          //                 : d3.format(".1f"));
-          
-          // legendGroup.select("g")
-          //     .call(axis)
-          //     .selectAll("text")
-          //     .style("font-size", "6px");
-  
-          // if (selectedState.breed != null)
-          //     title.text(selectedState.breed + "s");
-          // else if (selectedState.group != null)
-          //     title.text(selectedState.group);
-          // else
-          //     title.text("Dogs");
       }
   // function update(newData, newState) {
   //   // Re-create chart with new data. For simplicity, full re-render:
