@@ -66,6 +66,7 @@ function renderFilterDisplay(filterState) {
 // ---- data helpers ----
 function getDogsWithInfo() {
   dogsWithInfo = rows.filter(r => (r.dog_breed_group != "") &&
+  (!filterState.postcode    || r.district_code === filterState.postcode) && 
   (!filterState.group    || r.dog_breed_group === filterState.group) && 
   (!filterState.breed    || r.dog_breed === filterState.breed)
 );
