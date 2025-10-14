@@ -10,7 +10,7 @@ export function createTileChart(
   {
     width = 720,
     height = 420,
-    margin = { top: 64, right: 16, bottom: 48, left: 56 },
+    margin = { top: 84, right: 16, bottom: 48, left: 56 },
     colorInterpolator = d3.interpolateBlues,
     tilePadding = 0.08
   } = {}
@@ -78,31 +78,35 @@ export function createTileChart(
     .attr('class', 'x-axis')
     .call(xAxis)
     .selectAll('text')
-    .attr('dy', '0.8em')
-    .attr('dx', '-0.4em')
-    .attr('transform', 'rotate(20)')
-    .style('text-anchor', 'start');
+    .attr('dy', '1em')
+    .attr('dx', '0.8em')
+    .style('text-anchor', 'start')
+    .style('font-size', '14px')
 
-  g.append('g').attr('class', 'y-axis').call(yAxis);
+
+    // .attr('transform', 'rotate(20)')
+
+    g.append('g').attr('class', 'y-axis').call(yAxis).style('font-size', '14px');
+    
 
   // Axis labels
   g.append('text')
     .attr('class', 'x-label')
     .attr('x', plotW / 2)
     // push the x-axis label further down so it doesn't collide with rotated ticks
-    .attr('y', plotH + 64)
+    .attr('y', plotH + 40)
     .attr('text-anchor', 'middle')
     .attr('dominant-baseline', 'middle')
-    .style('font-size', 12)
+    .style('font-size', '14px')
     .text(xField);
 
   g.append('text')
     .attr('class', 'y-label')
     // move the y-axis label left so it clears the tick labels
-    .attr('transform', `translate(${-56},${plotH / 2}) rotate(-90)`)
+    .attr('transform', `translate(${-80},${plotH / 2}) rotate(-90)`)
     .attr('text-anchor', 'middle')
     .attr('dominant-baseline', 'middle')
-    .style('font-size', 12)
+    .style('font-size', '14px')
     .text(yField);
 
   // --- Tooltip (custom, immediate) - follow breedChart pattern
@@ -182,7 +186,7 @@ export function createTileChart(
   const legendHeight = 10;
   const legendWidth = Math.min(240, plotW);
   const legendX = (plotW - legendWidth) / 2;
-  const legendY = -20;
+  const legendY = -40;
 
   const legend = g.append('g').attr('class', 'legend');
 
@@ -236,15 +240,12 @@ export function createTileChart(
 
   // --- API
   function update({ tiles, xBins, yBins }, filterState) {
-    console.log("updading tableMode, tableOptio", filterState.tableMode, filterState.tableOption);
-    console.log("updating newtile, newxBins, newyBins", tiles, xBins, yBins);
     const newtiles = tiles;
     const newxBins = xBins;
     const newyBins = yBins;
     yField = filterState.tableOption;
     xField = filterState.tableMode;
     const selectedGroup = filterState.group === null ? getGroup(filterState.breed) : filterState.group;
-    console.log("selectedGroup", selectedGroup)
 
     xScale = d3
       .scaleBand()
@@ -278,11 +279,6 @@ export function createTileChart(
 
     yAxis = d3.axisLeft(yScale).tickSizeOuter(0);
 
-    console.log("yAxis", yAxis)
-
-
-    // refresh only the parts that need it
-
     g.select('.x-label').text(xField);
     g.select('.y-label').text(yField);
 
@@ -295,8 +291,6 @@ export function createTileChart(
       .transition()
       .duration(750)
       .call(xAxis);
-
-    console.log("newtiles", newtiles)
 
     //clear out tiles and redraw
     tileG.selectAll('*').remove();

@@ -35,12 +35,8 @@ function renderFilterDisplay(filterState) {
     ["District", filterState.postcode != null ? getDistrict(filterState.postcode) : 'All'],
     ["Breed", filterState.breed || 'All'],
     ["Group", filterState.group || 'All'],
-    // ["Table Mode", filterState.tableMode || 'All'],
-    // ["Table Option", filterState.tableOption || 'None'],
-  ];
+    ];
 
-  // console.log();
-  
   const table = container.append('table');
 
   const rows = table.selectAll('tr')
@@ -54,7 +50,7 @@ function renderFilterDisplay(filterState) {
 
   rows.append('td')
     .text(([_,d]) => d);
-  
+
 }
 
 // ---- data helpers ----
@@ -85,7 +81,7 @@ function getGeoFilteredRows() {
     (!filterState.group || r.dog_breed_group === filterState.group)
   );
 
- 
+
   const dataByDistrict = d3.group(filtered, d => d.district_code);
 
     const mergedFeatures = geodata.features.map(feature => {
@@ -141,66 +137,47 @@ function rollupGroups(srcRows) {
 }
 
 function calculateTileChartData(data, yField = 'adaptability', xField='population_density') {
-  console.log("calculating tile chart data for", data.length, "rows", "with yField " , yField, xField, "and xField", xField);
   const yBinsRequested = 5;
   const bins = 6;
-  
+
   let valueField = 'dog_count';
 
   const num = v => (v == null || v === '' ? NaN : +v);
 
   const yRaw = data.map(d => d[yField]).filter(v => v != null);
   const isYNumeric = yRaw.every(v => !isNaN(num(v)));
-  
+
   let yDomain;
   let yBinObjs = null;
-  
+
   // Always bin into 5 bins if numeric
   if (isYNumeric) {
-    console.log('yField is numeric, binning into', yBinsRequested, 'bins');
-    const yValues = data.map(d => num(d[yField])).filter(v => isFinite(v));
-    const yExtent = d3.extent(yValues);
-    const yPad = yExtent[0] === yExtent[1] ? 0.5 : 0;
-  
     const yBinGen = d3
       .bin()
       .value(d => num(d[yField]))
-      .domain([yExtent[0] - yPad, yExtent[1] + yPad])
       .thresholds(5);
-  
+
     const yBinned = yBinGen(data);
-    console.log('yBinned', yBinned);
     yBinObjs = yBinned.map((bin, i) => {
       const y0 = bin.x0 ?? NaN;
       const y1 = bin.x1 ?? NaN;
       const label = isFinite(y0) && isFinite(y1) ? `${d3.format('.1f')(y0)}–${d3.format('.1f')(y1)}` : YBin `$"{i + 1}`;
       return { i, y0, y1, label, rows: bin };
     });
-  
+
     yDomain = yBinObjs.map(b => b.label);
   } else {
-    // fallback: treat as categorical if non-numeric
     const uniq = Array.from(new Set(yRaw));
     yDomain = uniq.sort((a, b) => d3.ascending(String(a), String(b)));
   }
-  
-    // --- 2) Build X bins for xField
-    const xValues = data.map(d => num(d[xField])).filter(v => isFinite(v));
-    const xExtent = d3.extent(xValues);
-    // Guard: if not enough variation, widen slightly to avoid empty bins
-    const pad = xExtent[0] === xExtent[1] ? 0.5 : 0;
+
     const binGen = d3
       .bin()
       .value(d => num(d[xField]))
-      .domain([xExtent[0] - pad, xExtent[1] + pad])
       .thresholds(bins);
-  
+
     const binned = binGen(data);
-    console.log('binned', binned)
-  
-    // Create an index so we can quickly map a datum to its bin index
-    // (binned[i] is an array of original data rows in that bin)
-    // We will also build human-readable bin labels.
+
     const xBins = binned.map((bin, i) => {
       const x0 = bin.x0 ?? NaN;
       const x1 = bin.x1 ?? NaN;
@@ -211,14 +188,8 @@ function calculateTileChartData(data, yField = 'adaptability', xField='populatio
       return { i, x0, x1, label, rows: bin };
     });
 
-    console.log('xBins', xBins)
-    console.log('xField', xField)
-  
-    // Map from datum -> bin index
     const datumToBinIndex = d => {
-      // Find the bin whose [x0, x1) contains this datum's x
       const v = num(d[xField]);
-      // Handle edge case where v == last bin's x1: include in last bin
       for (let i = 0; i < xBins.length; i++) {
         const { x0, x1 } = xBins[i];
         if (v >= x0 && v < x1) return i;
@@ -226,7 +197,7 @@ function calculateTileChartData(data, yField = 'adaptability', xField='populatio
       }
       return null;
     };
-  
+
     const datumToYLabel = d => {
       if (yBinObjs) {
         const v = num(d[yField]);
@@ -239,7 +210,7 @@ function calculateTileChartData(data, yField = 'adaptability', xField='populatio
       }
       return d[yField];
     };
-  
+
     // --- 3) Aggregate into tiles: for each (yClass, xBin) sum valueField
     const tileMap = new Map(); // key `${y}|${xIndex}` -> {y, xIndex, value}
     const ensureTile = (y, xIndex) => {
@@ -247,20 +218,19 @@ function calculateTileChartData(data, yField = 'adaptability', xField='populatio
       if (!tileMap.has(k)) tileMap.set(k, { y, xIndex, value: 0, count: 0 });
       return tileMap.get(k);
     };
-  
+
     for (const d of data) {
       const yKey = datumToYLabel(d);
       const xIndex = datumToBinIndex(d);
       if (yKey == null || xIndex == null) continue;
-      // console.log('yKey',yKey,  'xIndex',xIndex, "num", num(d[valueField]))
       const v = num(d[valueField]);
-      
+
       if (!isFinite(v)) continue;
       const cell = ensureTile(yKey, xIndex);
       cell.value += v;
       cell.count += 1;
     }
-  
+
     // Fill in missing combinations with zero-value tiles
     for (const y of yDomain) {
       for (let i = 0; i < xBins.length; i++) {
@@ -268,11 +238,7 @@ function calculateTileChartData(data, yField = 'adaptability', xField='populatio
         if (!tileMap.has(k)) tileMap.set(k, { y, xIndex: i, value: 0, count: 0 });
       }
     }
-    console.log(tileMap)
-    console.log('yDoamin',yDomain)
-  
     const tiles = Array.from(tileMap.values());
-    console.log("tiles", tiles)
     return {tiles : tiles, xBins: xBins, yBins: yBinObjs}
 
 }
@@ -288,7 +254,6 @@ function recomputeAndRender() {
   const topBreeds = breedsAll.slice(0, 10);
   const filtered = filteredRows();
   const tileChartData = calculateTileChartData(filtered, filterState.tableOption, filterState.tableMode);
-  console.log("tilechartdata2",tileChartData);
 
   const groups = rollupGroups(groupFiltered).slice(0, 6);
 
@@ -334,9 +299,9 @@ d3.csv('data/dogs_in_vienna.csv', d => ({
   d3.json('geodata/vienna_districts.json').then(data => {
     geodata = data;
 
-    choropleth = createChoropleth('#chart1', 
-        {type: 'FeatureCollection', features: getGeoFilteredRows()}, 
-        {breed:null, group:null, district:null}, 
+    choropleth = createChoropleth('#chart1',
+        {type: 'FeatureCollection', features: getGeoFilteredRows()},
+        {breed:null, group:null, district:null},
         {width, height, margin:{top:0,bottom:0, left:0, right:0}}
       );
 
@@ -346,7 +311,7 @@ d3.csv('data/dogs_in_vienna.csv', d => ({
         breed: null,
         group: filterState.group,
       tableMode: filterState.tableMode,
-      tableOption: filterState.tableOption, 
+      tableOption: filterState.tableOption,
       }
       recomputeAndRender();
     });
@@ -359,13 +324,12 @@ d3.csv('data/dogs_in_vienna.csv', d => ({
 
 
   breedChart.on('filter', ({ dog_breed }) => {
-    console.log('breed filter event', dog_breed);
     filterState = {
       postcode: null,
       breed: dog_breed || null,
       group: filterState.group,
       tableMode: filterState.tableMode,
-      tableOption: filterState.tableOption, 
+      tableOption: filterState.tableOption,
     };
     recomputeAndRender();
   });
@@ -377,7 +341,7 @@ d3.csv('data/dogs_in_vienna.csv', d => ({
       breed: null,
       group: dog_breed_group || null,
       tableMode: filterState.tableMode,
-      tableOption: filterState.tableOption, 
+      tableOption: filterState.tableOption,
 
     };
     recomputeAndRender();
@@ -403,7 +367,6 @@ d3.csv('data/dogs_in_vienna.csv', d => ({
     tileHeight = Math.max(360, rect.height - 40);
   }
 
-  console.log('Object in Script:' , tiles)
 
   tileChart = createTileChart('#chart4', tiles, filterState, {
     width: tileWidth,
@@ -412,9 +375,8 @@ d3.csv('data/dogs_in_vienna.csv', d => ({
   });
 
   tileChart.on('filter', ({ category, attribute }) => {
-    console.log('tile filter event', category, attribute);
   });
-  
+
   // Wire the table header controls (mode + options) to the central filterState
   function wireTableControls(){
     const modeInputs = document.querySelectorAll('input[name="table-mode"]');
@@ -441,7 +403,7 @@ d3.csv('data/dogs_in_vienna.csv', d => ({
   }
 
   wireTableControls();
-  
+
 
   // TODO: postcode chart filter handler
 
