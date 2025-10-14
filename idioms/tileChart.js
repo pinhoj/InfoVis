@@ -4,13 +4,14 @@ export function createTileChart(
   data = [],
   {
     bins = 6,
+    yBinsRequested = 5,
     xField = 'population_density',         // binned on X
     // xField = 'avg_age',         // binned on X
     yField = 'adaptability',    // classes on Y
     valueField = 'dog_count',   // summed per tile
     width = 720,
     height = 420,
-    margin = { top: 32, right: 16, bottom: 48, left: 56 },
+    margin = { top: 64, right: 16, bottom: 48, left: 56 },
     xLabel = xField,
     yLabel = yField,
     colorInterpolator = d3.interpolateBlues,
@@ -47,43 +48,41 @@ export function createTileChart(
   // --- Helpers
   const num = v => (v == null || v === '' ? NaN : +v);
 
-  // --- 1) Prepare Y domain (classes) and optional numeric binning
-  // Sort numerically if numeric, otherwise by string
-  const yRaw = data.map(d => d[yField]).filter(v => v != null);
-  const isYNumeric = yRaw.every(v => !isNaN(num(v)));
+  // --- 1) Prepare Y domain (classes) and numeric binning (always 5 bins)
+const yRaw = data.map(d => d[yField]).filter(v => v != null);
+const isYNumeric = yRaw.every(v => !isNaN(num(v)));
 
-  // if caller provided yBins use it; otherwise we'll special-case 'adaptability'
-  const yBinsRequested = typeof yBins !== 'undefined' && yBins != null ? yBins : null;
-  let yDomain;
-  let yBinObjs = null; // when numeric Y is binned this holds bin metadata
+let yDomain;
+let yBinObjs = null;
 
-  if (yField === 'adaptability') {
-    // Adaptability is a discrete 1..5 score in the data. Use labels '1'..'5'.
-    yDomain = ['1', '2', '3', '4', '5'];
-    yBinObjs = yDomain.map((label, i) => ({ i, y0: +label, y1: +label, label, rows: [] }));
-  } else if (yBinsRequested && isYNumeric) {
-    // create numeric bins for Y similar to X
-    const yValues = data.map(d => num(d[yField])).filter(v => isFinite(v));
-    const yExtent = d3.extent(yValues);
-    const yPad = yExtent[0] === yExtent[1] ? 0.5 : 0;
-    const yBinGen = d3
-      .bin()
-      .value(d => num(d[yField]))
-      .domain([yExtent[0] - yPad, yExtent[1] + yPad])
-      .thresholds(yBinsRequested);
+// Always bin into 5 bins if numeric
+if (isYNumeric) {
+  console.log('yField is numeric, binning into', yBinsRequested, 'bins');
+  const yValues = data.map(d => num(d[yField])).filter(v => isFinite(v));
+  const yExtent = d3.extent(yValues);
+  const yPad = yExtent[0] === yExtent[1] ? 0.5 : 0;
 
-    const yBinned = yBinGen(data);
-    yBinObjs = yBinned.map((bin, i) => {
-      const y0 = bin.x0 ?? NaN;
-      const y1 = bin.x1 ?? NaN;
-      const label = isFinite(y0) && isFinite(y1) ? `${d3.format('.2f')(y0)}–${d3.format('.2f')(y1)}` : `YBin ${i + 1}`;
-      return { i, y0, y1, label, rows: bin };
-    });
-    yDomain = yBinObjs.map(b => b.label);
-  } else {
-    const uniq = Array.from(new Set(yRaw));
-    yDomain = uniq.sort((a, b) => (isYNumeric ? num(a) - num(b) : d3.ascending(String(a), String(b))));
-  }
+  const yBinGen = d3
+    .bin()
+    .value(d => num(d[yField]))
+    .domain([yExtent[0] - yPad, yExtent[1] + yPad])
+    .thresholds(5);
+
+  const yBinned = yBinGen(data);
+  console.log('yBinned', yBinned);
+  yBinObjs = yBinned.map((bin, i) => {
+    const y0 = bin.x0 ?? NaN;
+    const y1 = bin.x1 ?? NaN;
+    const label = isFinite(y0) && isFinite(y1) ? `${d3.format('.1f')(y0)}–${d3.format('.1f')(y1)}` : YBin `$"{i + 1}`;
+    return { i, y0, y1, label, rows: bin };
+  });
+
+  yDomain = yBinObjs.map(b => b.label);
+} else {
+  // fallback: treat as categorical if non-numeric
+  const uniq = Array.from(new Set(yRaw));
+  yDomain = uniq.sort((a, b) => d3.ascending(String(a), String(b)));
+}
 
   // --- 2) Build X bins for xField
   const xValues = data.map(d => num(d[xField])).filter(v => isFinite(v));
@@ -126,13 +125,6 @@ export function createTileChart(
 
   // Map a datum to the Y label used in tiles. Handles 'adaptability' specially.
   const datumToYLabel = d => {
-    if (yField === 'adaptability') {
-      const v = num(d[yField]);
-      if (!isFinite(v)) return null;
-      const rounded = Math.round(v);
-      if (rounded < 1 || rounded > 5) return null;
-      return String(rounded);
-    }
     if (yBinObjs) {
       const v = num(d[yField]);
       for (let i = 0; i < yBinObjs.length; i++) {
@@ -231,6 +223,22 @@ export function createTileChart(
     .style('font-size', 12)
     .text(yLabel);
 
+  // --- Tooltip (custom, immediate) - follow breedChart pattern
+  const tooltip = d3.select('body')
+    .selectAll('.tooltip-tile')
+    .data([null])
+    .join('div')
+    .attr('class', 'tooltip-tile')
+    .style('position', 'absolute')
+    .style('background', 'white')
+    .style('border', '1px solid #ccc')
+    .style('padding', '6px 8px')
+    .style('border-radius', '6px')
+    .style('box-shadow', '0 2px 6px rgba(0,0,0,0.15)')
+    .style('font-size', '12px')
+    .style('pointer-events', 'none')
+    .style('opacity', 0);
+
   // --- 6) Tiles
   const tileG = g.append('g').attr('class', 'tiles');
 
@@ -251,6 +259,16 @@ export function createTileChart(
     .style('cursor', 'pointer')
     .on('mouseenter', (event, d) => {
       const bin = xBins[d.xIndex];
+      // show custom tooltip immediately
+      tooltip.transition().duration(80).style('opacity', 1);
+      tooltip.html(`
+        <strong>${yLabel}:</strong> ${d.y}<br/>
+        <strong>${xLabel}:</strong> ${bin?.label ?? ''}<br/>
+        <strong>${valueField} (sum):</strong> ${d.value}<br/>
+        <strong>rows:</strong> ${d.count}
+      `);
+      tooltip.style('left', (event.pageX + 10) + 'px').style('top', (event.pageY - 28) + 'px');
+
       dispatch.call('hover', null, {
         y: d.y,
         xIndex: d.xIndex,
@@ -260,7 +278,11 @@ export function createTileChart(
       });
       d3.select(event.currentTarget).attr('stroke', '#222');
     })
+    .on('mousemove', (event) => {
+      tooltip.style('left', (event.pageX + 10) + 'px').style('top', (event.pageY - 28) + 'px');
+    })
     .on('mouseleave', (event, d) => {
+      tooltip.transition().duration(80).style('opacity', 0);
       dispatch.call('hover', null, null);
       d3.select(event.currentTarget).attr('stroke', '#fff');
     })
@@ -274,13 +296,6 @@ export function createTileChart(
         count: d.count,
       });
     });
-
-  // Accessible titles
-  rects.append('title').text(d => {
-    const bin = xBins[d.xIndex];
-    const label = bin ? `${bin.label}` : `Bin ${d.xIndex + 1}`;
-    return `${yLabel}: ${d.y}\n${xLabel}: ${label}\n${valueField} (sum): ${d.value}\nrows: ${d.count}`;
-  });
 
   // --- 7) Legend (simple gradient)
   const legendHeight = 10;
