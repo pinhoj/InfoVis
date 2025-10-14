@@ -442,8 +442,9 @@ const optionGroups = radioGroup.selectAll("g.option")
     //   tilePadding,
     // });
   // }
-
-  update(data, state, filterState);
+  selectedValue = "dog_size";
+  updateSelection();
+  update(data, {x:"population_density",y:"dog_size"}, filterState);
 
   return {
         on: (type, handler) => (dispatch.on(type, handler), undefined),
