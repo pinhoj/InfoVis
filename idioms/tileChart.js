@@ -53,7 +53,7 @@ export function createTileChart(container, data, state, filterState, {width, hei
 
   const xScale = d3.scaleBand()
     .domain(xLabels)
-    .range([0, width * 0.86]);
+    .range([0, width * 0.85]);
 
   const yScale = d3.scaleBand()
     .domain(yLabels)
@@ -68,7 +68,7 @@ export function createTileChart(container, data, state, filterState, {width, hei
   xAxis.selectAll('text')
     .attr('dy', '0.8em')
     .attr('dx', '-0.4em')
-    .style('text-anchor', 'start');
+    .style('text-anchor', 'middle');
     
     
   let yAxis = g.append('g')
@@ -390,8 +390,8 @@ const optionGroups = radioGroup.selectAll("g.option")
             
           xAxis.selectAll('text')
             .attr('dy', '0.8em')
-            .attr('dx', '-0.4em')
-            .style('text-anchor', 'start');
+            .attr('dx', '0em')
+            .style('text-anchor', 'middle');
 
           yAxis
             .call(d3.axisLeft(yScale).tickSizeInner(0));
