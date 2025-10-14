@@ -167,7 +167,6 @@ export function createChoropleth(container, geodata, selectedState, {width, heig
                 : selectedState.breed != null ? COLORS[getGroup(selectedState.breed)].selected 
                 : COLORS.base )); 
 
-        console.log(newcolorScale.domain());
 
         projection = d3.geoIdentity()
         .reflectY(true)

@@ -140,6 +140,143 @@ function rollupGroups(srcRows) {
   return arr;
 }
 
+function calculateTileChartData(data, yField = 'adaptability', xField='population_density') {
+  console.log("calculating tile chart data for", data.length, "rows", "with yField " , yField, xField, "and xField", xField);
+  const yBinsRequested = 5;
+  const bins = 6;
+  
+  let valueField = 'dog_count';
+
+  const num = v => (v == null || v === '' ? NaN : +v);
+
+  const yRaw = data.map(d => d[yField]).filter(v => v != null);
+  const isYNumeric = yRaw.every(v => !isNaN(num(v)));
+  
+  let yDomain;
+  let yBinObjs = null;
+  
+  // Always bin into 5 bins if numeric
+  if (isYNumeric) {
+    console.log('yField is numeric, binning into', yBinsRequested, 'bins');
+    const yValues = data.map(d => num(d[yField])).filter(v => isFinite(v));
+    const yExtent = d3.extent(yValues);
+    const yPad = yExtent[0] === yExtent[1] ? 0.5 : 0;
+  
+    const yBinGen = d3
+      .bin()
+      .value(d => num(d[yField]))
+      .domain([yExtent[0] - yPad, yExtent[1] + yPad])
+      .thresholds(5);
+  
+    const yBinned = yBinGen(data);
+    console.log('yBinned', yBinned);
+    yBinObjs = yBinned.map((bin, i) => {
+      const y0 = bin.x0 ?? NaN;
+      const y1 = bin.x1 ?? NaN;
+      const label = isFinite(y0) && isFinite(y1) ? `${d3.format('.1f')(y0)}–${d3.format('.1f')(y1)}` : YBin `$"{i + 1}`;
+      return { i, y0, y1, label, rows: bin };
+    });
+  
+    yDomain = yBinObjs.map(b => b.label);
+  } else {
+    // fallback: treat as categorical if non-numeric
+    const uniq = Array.from(new Set(yRaw));
+    yDomain = uniq.sort((a, b) => d3.ascending(String(a), String(b)));
+  }
+  
+    // --- 2) Build X bins for xField
+    const xValues = data.map(d => num(d[xField])).filter(v => isFinite(v));
+    const xExtent = d3.extent(xValues);
+    // Guard: if not enough variation, widen slightly to avoid empty bins
+    const pad = xExtent[0] === xExtent[1] ? 0.5 : 0;
+    const binGen = d3
+      .bin()
+      .value(d => num(d[xField]))
+      .domain([xExtent[0] - pad, xExtent[1] + pad])
+      .thresholds(bins);
+  
+    const binned = binGen(data);
+    console.log('binned', binned)
+  
+    // Create an index so we can quickly map a datum to its bin index
+    // (binned[i] is an array of original data rows in that bin)
+    // We will also build human-readable bin labels.
+    const xBins = binned.map((bin, i) => {
+      const x0 = bin.x0 ?? NaN;
+      const x1 = bin.x1 ?? NaN;
+      const label =
+        isFinite(x0) && isFinite(x1)
+          ? `${d3.format('.3~s')(x0)}–${d3.format('.3~s')(x1)}`
+          : `Bin ${i + 1}`;
+      return { i, x0, x1, label, rows: bin };
+    });
+
+    console.log('xBins', xBins)
+    console.log('xField', xField)
+  
+    // Map from datum -> bin index
+    const datumToBinIndex = d => {
+      // Find the bin whose [x0, x1) contains this datum's x
+      const v = num(d[xField]);
+      // Handle edge case where v == last bin's x1: include in last bin
+      for (let i = 0; i < xBins.length; i++) {
+        const { x0, x1 } = xBins[i];
+        if (v >= x0 && v < x1) return i;
+        if (i === xBins.length - 1 && v === x1) return i;
+      }
+      return null;
+    };
+  
+    const datumToYLabel = d => {
+      if (yBinObjs) {
+        const v = num(d[yField]);
+        for (let i = 0; i < yBinObjs.length; i++) {
+          const { y0, y1, label } = yBinObjs[i];
+          if (v >= y0 && v < y1) return label;
+          if (i === yBinObjs.length - 1 && v === y1) return label;
+        }
+        return null;
+      }
+      return d[yField];
+    };
+  
+    // --- 3) Aggregate into tiles: for each (yClass, xBin) sum valueField
+    const tileMap = new Map(); // key `${y}|${xIndex}` -> {y, xIndex, value}
+    const ensureTile = (y, xIndex) => {
+      const k = `${y}|${xIndex}`;
+      if (!tileMap.has(k)) tileMap.set(k, { y, xIndex, value: 0, count: 0 });
+      return tileMap.get(k);
+    };
+  
+    for (const d of data) {
+      const yKey = datumToYLabel(d);
+      const xIndex = datumToBinIndex(d);
+      if (yKey == null || xIndex == null) continue;
+      // console.log('yKey',yKey,  'xIndex',xIndex, "num", num(d[valueField]))
+      const v = num(d[valueField]);
+      
+      if (!isFinite(v)) continue;
+      const cell = ensureTile(yKey, xIndex);
+      cell.value += v;
+      cell.count += 1;
+    }
+  
+    // Fill in missing combinations with zero-value tiles
+    for (const y of yDomain) {
+      for (let i = 0; i < xBins.length; i++) {
+        const k = `${y}|${i}`;
+        if (!tileMap.has(k)) tileMap.set(k, { y, xIndex: i, value: 0, count: 0 });
+      }
+    }
+    console.log(tileMap)
+    console.log('yDoamin',yDomain)
+  
+    const tiles = Array.from(tileMap.values());
+    console.log("tiles", tiles)
+    return {tiles : tiles, xBins: xBins, yBins: yBinObjs}
+
+}
+
 // ---- charts (created after data load) ----
 let breedChart, groupChart, choropleth, tileChart;
 
@@ -150,13 +287,15 @@ function recomputeAndRender() {
   const breedsAll = rollupBreeds(breedFiltered);
   const topBreeds = breedsAll.slice(0, 10);
   const filtered = filteredRows();
+  const tileChartData = calculateTileChartData(filtered, filterState.tableOption, filterState.tableMode);
+  console.log("tilechartdata2",tileChartData);
 
   const groups = rollupGroups(groupFiltered).slice(0, 6);
 
   breedChart.update(topBreeds, filterState);
   groupChart.update(groups, filterState);
   choropleth.update({type:"FeatureCollection", features:getGeoFilteredRows()}, filterState)
-  tileChart.update(filtered, filterState);
+  tileChart.update(tileChartData, filterState);
 
   renderFilterDisplay(filterState);
   // TODO: add chart1 update for postcode filter
@@ -189,6 +328,7 @@ d3.csv('data/dogs_in_vienna.csv', d => ({
   const breedsAll = rollupBreeds(rows);
   const topBreeds = breedsAll.slice(0, 10);
   const groups    = rollupGroups(rows).slice(0, 6);
+  const tiles = calculateTileChartData(rows);
 
   // create charts
   d3.json('geodata/vienna_districts.json').then(data => {
@@ -263,14 +403,12 @@ d3.csv('data/dogs_in_vienna.csv', d => ({
     tileHeight = Math.max(360, rect.height - 40);
   }
 
-  tileChart = createTileChart('#chart4', rows, {
-    xField: filterState.tableMode,
-    yField: filterState.tableOption,
-    bins: 6,
+  console.log('Object in Script:' , tiles)
+
+  tileChart = createTileChart('#chart4', tiles, filterState, {
     width: tileWidth,
     height: tileHeight,
     margin: tileMargin,
-    selectedGroup: filterState.group === null ? getGroup(filterState.breed) : filterState.group,
   });
 
   tileChart.on('filter', ({ category, attribute }) => {

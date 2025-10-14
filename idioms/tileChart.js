@@ -2,30 +2,24 @@
 import { COLORS } from '../colors.js';
 import { getGroup } from '../script.js';
 
+
 export function createTileChart(
   container,
-  data = [],
+  { tiles, xBins, yBins },
+  filterState,
   {
-    bins = 6,
-    yBinsRequested = 5,
-    xField = 'population_density',         // binned on X
-    // xField = 'avg_age',         // binned on X
-    yField = 'adaptability',    // classes on Y
-    valueField = 'dog_count',   // summed per tile
     width = 720,
     height = 420,
     margin = { top: 64, right: 16, bottom: 48, left: 56 },
-    xLabel = xField,
-    yLabel = yField,
     colorInterpolator = d3.interpolateBlues,
-    tilePadding = 0.08,
-    selectedGroup = null,
+    tilePadding = 0.08
   } = {}
 ) {
+  let xField = 'population_density';
+  let yField = 'adaptability';
+  let selectedGroup = null;
   const dispatch = d3.dispatch('filter', 'hover');
-  console.log('data', data);
-
-  // Resolve container to a selection
+  const valueField = 'dog_counts'
   const root =
     typeof container === 'string'
       ? d3.select(container)
@@ -49,161 +43,35 @@ export function createTileChart(
     .append('g')
     .attr('transform', `translate(${margin.left},${margin.top})`);
 
-  // --- Helpers
-  const num = v => (v == null || v === '' ? NaN : +v);
-
-  // --- 1) Prepare Y domain (classes) and numeric binning (always 5 bins)
-const yRaw = data.map(d => d[yField]).filter(v => v != null);
-const isYNumeric = yRaw.every(v => !isNaN(num(v)));
-
-let yDomain;
-let yBinObjs = null;
-
-// Always bin into 5 bins if numeric
-if (isYNumeric) {
-  console.log('yField is numeric, binning into', yBinsRequested, 'bins');
-  const yValues = data.map(d => num(d[yField])).filter(v => isFinite(v));
-  const yExtent = d3.extent(yValues);
-  const yPad = yExtent[0] === yExtent[1] ? 0.5 : 0;
-
-  const yBinGen = d3
-    .bin()
-    .value(d => num(d[yField]))
-    .domain([yExtent[0] - yPad, yExtent[1] + yPad])
-    .thresholds(5);
-
-  const yBinned = yBinGen(data);
-  console.log('yBinned', yBinned);
-  yBinObjs = yBinned.map((bin, i) => {
-    const y0 = bin.x0 ?? NaN;
-    const y1 = bin.x1 ?? NaN;
-    const label = isFinite(y0) && isFinite(y1) ? `${d3.format('.1f')(y0)}–${d3.format('.1f')(y1)}` : YBin `$"{i + 1}`;
-    return { i, y0, y1, label, rows: bin };
-  });
-
-  yDomain = yBinObjs.map(b => b.label);
-} else {
-  // fallback: treat as categorical if non-numeric
-  const uniq = Array.from(new Set(yRaw));
-  yDomain = uniq.sort((a, b) => d3.ascending(String(a), String(b)));
-}
-
-  // --- 2) Build X bins for xField
-  const xValues = data.map(d => num(d[xField])).filter(v => isFinite(v));
-  const xExtent = d3.extent(xValues);
-  // Guard: if not enough variation, widen slightly to avoid empty bins
-  const pad = xExtent[0] === xExtent[1] ? 0.5 : 0;
-  const binGen = d3
-    .bin()
-    .value(d => num(d[xField]))
-    .domain([xExtent[0] - pad, xExtent[1] + pad])
-    .thresholds(bins);
-
-  const binned = binGen(data);
-
-  // Create an index so we can quickly map a datum to its bin index
-  // (binned[i] is an array of original data rows in that bin)
-  // We will also build human-readable bin labels.
-  const xBins = binned.map((bin, i) => {
-    const x0 = bin.x0 ?? NaN;
-    const x1 = bin.x1 ?? NaN;
-    const label =
-      isFinite(x0) && isFinite(x1)
-        ? `${d3.format('.3~s')(x0)}–${d3.format('.3~s')(x1)}`
-        : `Bin ${i + 1}`;
-    return { i, x0, x1, label, rows: bin };
-  });
-
-  // Map from datum -> bin index
-  const datumToBinIndex = d => {
-    // Find the bin whose [x0, x1) contains this datum's x
-    const v = num(d[xField]);
-    // Handle edge case where v == last bin's x1: include in last bin
-    for (let i = 0; i < xBins.length; i++) {
-      const { x0, x1 } = xBins[i];
-      if (v >= x0 && v < x1) return i;
-      if (i === xBins.length - 1 && v === x1) return i;
-    }
-    return null;
-  };
-
-  // Map a datum to the Y label used in tiles. Handles 'adaptability' specially.
-  const datumToYLabel = d => {
-    if (yBinObjs) {
-      const v = num(d[yField]);
-      for (let i = 0; i < yBinObjs.length; i++) {
-        const { y0, y1, label } = yBinObjs[i];
-        if (v >= y0 && v < y1) return label;
-        if (i === yBinObjs.length - 1 && v === y1) return label;
-      }
-      return null;
-    }
-    // otherwise return the raw value (string or number)
-    return d[yField];
-  };
-
-  // --- 3) Aggregate into tiles: for each (yClass, xBin) sum valueField
-  const tileMap = new Map(); // key `${y}|${xIndex}` -> {y, xIndex, value}
-  const ensureTile = (y, xIndex) => {
-    const k = `${y}|${xIndex}`;
-    if (!tileMap.has(k)) tileMap.set(k, { y, xIndex, value: 0, count: 0 });
-    return tileMap.get(k);
-  };
-
-  for (const d of data) {
-    const yKey = datumToYLabel(d);
-    const xIndex = datumToBinIndex(d);
-    if (yKey == null || xIndex == null) continue;
-    const v = num(d[valueField]);
-    if (!isFinite(v)) continue;
-    const cell = ensureTile(yKey, xIndex);
-    cell.value += v;
-    cell.count += 1;
-  }
-
-  // Fill in missing combinations with zero-value tiles
-  for (const y of yDomain) {
-    for (let i = 0; i < xBins.length; i++) {
-      const k = `${y}|${i}`;
-      if (!tileMap.has(k)) tileMap.set(k, { y, xIndex: i, value: 0, count: 0 });
-    }
-  }
-
-  const tiles = Array.from(tileMap.values());
-
   // --- 4) Scales
-  const xScale = d3
+  let xScale = d3
     .scaleBand()
     .domain(d3.range(xBins.length))
     .range([0, plotW])
     .padding(tilePadding);
 
-  const yScale = d3
+
+  let yScale = d3
     .scaleBand()
-    .domain(yDomain)
+    .domain(yBins.map(b => b.label))
     .range([plotH, 0])
     .padding(tilePadding);
 
-  const valueMax = d3.max(tiles, d => d.value) ?? 0;
-  // Choose a base color matching choropleth logic: group > breed->group > base
-console.log("selectedGroup", selectedGroup);
+  let valueMax = d3.max(tiles, d => d.value) ?? 0;
 
-const  baseColor = selectedGroup === null ? COLORS : COLORS[selectedGroup] 
+  let baseColor = selectedGroup === null ? COLORS : COLORS[selectedGroup]
 
-  console.log("baseColor", baseColor);
-
-
-  const color = d3.scaleSequential()
+  let color = d3.scaleSequential()
     .domain([0, valueMax || 1])
     .interpolator(d3.interpolate('#ffffff', baseColor.base));
 
   // --- 5) Axes
-  const xAxis = d3
+  let xAxis = d3
     .axisBottom(xScale)
     .tickFormat(i => xBins[i]?.label ?? `Bin ${i + 1}`)
     .tickSizeOuter(0);
 
-  const yAxis = d3.axisLeft(yScale).tickSizeOuter(0);
+  let yAxis = d3.axisLeft(yScale).tickSizeOuter(0);
 
   g.append('g')
     .attr('transform', `translate(0,${plotH})`)
@@ -226,7 +94,7 @@ const  baseColor = selectedGroup === null ? COLORS : COLORS[selectedGroup]
     .attr('text-anchor', 'middle')
     .attr('dominant-baseline', 'middle')
     .style('font-size', 12)
-    .text(xLabel);
+    .text(xField);
 
   g.append('text')
     .attr('class', 'y-label')
@@ -235,7 +103,7 @@ const  baseColor = selectedGroup === null ? COLORS : COLORS[selectedGroup]
     .attr('text-anchor', 'middle')
     .attr('dominant-baseline', 'middle')
     .style('font-size', 12)
-    .text(yLabel);
+    .text(yField);
 
   // --- Tooltip (custom, immediate) - follow breedChart pattern
   const tooltip = d3.select('body')
@@ -273,11 +141,10 @@ const  baseColor = selectedGroup === null ? COLORS : COLORS[selectedGroup]
     .style('cursor', 'pointer')
     .on('mouseenter', (event, d) => {
       const bin = xBins[d.xIndex];
-      // show custom tooltip immediately
       tooltip.transition().duration(80).style('opacity', 1);
       tooltip.html(`
-        <strong>${yLabel}:</strong> ${d.y}<br/>
-        <strong>${xLabel}:</strong> ${bin?.label ?? ''}<br/>
+        <strong>${yField}:</strong> ${d.y}<br/>
+        <strong>${xField}:</strong> ${bin?.label ?? ''}<br/>
         <strong>${valueField} (sum):</strong> ${d.value}<br/>
         <strong>rows:</strong> ${d.count}
       `);
@@ -321,8 +188,8 @@ const  baseColor = selectedGroup === null ? COLORS : COLORS[selectedGroup]
 
   // Gradient
   const defs = svg.append('defs');
-  const gradId = `grad-${Math.random().toString(36).slice(2)}`;
-  const gradient = defs.append('linearGradient').attr('id', gradId);
+  let gradId = `grad-${Math.random().toString(36).slice(2)}`;
+  let gradient = defs.append('linearGradient').attr('id', gradId);
   gradient
     .selectAll('stop')
     .data(d3.range(0, 1.0001, 0.1))
@@ -337,7 +204,8 @@ const  baseColor = selectedGroup === null ? COLORS : COLORS[selectedGroup]
     .attr('width', legendWidth)
     .attr('height', legendHeight)
     .attr('fill', `url(#${gradId})`)
-    .attr('stroke', '#ccc');
+    .attr('stroke', '#ccc')
+    .attr('data-grad', gradId);
 
   const legendScale = d3
     .scaleLinear()
@@ -348,6 +216,8 @@ const  baseColor = selectedGroup === null ? COLORS : COLORS[selectedGroup]
     .axisBottom(legendScale)
     .ticks(5)
     .tickSize(legendHeight + 4);
+
+
 
   legend
     .append('g')
@@ -365,26 +235,149 @@ const  baseColor = selectedGroup === null ? COLORS : COLORS[selectedGroup]
     .text(`${valueField} (sum)`);
 
   // --- API
-  function update(newData = data, filterState = {}) {
-    // Re-create chart with new data. For simplicity, full re-render:
-    console.log("updading", filterState);
-    svg.remove();
-    return createTileChart(container, newData, {
-      bins,
-      yBins: yBinsRequested,
-      xField: filterState.tableMode,
-      yField: filterState.tableOption,         // classes on Y
-      valueField,
-      width,
-      height,
-      margin,
-      xLabel,
-      yLabel,
-      colorInterpolator,
-      tilePadding,
-      selectedGroup : filterState.group === null ? getGroup(filterState.breed) : filterState.group,
-    });
+  function update({ tiles, xBins, yBins }, filterState) {
+    console.log("updading tableMode, tableOptio", filterState.tableMode, filterState.tableOption);
+    console.log("updating newtile, newxBins, newyBins", tiles, xBins, yBins);
+    const newtiles = tiles;
+    const newxBins = xBins;
+    const newyBins = yBins;
+    yField = filterState.tableOption;
+    xField = filterState.tableMode;
+    const selectedGroup = filterState.group === null ? getGroup(filterState.breed) : filterState.group;
+    console.log("selectedGroup", selectedGroup)
+
+    xScale = d3
+      .scaleBand()
+      .domain(d3.range(newxBins.length))
+      .range([0, plotW])
+      .padding(tilePadding);
+
+
+    yScale = d3
+      .scaleBand()
+      .domain(newyBins.map(b => b.label))
+      .range([plotH, 0])
+      .padding(tilePadding);
+
+
+
+
+    valueMax = d3.max(newtiles, d => d.value) ?? 0;
+
+    baseColor = selectedGroup === null ? COLORS : COLORS[selectedGroup]
+
+    color = d3.scaleSequential()
+      .domain([0, valueMax || 1])
+      .interpolator(d3.interpolate('#ffffff', baseColor.base));
+
+    // --- 5) Axes
+    xAxis = d3
+      .axisBottom(xScale)
+      .tickFormat(i => newxBins[i]?.label ?? `Bin ${i + 1}`)
+      .tickSizeOuter(0);
+
+    yAxis = d3.axisLeft(yScale).tickSizeOuter(0);
+
+    console.log("yAxis", yAxis)
+
+
+    // refresh only the parts that need it
+
+    g.select('.x-label').text(xField);
+    g.select('.y-label').text(yField);
+
+    g.select('.y-axis')
+      .transition()
+      .duration(750)
+      .call(yAxis);
+
+    g.select('.x-axis')
+      .transition()
+      .duration(750)
+      .call(xAxis);
+
+    console.log("newtiles", newtiles)
+
+    //clear out tiles and redraw
+    tileG.selectAll('*').remove();
+
+    tileG.append('g').attr('class', 'tiles');
+
+    const rects = tileG
+      .selectAll('rect.tile')
+      .data(newtiles, d => `${d.y}|${d.xIndex}`)
+      .join('rect')
+      .attr('class', 'tile')
+      .attr('x', d => xScale(d.xIndex))
+      .attr('y', d => yScale(d.y))
+      .attr('width', xScale.bandwidth())
+      .attr('height', yScale.bandwidth())
+      .attr('rx', 4)
+      .attr('ry', 4)
+      .attr('stroke', '#fff')
+      .attr('stroke-width', 1)
+      .attr('fill', d => color(d.value))
+      .style('cursor', 'pointer')
+      .on('mouseenter', (event, d) => {
+        const bin = newxBins[d.xIndex];
+        tooltip.transition().duration(80).style('opacity', 1);
+        tooltip.html(`
+        <strong>${yField}:</strong> ${d.y}<br/>
+        <strong>${xField}:</strong> ${bin?.label ?? ''}<br/>
+        <strong>${valueField} (sum):</strong> ${d.value}<br/>
+        <strong>rows:</strong> ${d.count}
+      `);
+        tooltip.style('left', (event.pageX + 10) + 'px').style('top', (event.pageY - 28) + 'px');
+
+        dispatch.call('hover', null, {
+          y: d.y,
+          xIndex: d.xIndex,
+          xRange: [bin?.x0, bin?.x1],
+          value: d.value,
+          count: d.count,
+        });
+        d3.select(event.currentTarget).attr('stroke', '#222');
+      })
+      .on('mousemove', (event) => {
+        tooltip.style('left', (event.pageX + 10) + 'px').style('top', (event.pageY - 28) + 'px');
+      })
+      .on('mouseleave', (event, d) => {
+        tooltip.transition().duration(80).style('opacity', 0);
+        dispatch.call('hover', null, null);
+        d3.select(event.currentTarget).attr('stroke', '#fff');
+      })
+      .on('click', (event, d) => {
+        const bin = newxBins[d.xIndex];
+        dispatch.call('filter', null, {
+          y: d.y,
+          xIndex: d.xIndex,
+          xRange: [bin?.x0, bin?.x1],
+          value: d.value,
+          count: d.count,
+        });
+      });
+
+
+    // update legend
+    g.select('.legend g')
+      .transition().duration(750)
+      .call(d3.axisBottom(d3.scaleLinear().domain([0, valueMax]).range([legendX, legendX + legendWidth]))
+        .ticks(5).tickSize(legendHeight + 4))
+      .call(s => s.select('.domain').remove())
+      .call(s => s.selectAll('line').attr('y2', 0));
+
+  const gradId = g.select('.legend rect').attr('fill').match(/url\(#(.+)\)/)[1];
+d3.select(`#${gradId}`).selectAll('stop')
+  .attr('stop-color', (_, i, nodes) => {
+    const t = (nodes.length === 1) ? 0 : i / (nodes.length - 1);
+    return color(t * valueMax);
+  });
+
+
+
+
   }
+
 
   function destroy() {
     root.selectAll('*').remove();
