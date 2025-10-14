@@ -1,4 +1,7 @@
 // expects D3 v6+ to be available (import * as d3 from 'd3')
+import { COLORS } from '../colors.js';
+import { getGroup } from '../script.js';
+
 export function createTileChart(
   container,
   data = [],
@@ -16,6 +19,7 @@ export function createTileChart(
     yLabel = yField,
     colorInterpolator = d3.interpolateBlues,
     tilePadding = 0.08,
+    selectedGroup = null,
   } = {}
 ) {
   const dispatch = d3.dispatch('filter', 'hover');
@@ -105,7 +109,7 @@ if (isYNumeric) {
     const x1 = bin.x1 ?? NaN;
     const label =
       isFinite(x0) && isFinite(x1)
-        ? `${d3.format('.2f')(x0)}–${d3.format('.2f')(x1)}`
+        ? `${d3.format('.3~s')(x0)}–${d3.format('.3~s')(x1)}`
         : `Bin ${i + 1}`;
     return { i, x0, x1, label, rows: bin };
   });
@@ -181,9 +185,17 @@ if (isYNumeric) {
     .padding(tilePadding);
 
   const valueMax = d3.max(tiles, d => d.value) ?? 0;
-  const color = d3
-    .scaleSequential(colorInterpolator)
-    .domain([0, valueMax || 1]); // avoid identical domain if all zeros
+  // Choose a base color matching choropleth logic: group > breed->group > base
+console.log("selectedGroup", selectedGroup);
+
+const  baseColor = selectedGroup === null ? COLORS : COLORS[selectedGroup] 
+
+  console.log("baseColor", baseColor);
+
+
+  const color = d3.scaleSequential()
+    .domain([0, valueMax || 1])
+    .interpolator(d3.interpolate('#ffffff', baseColor.base));
 
   // --- 5) Axes
   const xAxis = d3
@@ -209,7 +221,8 @@ if (isYNumeric) {
   g.append('text')
     .attr('class', 'x-label')
     .attr('x', plotW / 2)
-    .attr('y', plotH + 40)
+    // push the x-axis label further down so it doesn't collide with rotated ticks
+    .attr('y', plotH + 64)
     .attr('text-anchor', 'middle')
     .attr('dominant-baseline', 'middle')
     .style('font-size', 12)
@@ -217,7 +230,8 @@ if (isYNumeric) {
 
   g.append('text')
     .attr('class', 'y-label')
-    .attr('transform', `translate(${-40},${plotH / 2}) rotate(-90)`)
+    // move the y-axis label left so it clears the tick labels
+    .attr('transform', `translate(${-56},${plotH / 2}) rotate(-90)`)
     .attr('text-anchor', 'middle')
     .attr('dominant-baseline', 'middle')
     .style('font-size', 12)
@@ -368,6 +382,7 @@ if (isYNumeric) {
       yLabel,
       colorInterpolator,
       tilePadding,
+      selectedGroup : filterState.group === null ? getGroup(filterState.breed) : filterState.group,
     });
   }
 

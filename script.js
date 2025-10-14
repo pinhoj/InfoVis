@@ -118,6 +118,7 @@ function rollupBreeds(srcRows) {
 }
 
 export function getGroup(breed){
+  if(!breed) return null;
   return breedToGroup.get(breed);
 }
 
@@ -251,10 +252,27 @@ d3.csv('data/dogs_in_vienna.csv', d => ({
     breedChart.hoverByGroup(dog_breed_group);
   });
 
-  tileChart = createTileChart('#chart4', rows, { 
+  // compute a container-aware size for the tile chart so labels/tiles have more room
+  const chart4El = document.querySelector('#chart4');
+  let tileWidth = width;
+  let tileHeight = Math.max(360, height); // ensure a minimum height
+  const tileMargin = { top: 48, right: 16, bottom: 72, left: 72 };
+  if (chart4El) {
+    const rect = chart4El.getBoundingClientRect();
+    tileWidth = Math.max(480, rect.width - 24);
+    tileHeight = Math.max(360, rect.height - 40);
+  }
+
+  tileChart = createTileChart('#chart4', rows, {
     xField: filterState.tableMode,
-    yField: filterState.tableOption,         // binned on X
-    bins: 6, width, height });
+    yField: filterState.tableOption,
+    bins: 6,
+    width: tileWidth,
+    height: tileHeight,
+    margin: tileMargin,
+    selectedGroup: filterState.group === null ? getGroup(filterState.breed) : filterState.group,
+  });
+
   tileChart.on('filter', ({ category, attribute }) => {
     console.log('tile filter event', category, attribute);
   });
