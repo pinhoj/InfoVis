@@ -103,7 +103,7 @@ export function createChoropleth(container, geodata, selectedState, {width, heig
         .attr("stroke-width", "0.5px")
         .call(legendAxis)
         .selectAll("text")
-        .style("font-size", "6px");
+        .style("font-size", "8px");
 
 
     // Tooltip (scoped; avoid duplicates by selecting or creating)
@@ -222,7 +222,7 @@ export function createChoropleth(container, geodata, selectedState, {width, heig
         legendGroup.select("g")
             .call(axis)
             .selectAll("text")
-            .style("font-size", "6px");
+            .style("font-size", "8px");
 
         if (selectedState.breed != null)
             title.text(selectedState.breed + "s");
@@ -236,7 +236,7 @@ export function createChoropleth(container, geodata, selectedState, {width, heig
         // console.log(district.properties.name)
         if (toggle == 1){
             console.log(districts);
-            districts.filter(d => d.properties.iso === district.properties.iso).attr('stroke-width', 1.5);
+            districts.filter(d => d.properties.iso === district.properties.iso).attr('stroke-width', 2.5);
         } else
             districts.filter(d => d.properties.iso === district.properties.iso).attr('stroke-width', 1);
     }
