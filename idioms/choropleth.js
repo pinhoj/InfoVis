@@ -1,4 +1,4 @@
-import {COLORS} from '../colors.js'
+import {COLORS} from '../colors.js';
 import { getGroup } from '../script.js';
 
 export function createChoropleth(container, geodata, selectedState, {width, height, margin}){
@@ -144,7 +144,7 @@ export function createChoropleth(container, geodata, selectedState, {width, heig
             tooltip.style('left', (event.pageX + 10) + 'px')
                    .style('top', (event.pageY - 28) + 'px');
         })
-        .on('mouseout', function () {
+        .on('mouseout', function (event, d) {
             tooltip.transition().duration(150).style('opacity', 0);
                   d3.select(this)
             .attr('stroke', '#333')
@@ -235,12 +235,13 @@ export function createChoropleth(container, geodata, selectedState, {width, heig
             title.text("Dogs");
     }
 
-    function hoverDistrict(district){
-        districts.filter(d =>d.code === district.code).attr('fill', 'red')
-    }
-
-    function highlightDistrict(district){
-
+    function hoverDistrict(district, toggle){
+        // console.log(district.properties.name)
+        if (toggle == 1){
+            console.log(districts);
+            districts.filter(d => d.properties.iso === district.properties.iso).attr('stroke-width', 1.5);
+        } else
+            districts.filter(d => d.properties.iso === district.properties.iso).attr('stroke-width', 1);
     }
 
     // Initial render
