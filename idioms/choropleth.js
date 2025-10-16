@@ -136,7 +136,9 @@ export function createChoropleth(container, geodata, selectedState, {width, heig
                             : d3.format('.1f')(d.properties.dog_density)
                         }
                         <br>Dog count: ${d3.format('.3~s')(d.properties.totalDogs)}`);
-        
+                  d3.select(this)
+        .attr('stroke', '#000')
+        .attr('stroke-width', 2);
         })
         .on('mousemove', function (event) {
             tooltip.style('left', (event.pageX + 10) + 'px')
@@ -144,6 +146,9 @@ export function createChoropleth(container, geodata, selectedState, {width, heig
         })
         .on('mouseout', function () {
             tooltip.transition().duration(150).style('opacity', 0);
+                  d3.select(this)
+            .attr('stroke', '#333')
+            .attr('stroke-width', 1);
         })
         .on('click', function (event, d) {
             console.log(selectedState.postcode , d.properties.iso)
