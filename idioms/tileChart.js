@@ -252,13 +252,20 @@ export function createTileChart(container, data, state, filterState, {width, hei
   updateToggle(); // Initial render
 
   const options = [
-    { value: "dog_size", label: "Size" },
+    { value: "dog_size", label: "Dog size" },
     { value: "adaptability", label: "Adaptability" },
     { value: "friendliness", label: "Friendliness" },
     { value: "health_needs", label: "Health Needs" },
     { value: "trainability", label: "Trainability" },
     { value: "exercise_needs", label: "Exercise Needs" }
   ];
+
+  function getLabelByValue(value) {
+    const option = options.find(opt => opt.value === value);
+    if (value === "avg_age") return "Average age";
+    if (value === "population_density") return "Population density";
+    return option ? option.label : null; // or return undefined / a default string if not found
+  }
 
   const startX = width * 0.92;
   const startY = margin.top + 30;
@@ -421,10 +428,10 @@ const optionGroups = radioGroup.selectAll("g.option")
           legendAxis2
             .call(legendAxis);
 
-          xTitle.text(state.x);
-          yTitle.text(state.y);
+          xTitle.text(getLabelByValue(state.x));
+          yTitle.text(getLabelByValue(state.y));
 
-          title.text(state.x + " vs " + state.y);
+          title.text(getLabelByValue(state.x) + " vs " + getLabelByValue(state.y));
           
       }
   // function update(newData, newState) {
