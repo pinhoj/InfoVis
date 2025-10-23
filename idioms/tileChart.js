@@ -39,7 +39,7 @@ export function createTileChart(container, data, state, filterState, {width, hei
     .data(data)
     .join('rect')
     .attr('class', 'tile')
-    .attr('transform', (d,i) =>`translate(${Math.floor(i / 5) * width/7},${ height * 0.15 + i % 5 * height/8})`)
+    .attr('transform', (d,i) =>`translate(${Math.floor(i / 5) * width/7},${height *.65 - i % 5 * height/8})`)
     .attr('width', width / 7)
     .attr('height', height / 8)
     .attr('rx', 4)
@@ -331,8 +331,8 @@ const optionGroups = radioGroup.selectAll("g.option")
       sel
           .on('mouseover', function (event, d) {
               tooltip.transition().duration(150).style('opacity', 1);
-              tooltip.html(`${state.x}: ${formatRange(d.xBinLabel)}
-                          <br>${state.y}: ${d.yBinLabel}
+              tooltip.html(`${getLabelByValue(state.x)}: ${formatRange(d.xBinLabel)}
+                          <br>${getLabelByValue(state.y)}: ${d.yBinLabel}
                           <br>Dog count: ${d3.format('.3~s')(d.totalCount)}`);
               
           })
