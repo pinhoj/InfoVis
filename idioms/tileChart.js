@@ -294,8 +294,8 @@ const optionGroups = radioGroup.selectAll("g.option")
   // Inner circle (filled only if selected)
   optionGroups.append("circle")
     .attr("class", "radio-dot")
-    .attr("r", optionRadius / 2)
-    .attr("fill", "#333")
+    .attr("r", optionRadius  + 2)
+    .attr("fill", COLORS.base)
     .attr("visibility", "hidden");
 
   // Label text
@@ -309,6 +309,10 @@ const optionGroups = radioGroup.selectAll("g.option")
   function updateSelection() {
     radioGroup.selectAll(".radio-dot")
       .attr("visibility", d => d.value === selectedValue ? "visible" : "hidden");
+    radioGroup.selectAll("text")
+      .attr("fill", d => d.value != selectedValue ? "#999" : "#000")
+      .attr("font-weight", d => d.value != selectedValue ? "normal" : "bold");
+
   }
 
   function formatRange(range){
