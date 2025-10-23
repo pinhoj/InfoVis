@@ -16,5 +16,5 @@ Questions
  - What is the correlation between dog size (very small, small, medium, large, very large) and the average age of residents across Vienna’s districts?
     
 
-Dashboard available online at 
+Dashboard also available online at 
     https://web.tecnico.ulisboa.pt/~joao.c.pinho/InfoVis/
