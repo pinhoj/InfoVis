@@ -225,6 +225,10 @@ export function createTileChart(container, data, state, filterState, {width, hei
 
   function updateToggle() {
     // Update track color
+    let baseColor = filterState.group != null ? COLORS[filterState.group].selected
+                        : filterState.breed != null ? COLORS[getGroup(filterState.breed)].selected 
+                        : COLORS.base 
+
     track.transition()
       .duration(200)
       .attr("fill", isRightOn ? "#bbbbbb" : "#bbbbbb");
@@ -232,7 +236,7 @@ export function createTileChart(container, data, state, filterState, {width, hei
     // Move handle
     handle.transition()
       .duration(200)
-      .attr("fill", COLORS.base)
+      .attr("fill", baseColor)
       .attr("cx", isRightOn ? switchWidth - radius - 3 : radius + 3);
 
     // Highlight active label
