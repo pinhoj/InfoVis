@@ -57,7 +57,7 @@ export function createTileChart(container, data, state, filterState, {width, hei
 
   const yScale = d3.scaleBand()
     .domain(yLabels)
-    .range([0, height * 0.65]);
+    .range([height * 0.65, 0]);
 
   let xAxis = g.append('g')
     .attr('class', 'x-axis')
@@ -393,7 +393,7 @@ const optionGroups = radioGroup.selectAll("g.option")
 
           const yScale = d3.scaleBand()
             .domain(yLabels)
-            .range([0, height * 0.65]);
+            .range([ height * 0.65, 0]);
 
 
           xAxis
