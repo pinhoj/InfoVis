@@ -1,2 +1,0 @@
- # InfoVis
- Group 21
