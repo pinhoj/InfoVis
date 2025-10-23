@@ -408,6 +408,9 @@ const optionGroups = radioGroup.selectAll("g.option")
             .call(d3.axisLeft(yScale).tickSizeInner(0));
 
           handle.attr('fill', baseColor);
+          
+          radioGroup.selectAll(".radio-dot")
+            .attr('fill', baseColor);
 
           gradient
             .attr('stop-color', d => newColorScale(sqrtScale(d * valueMax)));
