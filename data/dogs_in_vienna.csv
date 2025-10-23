@@ -102,7 +102,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 90100,Styrian Rough-Haired High Mountain Hound,,5,16.29,5678.38,2.87,49.2,,,,,,,0.31
 90100,Tibetan Terrier,Companion Dogs,17,16.29,5678.38,2.87,49.2,Medium,3.4,4.67,2.2,3.2,5.0,1.04
 90100,Unknown,,791,16.29,5678.38,2.87,49.2,,,,,,,48.56
-90100,Vizsla,Sporting Dogs,29,16.29,5678.38,2.87,49.2,Very Large,2.2,5.0,2.8,4.0,5.0,1.78
+90100,Vizsla,Sporting Dogs,29,16.29,5678.38,2.87,49.2,Large,2.2,5.0,2.8,4.0,5.0,1.78
 90100,Weimaraner,Sporting Dogs,29,16.29,5678.38,2.87,49.2,Very Large,2.4,4.0,3.6,4.2,5.0,1.78
 90100,Welsh Terrier,Terrier Dogs,6,16.29,5678.38,2.87,49.2,Medium,2.6,4.67,2.6,3.8,5.0,0.37
 90100,West Highland White Terrier,Terrier Dogs,42,16.29,5678.38,2.87,49.2,Small,3.6,4.67,3.0,3.6,4.0,2.58
@@ -269,7 +269,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 90200,Tibetan Spaniel,Companion Dogs,24,96.582,5019.33,19.24,42.3,Medium,3.2,4.67,3.2,3.6,4.0,0.25
 90200,Tibetan Terrier,Companion Dogs,26,96.582,5019.33,19.24,42.3,Medium,3.4,4.67,2.2,3.2,5.0,0.27
 90200,Unknown,,4502,96.582,5019.33,19.24,42.3,,,,,,,46.61
-90200,Vizsla,Sporting Dogs,84,96.582,5019.33,19.24,42.3,Very Large,2.2,5.0,2.8,4.0,5.0,0.87
+90200,Vizsla,Sporting Dogs,84,96.582,5019.33,19.24,42.3,Large,2.2,5.0,2.8,4.0,5.0,0.87
 90200,Volpino,,6,96.582,5019.33,19.24,42.3,,,,,,,0.06
 90200,Weimaraner,Sporting Dogs,31,96.582,5019.33,19.24,42.3,Very Large,2.4,4.0,3.6,4.2,5.0,0.32
 90200,Welsh Springer Spaniel,Sporting Dogs,3,96.582,5019.33,19.24,42.3,Very Large,3.6,4.67,3.2,4.2,5.0,0.03
@@ -440,7 +440,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 90300,Tibetan Spaniel,Companion Dogs,1,84.574,11432.41,7.4,44.0,Medium,3.2,4.67,3.2,3.6,4.0,0.01
 90300,Tibetan Terrier,Companion Dogs,31,84.574,11432.41,7.4,44.0,Medium,3.4,4.67,2.2,3.2,5.0,0.37
 90300,Unknown,,4083,84.574,11432.41,7.4,44.0,,,,,,,48.28
-90300,Vizsla,Sporting Dogs,113,84.574,11432.41,7.4,44.0,Very Large,2.2,5.0,2.8,4.0,5.0,1.34
+90300,Vizsla,Sporting Dogs,113,84.574,11432.41,7.4,44.0,Large,2.2,5.0,2.8,4.0,5.0,1.34
 90300,Weimaraner,Sporting Dogs,17,84.574,11432.41,7.4,44.0,Very Large,2.4,4.0,3.6,4.2,5.0,0.2
 90300,Welsh Springer Spaniel,Sporting Dogs,11,84.574,11432.41,7.4,44.0,Very Large,3.6,4.67,3.2,4.2,5.0,0.13
 90300,Welsh Terrier,Terrier Dogs,14,84.574,11432.41,7.4,44.0,Medium,2.6,4.67,2.6,3.8,5.0,0.17
@@ -563,7 +563,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 90400,Thai Ridgeback,Companion Dogs,2,30.724,17307.27,1.78,44.4,Very Large,2.4,2.67,3.2,2.8,4.0,0.07
 90400,Tibetan Terrier,Companion Dogs,2,30.724,17307.27,1.78,44.4,Medium,3.4,4.67,2.2,3.2,5.0,0.07
 90400,Unknown,,1080,30.724,17307.27,1.78,44.4,,,,,,,35.15
-90400,Vizsla,Sporting Dogs,24,30.724,17307.27,1.78,44.4,Very Large,2.2,5.0,2.8,4.0,5.0,0.78
+90400,Vizsla,Sporting Dogs,24,30.724,17307.27,1.78,44.4,Large,2.2,5.0,2.8,4.0,5.0,0.78
 90400,Weimaraner,Sporting Dogs,10,30.724,17307.27,1.78,44.4,Very Large,2.4,4.0,3.6,4.2,5.0,0.33
 90400,West Highland White Terrier,Terrier Dogs,34,30.724,17307.27,1.78,44.4,Small,3.6,4.67,3.0,3.6,4.0,1.11
 90400,Whippet,Hound Dogs,28,30.724,17307.27,1.78,44.4,Medium,3.2,4.67,2.6,3.6,5.0,0.91
@@ -698,7 +698,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 90500,Tibetan Terrier,Companion Dogs,8,52.581,26138.39,2.01,42.3,Medium,3.4,4.67,2.2,3.2,5.0,0.15
 90500,Tosa Inu,,5,52.581,26138.39,2.01,42.3,,,,,,,0.1
 90500,Unknown,,1808,52.581,26138.39,2.01,42.3,,,,,,,34.39
-90500,Vizsla,Sporting Dogs,56,52.581,26138.39,2.01,42.3,Very Large,2.2,5.0,2.8,4.0,5.0,1.07
+90500,Vizsla,Sporting Dogs,56,52.581,26138.39,2.01,42.3,Large,2.2,5.0,2.8,4.0,5.0,1.07
 90500,Weimaraner,Sporting Dogs,10,52.581,26138.39,2.01,42.3,Very Large,2.4,4.0,3.6,4.2,5.0,0.19
 90500,West Highland White Terrier,Terrier Dogs,42,52.581,26138.39,2.01,42.3,Small,3.6,4.67,3.0,3.6,4.0,0.8
 90500,Whippet,Hound Dogs,51,52.581,26138.39,2.01,42.3,Medium,3.2,4.67,2.6,3.6,5.0,0.97
@@ -811,7 +811,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 90600,Standard Schnauzer,Working Dogs,9,29.388,20197.33,1.46,43.8,Large,3.2,3.67,2.0,3.6,5.0,0.31
 90600,Tibetan Terrier,Companion Dogs,9,29.388,20197.33,1.46,43.8,Medium,3.4,4.67,2.2,3.2,5.0,0.31
 90600,Unknown,,1220,29.388,20197.33,1.46,43.8,,,,,,,41.51
-90600,Vizsla,Sporting Dogs,39,29.388,20197.33,1.46,43.8,Very Large,2.2,5.0,2.8,4.0,5.0,1.33
+90600,Vizsla,Sporting Dogs,39,29.388,20197.33,1.46,43.8,Large,2.2,5.0,2.8,4.0,5.0,1.33
 90600,Weimaraner,Sporting Dogs,4,29.388,20197.33,1.46,43.8,Very Large,2.4,4.0,3.6,4.2,5.0,0.14
 90600,West Highland White Terrier,Terrier Dogs,47,29.388,20197.33,1.46,43.8,Small,3.6,4.67,3.0,3.6,4.0,1.6
 90600,Whippet,Hound Dogs,16,29.388,20197.33,1.46,43.8,Medium,3.2,4.67,2.6,3.6,5.0,0.54
@@ -914,7 +914,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 90700,Standard Schnauzer,Working Dogs,16,30.101,18716.64,1.61,43.2,Large,3.2,3.67,2.0,3.6,5.0,0.53
 90700,Tibetan Spaniel,Companion Dogs,1,30.101,18716.64,1.61,43.2,Medium,3.2,4.67,3.2,3.6,4.0,0.03
 90700,Unknown,,1068,30.101,18716.64,1.61,43.2,,,,,,,35.48
-90700,Vizsla,Sporting Dogs,26,30.101,18716.64,1.61,43.2,Very Large,2.2,5.0,2.8,4.0,5.0,0.86
+90700,Vizsla,Sporting Dogs,26,30.101,18716.64,1.61,43.2,Large,2.2,5.0,2.8,4.0,5.0,0.86
 90700,Weimaraner,Sporting Dogs,10,30.101,18716.64,1.61,43.2,Very Large,2.4,4.0,3.6,4.2,5.0,0.33
 90700,Welsh Terrier,Terrier Dogs,4,30.101,18716.64,1.61,43.2,Medium,2.6,4.67,2.6,3.8,5.0,0.13
 90700,West Highland White Terrier,Terrier Dogs,26,30.101,18716.64,1.61,43.2,Small,3.6,4.67,3.0,3.6,4.0,0.86
@@ -1020,7 +1020,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 90800,Tibetan Spaniel,Companion Dogs,6,23.56,21615.76,1.09,43.4,Medium,3.2,4.67,3.2,3.6,4.0,0.25
 90800,Tibetan Terrier,Companion Dogs,4,23.56,21615.76,1.09,43.4,Medium,3.4,4.67,2.2,3.2,5.0,0.17
 90800,Unknown,,872,23.56,21615.76,1.09,43.4,,,,,,,37.01
-90800,Vizsla,Sporting Dogs,53,23.56,21615.76,1.09,43.4,Very Large,2.2,5.0,2.8,4.0,5.0,2.25
+90800,Vizsla,Sporting Dogs,53,23.56,21615.76,1.09,43.4,Large,2.2,5.0,2.8,4.0,5.0,2.25
 90800,Weimaraner,Sporting Dogs,3,23.56,21615.76,1.09,43.4,Very Large,2.4,4.0,3.6,4.2,5.0,0.13
 90800,West Highland White Terrier,Terrier Dogs,19,23.56,21615.76,1.09,43.4,Small,3.6,4.67,3.0,3.6,4.0,0.81
 90800,Whippet,Hound Dogs,14,23.56,21615.76,1.09,43.4,Medium,3.2,4.67,2.6,3.6,5.0,0.59
@@ -1149,7 +1149,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 90900,Tibetan Terrier,Companion Dogs,23,39.431,13288.13,2.97,43.3,Medium,3.4,4.67,2.2,3.2,5.0,0.58
 90900,Tosa Inu,,6,39.431,13288.13,2.97,43.3,,,,,,,0.15
 90900,Unknown,,1500,39.431,13288.13,2.97,43.3,,,,,,,38.04
-90900,Vizsla,Sporting Dogs,40,39.431,13288.13,2.97,43.3,Very Large,2.2,5.0,2.8,4.0,5.0,1.01
+90900,Vizsla,Sporting Dogs,40,39.431,13288.13,2.97,43.3,Large,2.2,5.0,2.8,4.0,5.0,1.01
 90900,Weimaraner,Sporting Dogs,18,39.431,13288.13,2.97,43.3,Very Large,2.4,4.0,3.6,4.2,5.0,0.46
 90900,Welsh Terrier,Terrier Dogs,9,39.431,13288.13,2.97,43.3,Medium,2.6,4.67,2.6,3.8,5.0,0.23
 90900,West Highland White Terrier,Terrier Dogs,61,39.431,13288.13,2.97,43.3,Small,3.6,4.67,3.0,3.6,4.0,1.55
@@ -1344,7 +1344,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 91000,Tibetan Terrier,Companion Dogs,67,178.358,5603.71,31.83,42.9,Medium,3.4,4.67,2.2,3.2,5.0,0.38
 91000,Tosa Inu,,5,178.358,5603.71,31.83,42.9,,,,,,,0.03
 91000,Unknown,,9119,178.358,5603.71,31.83,42.9,,,,,,,51.13
-91000,Vizsla,Sporting Dogs,168,178.358,5603.71,31.83,42.9,Very Large,2.2,5.0,2.8,4.0,5.0,0.94
+91000,Vizsla,Sporting Dogs,168,178.358,5603.71,31.83,42.9,Large,2.2,5.0,2.8,4.0,5.0,0.94
 91000,Weimaraner,Sporting Dogs,32,178.358,5603.71,31.83,42.9,Very Large,2.4,4.0,3.6,4.2,5.0,0.18
 91000,West Highland White Terrier,Terrier Dogs,243,178.358,5603.71,31.83,42.9,Small,3.6,4.67,3.0,3.6,4.0,1.36
 91000,Whippet,Hound Dogs,55,178.358,5603.71,31.83,42.9,Medium,3.2,4.67,2.6,3.6,5.0,0.31
@@ -1515,7 +1515,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 91100,Tibetan Spaniel,Companion Dogs,13,91.223,3922.5,23.26,41.5,Medium,3.2,4.67,3.2,3.6,4.0,0.14
 91100,Tibetan Terrier,Companion Dogs,38,91.223,3922.5,23.26,41.5,Medium,3.4,4.67,2.2,3.2,5.0,0.42
 91100,Unknown,,6199,91.223,3922.5,23.26,41.5,,,,,,,67.95
-91100,Vizsla,Sporting Dogs,94,91.223,3922.5,23.26,41.5,Very Large,2.2,5.0,2.8,4.0,5.0,1.03
+91100,Vizsla,Sporting Dogs,94,91.223,3922.5,23.26,41.5,Large,2.2,5.0,2.8,4.0,5.0,1.03
 91100,Weimaraner,Sporting Dogs,24,91.223,3922.5,23.26,41.5,Very Large,2.4,4.0,3.6,4.2,5.0,0.26
 91100,Welsh Springer Spaniel,Sporting Dogs,4,91.223,3922.5,23.26,41.5,Very Large,3.6,4.67,3.2,4.2,5.0,0.04
 91100,West Highland White Terrier,Terrier Dogs,145,91.223,3922.5,23.26,41.5,Small,3.6,4.67,3.0,3.6,4.0,1.59
@@ -1671,7 +1671,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 91200,Tibetan Spaniel,Companion Dogs,25,88.515,10923.39,8.1,42.9,Medium,3.2,4.67,3.2,3.6,4.0,0.28
 91200,Tibetan Terrier,Companion Dogs,6,88.515,10923.39,8.1,42.9,Medium,3.4,4.67,2.2,3.2,5.0,0.07
 91200,Unknown,,4018,88.515,10923.39,8.1,42.9,,,,,,,45.39
-91200,Vizsla,Sporting Dogs,48,88.515,10923.39,8.1,42.9,Very Large,2.2,5.0,2.8,4.0,5.0,0.54
+91200,Vizsla,Sporting Dogs,48,88.515,10923.39,8.1,42.9,Large,2.2,5.0,2.8,4.0,5.0,0.54
 91200,Welsh Springer Spaniel,Sporting Dogs,5,88.515,10923.39,8.1,42.9,Very Large,3.6,4.67,3.2,4.2,5.0,0.06
 91200,Welsh Terrier,Terrier Dogs,18,88.515,10923.39,8.1,42.9,Medium,2.6,4.67,2.6,3.8,5.0,0.2
 91200,West Highland White Terrier,Terrier Dogs,165,88.515,10923.39,8.1,42.9,Small,3.6,4.67,3.0,3.6,4.0,1.86
@@ -1846,7 +1846,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 91300,Tibetan Terrier,Companion Dogs,43,50.65,1342.98,37.71,47.8,Medium,3.4,4.67,2.2,3.2,5.0,0.85
 91300,Tyrolean Hound,,6,50.65,1342.98,37.71,47.8,,,,,,,0.12
 91300,Unknown,,3620,50.65,1342.98,37.71,47.8,,,,,,,71.47
-91300,Vizsla,Sporting Dogs,129,50.65,1342.98,37.71,47.8,Very Large,2.2,5.0,2.8,4.0,5.0,2.55
+91300,Vizsla,Sporting Dogs,129,50.65,1342.98,37.71,47.8,Large,2.2,5.0,2.8,4.0,5.0,2.55
 91300,Weimaraner,Sporting Dogs,36,50.65,1342.98,37.71,47.8,Very Large,2.4,4.0,3.6,4.2,5.0,0.71
 91300,Welsh Springer Spaniel,Sporting Dogs,7,50.65,1342.98,37.71,47.8,Very Large,3.6,4.67,3.2,4.2,5.0,0.14
 91300,Welsh Terrier,Terrier Dogs,15,50.65,1342.98,37.71,47.8,Medium,2.6,4.67,2.6,3.8,5.0,0.3
@@ -2022,7 +2022,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 91400,Tibetan Spaniel,Companion Dogs,14,84.973,2516.73,33.76,45.0,Medium,3.2,4.67,3.2,3.6,4.0,0.16
 91400,Tibetan Terrier,Companion Dogs,26,84.973,2516.73,33.76,45.0,Medium,3.4,4.67,2.2,3.2,5.0,0.31
 91400,Unknown,,5056,84.973,2516.73,33.76,45.0,,,,,,,59.5
-91400,Vizsla,Sporting Dogs,69,84.973,2516.73,33.76,45.0,Very Large,2.2,5.0,2.8,4.0,5.0,0.81
+91400,Vizsla,Sporting Dogs,69,84.973,2516.73,33.76,45.0,Large,2.2,5.0,2.8,4.0,5.0,0.81
 91400,Volpino,,6,84.973,2516.73,33.76,45.0,,,,,,,0.07
 91400,Weimaraner,Sporting Dogs,51,84.973,2516.73,33.76,45.0,Very Large,2.4,4.0,3.6,4.2,5.0,0.6
 91400,Welsh Springer Spaniel,Sporting Dogs,12,84.973,2516.73,33.76,45.0,Very Large,3.6,4.67,3.2,4.2,5.0,0.14
@@ -2157,7 +2157,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 91500,Thai Ridgeback,Companion Dogs,7,71.651,18285.48,3.92,41.6,Very Large,2.4,2.67,3.2,2.8,4.0,0.1
 91500,Tosa Inu,,4,71.651,18285.48,3.92,41.6,,,,,,,0.06
 91500,Unknown,,2297,71.651,18285.48,3.92,41.6,,,,,,,32.06
-91500,Vizsla,Sporting Dogs,64,71.651,18285.48,3.92,41.6,Very Large,2.2,5.0,2.8,4.0,5.0,0.89
+91500,Vizsla,Sporting Dogs,64,71.651,18285.48,3.92,41.6,Large,2.2,5.0,2.8,4.0,5.0,0.89
 91500,Weimaraner,Sporting Dogs,7,71.651,18285.48,3.92,41.6,Very Large,2.4,4.0,3.6,4.2,5.0,0.1
 91500,Welsh Springer Spaniel,Sporting Dogs,5,71.651,18285.48,3.92,41.6,Very Large,3.6,4.67,3.2,4.2,5.0,0.07
 91500,Welsh Terrier,Terrier Dogs,2,71.651,18285.48,3.92,41.6,Medium,2.6,4.67,2.6,3.8,5.0,0.03
@@ -2309,7 +2309,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 91600,Tibetan Spaniel,Companion Dogs,8,95.704,11034.64,8.67,42.8,Medium,3.2,4.67,3.2,3.6,4.0,0.08
 91600,Tibetan Terrier,Companion Dogs,25,95.704,11034.64,8.67,42.8,Medium,3.4,4.67,2.2,3.2,5.0,0.26
 91600,Unknown,,3741,95.704,11034.64,8.67,42.8,,,,,,,39.09
-91600,Vizsla,Sporting Dogs,83,95.704,11034.64,8.67,42.8,Very Large,2.2,5.0,2.8,4.0,5.0,0.87
+91600,Vizsla,Sporting Dogs,83,95.704,11034.64,8.67,42.8,Large,2.2,5.0,2.8,4.0,5.0,0.87
 91600,Volpino,,1,95.704,11034.64,8.67,42.8,,,,,,,0.01
 91600,Weimaraner,Sporting Dogs,12,95.704,11034.64,8.67,42.8,Very Large,2.4,4.0,3.6,4.2,5.0,0.13
 91600,Welsh Springer Spaniel,Sporting Dogs,4,95.704,11034.64,8.67,42.8,Very Large,3.6,4.67,3.2,4.2,5.0,0.04
@@ -2466,7 +2466,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 91700,Tibetan Spaniel,Companion Dogs,4,52.647,4621.73,11.39,43.1,Medium,3.2,4.67,3.2,3.6,4.0,0.08
 91700,Tibetan Terrier,Companion Dogs,64,52.647,4621.73,11.39,43.1,Medium,3.4,4.67,2.2,3.2,5.0,1.22
 91700,Unknown,,2536,52.647,4621.73,11.39,43.1,,,,,,,48.17
-91700,Vizsla,Sporting Dogs,65,52.647,4621.73,11.39,43.1,Very Large,2.2,5.0,2.8,4.0,5.0,1.23
+91700,Vizsla,Sporting Dogs,65,52.647,4621.73,11.39,43.1,Large,2.2,5.0,2.8,4.0,5.0,1.23
 91700,Weimaraner,Sporting Dogs,15,52.647,4621.73,11.39,43.1,Very Large,2.4,4.0,3.6,4.2,5.0,0.28
 91700,Welsh Terrier,Terrier Dogs,11,52.647,4621.73,11.39,43.1,Medium,2.6,4.67,2.6,3.8,5.0,0.21
 91700,West Highland White Terrier,Terrier Dogs,78,52.647,4621.73,11.39,43.1,Small,3.6,4.67,3.0,3.6,4.0,1.48
@@ -2630,7 +2630,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 91800,Tibetan Spaniel,Companion Dogs,3,47.632,7504.41,6.35,44.2,Medium,3.2,4.67,3.2,3.6,4.0,0.06
 91800,Tibetan Terrier,Companion Dogs,12,47.632,7504.41,6.35,44.2,Medium,3.4,4.67,2.2,3.2,5.0,0.25
 91800,Unknown,,2396,47.632,7504.41,6.35,44.2,,,,,,,50.3
-91800,Vizsla,Sporting Dogs,81,47.632,7504.41,6.35,44.2,Very Large,2.2,5.0,2.8,4.0,5.0,1.7
+91800,Vizsla,Sporting Dogs,81,47.632,7504.41,6.35,44.2,Large,2.2,5.0,2.8,4.0,5.0,1.7
 91800,Weimaraner,Sporting Dogs,17,47.632,7504.41,6.35,44.2,Very Large,2.4,4.0,3.6,4.2,5.0,0.36
 91800,Welsh Springer Spaniel,Sporting Dogs,12,47.632,7504.41,6.35,44.2,Very Large,3.6,4.67,3.2,4.2,5.0,0.25
 91800,Welsh Terrier,Terrier Dogs,11,47.632,7504.41,6.35,44.2,Medium,2.6,4.67,2.6,3.8,5.0,0.23
@@ -2814,7 +2814,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 91900,Tibetan Terrier,Companion Dogs,33,68.46,2744.56,24.94,46.6,Medium,3.4,4.67,2.2,3.2,5.0,0.48
 91900,Tosa Inu,,4,68.46,2744.56,24.94,46.6,,,,,,,0.06
 91900,Unknown,,4842,68.46,2744.56,24.94,46.6,,,,,,,70.73
-91900,Vizsla,Sporting Dogs,168,68.46,2744.56,24.94,46.6,Very Large,2.2,5.0,2.8,4.0,5.0,2.45
+91900,Vizsla,Sporting Dogs,168,68.46,2744.56,24.94,46.6,Large,2.2,5.0,2.8,4.0,5.0,2.45
 91900,Weimaraner,Sporting Dogs,62,68.46,2744.56,24.94,46.6,Very Large,2.4,4.0,3.6,4.2,5.0,0.91
 91900,Welsh Springer Spaniel,Sporting Dogs,18,68.46,2744.56,24.94,46.6,Very Large,3.6,4.67,3.2,4.2,5.0,0.26
 91900,Welsh Terrier,Terrier Dogs,9,68.46,2744.56,24.94,46.6,Medium,2.6,4.67,2.6,3.8,5.0,0.13
@@ -2964,7 +2964,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 92000,Tibetan Terrier,Companion Dogs,11,83.351,14596.16,5.71,42.2,Medium,3.4,4.67,2.2,3.2,5.0,0.13
 92000,Tosa Inu,,7,83.351,14596.16,5.71,42.2,,,,,,,0.08
 92000,Unknown,,3257,83.351,14596.16,5.71,42.2,,,,,,,39.08
-92000,Vizsla,Sporting Dogs,46,83.351,14596.16,5.71,42.2,Very Large,2.2,5.0,2.8,4.0,5.0,0.55
+92000,Vizsla,Sporting Dogs,46,83.351,14596.16,5.71,42.2,Large,2.2,5.0,2.8,4.0,5.0,0.55
 92000,Volpino,,6,83.351,14596.16,5.71,42.2,,,,,,,0.07
 92000,Weimaraner,Sporting Dogs,7,83.351,14596.16,5.71,42.2,Very Large,2.4,4.0,3.6,4.2,5.0,0.08
 92000,Welsh Terrier,Terrier Dogs,10,83.351,14596.16,5.71,42.2,Medium,2.6,4.67,2.6,3.8,5.0,0.12
@@ -3152,7 +3152,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 92100,Tibetan Terrier,Companion Dogs,59,144.263,3246.01,44.44,43.7,Medium,3.4,4.67,2.2,3.2,5.0,0.41
 92100,Tosa Inu,,4,144.263,3246.01,44.44,43.7,,,,,,,0.03
 92100,Unknown,,12458,144.263,3246.01,44.44,43.7,,,,,,,86.36
-92100,Vizsla,Sporting Dogs,204,144.263,3246.01,44.44,43.7,Very Large,2.2,5.0,2.8,4.0,5.0,1.41
+92100,Vizsla,Sporting Dogs,204,144.263,3246.01,44.44,43.7,Large,2.2,5.0,2.8,4.0,5.0,1.41
 92100,Volpino,,6,144.263,3246.01,44.44,43.7,,,,,,,0.04
 92100,Weimaraner,Sporting Dogs,51,144.263,3246.01,44.44,43.7,Very Large,2.4,4.0,3.6,4.2,5.0,0.35
 92100,Welsh Springer Spaniel,Sporting Dogs,8,144.263,3246.01,44.44,43.7,Very Large,3.6,4.67,3.2,4.2,5.0,0.06
@@ -3370,7 +3370,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 92200,Tibetan Terrier,Companion Dogs,139,161.957,1583.17,102.3,42.4,Medium,3.4,4.67,2.2,3.2,5.0,0.86
 92200,Tosa Inu,,7,161.957,1583.17,102.3,42.4,,,,,,,0.04
 92200,Unknown,,14782,161.957,1583.17,102.3,42.4,,,,,,,91.27
-92200,Vizsla,Sporting Dogs,307,161.957,1583.17,102.3,42.4,Very Large,2.2,5.0,2.8,4.0,5.0,1.9
+92200,Vizsla,Sporting Dogs,307,161.957,1583.17,102.3,42.4,Large,2.2,5.0,2.8,4.0,5.0,1.9
 92200,Weimaraner,Sporting Dogs,64,161.957,1583.17,102.3,42.4,Very Large,2.4,4.0,3.6,4.2,5.0,0.4
 92200,Welsh Springer Spaniel,Sporting Dogs,6,161.957,1583.17,102.3,42.4,Very Large,3.6,4.67,3.2,4.2,5.0,0.04
 92200,Welsh Terrier,Terrier Dogs,63,161.957,1583.17,102.3,42.4,Medium,2.6,4.67,2.6,3.8,5.0,0.39
@@ -3565,7 +3565,7 @@ district_code,dog_breed,dog_breed_group,dog_count,population,population_density,
 92300,Tibetan Spaniel,Companion Dogs,17,94.469,2946.47,32.06,45.1,Medium,3.2,4.67,3.2,3.6,4.0,0.18
 92300,Tibetan Terrier,Companion Dogs,55,94.469,2946.47,32.06,45.1,Medium,3.4,4.67,2.2,3.2,5.0,0.58
 92300,Unknown,,7462,94.469,2946.47,32.06,45.1,,,,,,,78.99
-92300,Vizsla,Sporting Dogs,162,94.469,2946.47,32.06,45.1,Very Large,2.2,5.0,2.8,4.0,5.0,1.71
+92300,Vizsla,Sporting Dogs,162,94.469,2946.47,32.06,45.1,Large,2.2,5.0,2.8,4.0,5.0,1.71
 92300,Weimaraner,Sporting Dogs,9,94.469,2946.47,32.06,45.1,Very Large,2.4,4.0,3.6,4.2,5.0,0.1
 92300,Welsh Terrier,Terrier Dogs,19,94.469,2946.47,32.06,45.1,Medium,2.6,4.67,2.6,3.8,5.0,0.2
 92300,West Highland White Terrier,Terrier Dogs,268,94.469,2946.47,32.06,45.1,Small,3.6,4.67,3.0,3.6,4.0,2.84
